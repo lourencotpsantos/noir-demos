@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Demo for one business: never indexed. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Hostal Enriqueta · Casco antiguo de Marbella</title>
+<meta name="description" content="Hostal económico en el centro de Marbella, en pleno casco antiguo. Habitaciones dobles, triples y cuádruples con baño privado, aire acondicionado y WiFi.">
+<style>
+  :root {
+    --accent: #8f3a1d;        /* terracotta */
+    --accent-ink: #ffffff;
+    --tint: #f8f0e6;
+    --ink: #1f1b17;
+    --muted: #5f574e;
+    --line: #e6dccd;
+    --paper: #fffdf9;
+    --tile: #1f5a66;          /* Andalusian tile blue-green */
+    --radius: 14px;
+    --wrap: 68rem;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; color: var(--ink); background: var(--paper);
+    font: 1.0625rem/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: ui-serif, Georgia, "Times New Roman", serif; line-height: 1.15; margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2.1rem, 5.5vw, 3.6rem); }
+  h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); }
+  h3 { font-size: 1.25rem; }
+  p { margin: 0; }
+  a { color: inherit; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1.25rem; }
+  :focus-visible { outline: 3px solid var(--tile); outline-offset: 3px; border-radius: 4px; }
+  .skip { position: absolute; left: -999px; }
+  .skip:focus { left: 1rem; top: 1rem; background: var(--paper); padding: .5rem .75rem; z-index: 10; }
+
+  .demo { background: var(--ink); color: #fff; font-size: .875rem; padding: .55rem 0; }
+
+  header.site { border-bottom: 1px solid var(--line); background: var(--paper); position: sticky; top: 0; z-index: 5; }
+  header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4rem; }
+  .brand { font-family: ui-serif, Georgia, serif; font-weight: 600; font-size: 1.25rem; text-decoration: none; }
+  nav ul { display: flex; gap: 1.25rem; list-style: none; margin: 0; padding: 0; align-items: center; }
+  nav a { text-decoration: none; color: var(--muted); padding: .5rem 0; display: inline-block; }
+  nav a:hover { color: var(--ink); }
+  .lang { border: 1px solid var(--line); background: none; color: var(--ink); border-radius: 999px; padding: .45rem .9rem; font: inherit; font-size: .9rem; cursor: pointer; min-height: 2.75rem; }
+  @media (max-width: 42rem) { nav li.hide-s { display: none; } }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: .7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 600; border: 2px solid var(--accent); }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.ghost { color: var(--accent); background: transparent; }
+  .btn:hover { filter: brightness(1.1); }
+
+  .hero { background: var(--tint); }
+  .hero .wrap { display: grid; gap: 2.5rem; grid-template-columns: 1.15fr .85fr; align-items: center; padding-top: clamp(2.5rem, 7vw, 5rem); padding-bottom: clamp(2.5rem, 7vw, 5rem); }
+  @media (max-width: 52rem) { .hero .wrap { grid-template-columns: 1fr; } }
+  .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; color: var(--accent); font-weight: 700; margin-bottom: .9rem; }
+  .hero p.lead { font-size: clamp(1.1rem, 2.1vw, 1.3rem); color: var(--muted); max-width: 36rem; margin-top: 1.1rem; }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+
+  /* Photo placeholders: a tile pattern until the real photos arrive. */
+  .photo {
+    border-radius: var(--radius); min-height: 13rem; display: grid; place-items: end start; padding: 1rem;
+    color: #fff; font-size: .9rem; font-weight: 600;
+    background:
+      radial-gradient(circle at 25% 25%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
+      radial-gradient(circle at 75% 75%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
+      linear-gradient(135deg, var(--tile), #2f7c8a);
+  }
+  .photo span { background: rgba(0,0,0,.45); padding: .3rem .65rem; border-radius: 999px; }
+  .photo.tall { min-height: clamp(16rem, 34vw, 24rem); }
+  .photo.warm { background:
+      radial-gradient(circle at 25% 25%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
+      radial-gradient(circle at 75% 75%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
+      linear-gradient(135deg, var(--accent), #b9603a); }
+
+  section { padding: clamp(3rem, 7vw, 5rem) 0; }
+  section + section { border-top: 1px solid var(--line); }
+  .intro { color: var(--muted); max-width: 40rem; margin-top: .9rem; }
+  .cards { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); margin: 2rem 0 0; padding: 0; list-style: none; }
+  .card { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; overflow: hidden; display: flex; flex-direction: column; }
+  .card .photo { border-radius: 0; min-height: 10rem; }
+  .card .body { padding: 1.3rem 1.4rem 1.5rem; }
+  .card .who { color: var(--accent); font-weight: 700; font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; }
+  .card p.text { color: var(--muted); margin-top: .5rem; }
+
+  .included { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+  .included li { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: .5rem 1rem; }
+  .note { margin-top: 1.25rem; color: var(--muted); }
+
+  .split { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin-top: 2rem; align-items: start; }
+  address { font-style: normal; font-size: 1.15rem; }
+  .contact-list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: .7rem; }
+  .contact-list a { font-weight: 600; color: var(--accent); overflow-wrap: anywhere; }
+  .book { background: var(--tint); border-radius: var(--radius); padding: 1.6rem; }
+  .book p { color: var(--muted); margin: .6rem 0 1.25rem; }
+
+  footer { background: var(--ink); color: #d9d2c7; padding: 2.5rem 0; font-size: .95rem; }
+  footer p + p { margin-top: .75rem; }
+
+  [data-lang="en"] { display: none; }
+  html[lang="en"] [data-lang="en"] { display: revert; }
+  html[lang="en"] [data-lang="es"] { display: none; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main"><span data-lang="es">Saltar al contenido</span><span data-lang="en">Skip to content</span></a>
+
+<div class="demo" role="note">
+  <div class="wrap">
+    <span data-lang="es">Demo hecha para Hostal Enriqueta por Lourenço Santos, Noir Digital. No aparece en Google.</span>
+    <span data-lang="en">Demo made for Hostal Enriqueta by Lourenço Santos, Noir Digital. Not listed on Google.</span>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#top">Hostal Enriqueta</a>
+    <nav aria-label="Principal">
+      <ul>
+        <li class="hide-s"><a href="#habitaciones"><span data-lang="es">Habitaciones</span><span data-lang="en">Rooms</span></a></li>
+        <li class="hide-s"><a href="#llegar"><span data-lang="es">Cómo llegar</span><span data-lang="en">Find us</span></a></li>
+        <li class="hide-s"><a href="#reservas"><span data-lang="es">Reservas</span><span data-lang="en">Book</span></a></li>
+        <li><button class="lang" type="button" id="lang" aria-label="Switch to English">EN</button></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="hero" id="top">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow"><span data-lang="es">Hostal · Casco antiguo de Marbella</span><span data-lang="en">Guest house · Marbella old town</span></p>
+        <h1>
+          <span data-lang="es">Habitaciones económicas en pleno centro de Marbella</span>
+          <span data-lang="en">Affordable rooms in the heart of old Marbella</span>
+        </h1>
+        <p class="lead">
+          <span data-lang="es">Dobles, triples y cuádruples con baño privado, aire acondicionado y WiFi. Algunas dan a nuestro patio andaluz.</span>
+          <span data-lang="en">Double, triple and four-person rooms with private bathroom, air conditioning and WiFi. Some look onto our Andalusian patio.</span>
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="tel:+34952827552"><span data-lang="es">Llamar al 952 82 75 52</span><span data-lang="en">Call +34 952 82 75 52</span></a>
+          <a class="btn ghost" href="#reservas"><span data-lang="es">Reservar por email</span><span data-lang="en">Book by email</span></a>
+        </div>
+      </div>
+      <div class="photo tall" role="img" aria-label="Espacio para una foto del patio">
+        <span data-lang="es">Aquí va vuestra foto del patio</span><span data-lang="en">Your photo of the patio goes here</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="habitaciones">
+    <div class="wrap">
+      <h2><span data-lang="es">Habitaciones</span><span data-lang="en">Rooms</span></h2>
+      <p class="intro">
+        <span data-lang="es">Unas son exteriores y otras interiores, con vistas al patio andaluz. Algunas tienen balcón.</span>
+        <span data-lang="en">Some face the street and others face inside, over the Andalusian patio. Some have a balcony.</span>
+      </p>
+      <ul class="cards">
+        <li class="card">
+          <div class="photo" role="img" aria-label="Espacio para una foto de la habitación doble"><span data-lang="es">Foto: habitación doble</span><span data-lang="en">Photo: double room</span></div>
+          <div class="body">
+            <p class="who"><span data-lang="es">1 o 2 personas</span><span data-lang="en">1 or 2 people</span></p>
+            <h3><span data-lang="es">Doble</span><span data-lang="en">Double</span></h3>
+            <p class="text">
+              <span data-lang="es">Con dos camas o con cama de matrimonio. Si viajas solo, el precio es más bajo.</span>
+              <span data-lang="en">With two beds or one double bed. A lower price if you are travelling alone.</span>
+            </p>
+          </div>
+        </li>
+        <li class="card">
+          <div class="photo warm" role="img" aria-label="Espacio para una foto de la habitación triple"><span data-lang="es">Foto: habitación triple</span><span data-lang="en">Photo: triple room</span></div>
+          <div class="body">
+            <p class="who"><span data-lang="es">3 personas</span><span data-lang="en">3 people</span></p>
+            <h3>Triple</h3>
+            <p class="text">
+              <span data-lang="es">Más amplia que las dobles, también disponible con tres camas.</span>
+              <span data-lang="en">Larger than the doubles, also available with three beds.</span>
+            </p>
+          </div>
+        </li>
+        <li class="card">
+          <div class="photo" role="img" aria-label="Espacio para una foto de la habitación cuádruple"><span data-lang="es">Foto: habitación cuádruple</span><span data-lang="en">Photo: four-person room</span></div>
+          <div class="body">
+            <p class="who"><span data-lang="es">4 personas</span><span data-lang="en">4 people</span></p>
+            <h3><span data-lang="es">Cuádruple</span><span data-lang="en">Four-person room</span></h3>
+            <p class="text">
+              <span data-lang="es">Nuestra habitación más grande. Solo tenemos dos: una con dos camas individuales y una de matrimonio, y otra con dos de matrimonio.</span>
+              <span data-lang="en">Our largest room. We have only two: one with two single beds and a double, one with two double beds.</span>
+            </p>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="included" aria-label="En todas las habitaciones">
+        <li><span data-lang="es">Baño privado</span><span data-lang="en">Private bathroom</span></li>
+        <li><span data-lang="es">Aire acondicionado</span><span data-lang="en">Air conditioning</span></li>
+        <li><span data-lang="es">Ventilador de techo</span><span data-lang="en">Ceiling fan</span></li>
+        <li>WiFi</li>
+        <li>TV</li>
+      </ul>
+      <p class="note"><span data-lang="es">Todo incluido en todas las habitaciones.</span><span data-lang="en">All included in every room.</span></p>
+    </div>
+  </section>
+
+  <section id="llegar">
+    <div class="wrap">
+      <h2><span data-lang="es">Cómo llegar</span><span data-lang="en">Find us</span></h2>
+      <div class="split">
+        <div>
+          <address>Calle de los Caballeros 18<br><span data-lang="es">Casco antiguo, Marbella</span><span data-lang="en">Old town, Marbella</span></address>
+          <ul class="contact-list">
+            <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Hostal+Enriqueta+Calle+de+los+Caballeros+18+Marbella"><span data-lang="es">Abrir en Google Maps</span><span data-lang="en">Open in Google Maps</span></a></li>
+            <li><a href="tel:+34952827552">(+34) 952 82 75 52</a></li>
+            <li><a href="mailto:h.enriqueta.marbella@gmail.com">h.enriqueta.marbella@gmail.com</a></li>
+          </ul>
+        </div>
+        <div class="photo warm" role="img" aria-label="Espacio para una foto de la fachada">
+          <span data-lang="es">Aquí va vuestra foto de la fachada</span><span data-lang="en">Your photo of the entrance goes here</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reservas">
+    <div class="wrap">
+      <h2><span data-lang="es">Reservas</span><span data-lang="en">Book a room</span></h2>
+      <div class="split">
+        <div class="book">
+          <h3><span data-lang="es">Por email</span><span data-lang="en">By email</span></h3>
+          <p>
+            <span data-lang="es">Dinos las fechas, cuántos sois y qué habitación preferís. Os respondemos con disponibilidad y precio.</span>
+            <span data-lang="en">Tell us your dates, how many you are and the room you prefer. We reply with availability and price.</span>
+          </p>
+          <a class="btn primary" data-lang="es" href="mailto:h.enriqueta.marbella@gmail.com?subject=Reserva%20Hostal%20Enriqueta&amp;body=Fechas%3A%0APersonas%3A%0AHabitaci%C3%B3n%3A%0ANombre%3A">Escribir para reservar</a>
+          <a class="btn primary" data-lang="en" href="mailto:h.enriqueta.marbella@gmail.com?subject=Booking%20request%20Hostal%20Enriqueta&amp;body=Dates%3A%0AGuests%3A%0ARoom%3A%0AName%3A">Email to book</a>
+        </div>
+        <div class="book">
+          <h3><span data-lang="es">Por teléfono</span><span data-lang="en">By phone</span></h3>
+          <p>
+            <span data-lang="es">Si lo prefieres, llámanos y lo dejamos reservado en un momento.</span>
+            <span data-lang="en">If you prefer, call us and we will book it for you straight away.</span>
+          </p>
+          <a class="btn ghost" href="tel:+34952827552">(+34) 952 82 75 52</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Hostal Enriqueta · Calle de los Caballeros 18, Marbella</p>
+    <p>
+      <span data-lang="es">Esto es una demo. Los textos salen de vuestra web actual y los recuadros de color son espacios para vuestras fotos. Hecha por Lourenço Santos, Noir Digital, Marbella.</span>
+      <span data-lang="en">This is a demo. The wording comes from your current website and the coloured panels are spaces for your photos. Made by Lourenço Santos, Noir Digital, Marbella.</span>
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Spanish first; English for visitors whose browser is not in Spanish.
+  (function () {
+    var root = document.documentElement, button = document.getElementById('lang');
+    function set(lang) {
+      root.lang = lang;
+      button.textContent = lang === 'es' ? 'EN' : 'ES';
+      button.setAttribute('aria-label', lang === 'es' ? 'Switch to English' : 'Cambiar a español');
+    }
+    set((navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
+    button.addEventListener('click', function () { set(root.lang === 'es' ? 'en' : 'es'); });
+  })();
+</script>
+</body>
+</html>
