@@ -1,281 +1,868 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-phase="morning">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Demo for one business: never indexed. -->
 <meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
 <title>Hostal Enriqueta · Casco antiguo de Marbella</title>
-<meta name="description" content="Hostal económico en el centro de Marbella, en pleno casco antiguo. Habitaciones dobles, triples y cuádruples con baño privado, aire acondicionado y WiFi.">
+<meta name="description" content="Hostal económico con patio andaluz en el casco antiguo de Marbella. Habitaciones dobles, triples y cuádruples con baño privado, aire acondicionado y WiFi.">
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link rel="stylesheet" href="https://fonts.bunny.net/css?family=gloock:400|instrument-sans:400,500,600&display=swap">
 <style>
+  /* Colours come from the patio itself: limewash, cobalt tile, geranium, leaf.
+     The page moves from morning to night as you scroll. */
   :root {
-    --accent: #8f3a1d;        /* terracotta */
-    --accent-ink: #ffffff;
-    --tint: #f8f0e6;
-    --ink: #1f1b17;
-    --muted: #5f574e;
-    --line: #e6dccd;
-    --paper: #fffdf9;
-    --tile: #1f5a66;          /* Andalusian tile blue-green */
-    --radius: 14px;
-    --wrap: 68rem;
+    --head: 3.75rem;
+    --bg: #f3f5f3;
+    --ink: #14224a;
+    --muted: #4b5679;
+    --line: #d5dbe6;
+    --surface: #ffffff;
+    --accent: #2447b8;
+    --on-accent: #ffffff;
+    --orb: #f0a51e;
+    --geranium: #cf2350;
+    --display: "Gloock", Georgia, "Times New Roman", serif;
+    --text: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --wrap: 76rem;
+    --tiles: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%23f3f5f3'/%3E%3Cg fill='%232447b8'%3E%3Crect x='13' y='13' width='22' height='22'/%3E%3Crect x='13' y='13' width='22' height='22' transform='rotate(45 24 24)'/%3E%3C/g%3E%3Ccircle cx='24' cy='24' r='5' fill='%23f3f5f3'/%3E%3Ccircle cx='24' cy='24' r='2' fill='%231d7450'/%3E%3Cg fill='%231d7450'%3E%3Ccircle cx='0' cy='0' r='5'/%3E%3Ccircle cx='48' cy='0' r='5'/%3E%3Ccircle cx='0' cy='48' r='5'/%3E%3Ccircle cx='48' cy='48' r='5'/%3E%3C/g%3E%3C/svg%3E");
   }
+  html[data-phase="day"]   { --bg: #fcfdfc; }
+  html[data-phase="dusk"]  { --bg: #f7dfce; --line: #e4c3ad; --muted: #54496a; --orb: #e2572b; }
+  html[data-phase="night"] { --bg: #0d1630; --ink: #eef0f6; --muted: #aab3cf; --line: #2a3767; --surface: #16224a; --accent: #f3b667; --on-accent: #1b1304; --orb: #f5e7b8; }
+
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
   body {
-    margin: 0; color: var(--ink); background: var(--paper);
-    font: 1.0625rem/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 1.0625rem/1.6 var(--text);
     -webkit-font-smoothing: antialiased;
+    transition: background-color .9s ease, color .9s ease;
   }
-  h1, h2, h3 { font-family: ui-serif, Georgia, "Times New Roman", serif; line-height: 1.15; margin: 0; font-weight: 600; letter-spacing: -0.01em; }
-  h1 { font-size: clamp(2.1rem, 5.5vw, 3.6rem); }
-  h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); }
-  h3 { font-size: 1.25rem; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.02; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(3rem, 7.4vw, 6rem); line-height: .95; }
+  h2 { font-size: clamp(2rem, 4.4vw, 3.5rem); max-width: 18ch; }
+  h3 { font-size: 1.75rem; }
   p { margin: 0; }
   a { color: inherit; }
+  img { max-width: 100%; }
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1.25rem; }
-  :focus-visible { outline: 3px solid var(--tile); outline-offset: 3px; border-radius: 4px; }
+  .muted { color: var(--muted); transition: color .9s ease; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
   .skip { position: absolute; left: -999px; }
-  .skip:focus { left: 1rem; top: 1rem; background: var(--paper); padding: .5rem .75rem; z-index: 10; }
+  .skip:focus { left: 1rem; top: 1rem; background: var(--bg); padding: .5rem .75rem; z-index: 60; }
 
-  .demo { background: var(--ink); color: #fff; font-size: .875rem; padding: .55rem 0; }
+  .en { display: none; }
+  html[lang="en"] .en { display: revert; }
+  html[lang="en"] .es { display: none; }
 
-  header.site { border-bottom: 1px solid var(--line); background: var(--paper); position: sticky; top: 0; z-index: 5; }
-  header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4rem; }
-  .brand { font-family: ui-serif, Georgia, serif; font-weight: 600; font-size: 1.25rem; text-decoration: none; }
-  nav ul { display: flex; gap: 1.25rem; list-style: none; margin: 0; padding: 0; align-items: center; }
-  nav a { text-decoration: none; color: var(--muted); padding: .5rem 0; display: inline-block; }
-  nav a:hover { color: var(--ink); }
-  .lang { border: 1px solid var(--line); background: none; color: var(--ink); border-radius: 999px; padding: .45rem .9rem; font: inherit; font-size: .9rem; cursor: pointer; min-height: 2.75rem; }
-  @media (max-width: 42rem) { nav li.hide-s { display: none; } }
-
-  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: .7rem 1.4rem; border-radius: 999px; text-decoration: none; font-weight: 600; border: 2px solid var(--accent); }
-  .btn.primary { background: var(--accent); color: var(--accent-ink); }
-  .btn.ghost { color: var(--accent); background: transparent; }
-  .btn:hover { filter: brightness(1.1); }
-
-  .hero { background: var(--tint); }
-  .hero .wrap { display: grid; gap: 2.5rem; grid-template-columns: 1.15fr .85fr; align-items: center; padding-top: clamp(2.5rem, 7vw, 5rem); padding-bottom: clamp(2.5rem, 7vw, 5rem); }
-  @media (max-width: 52rem) { .hero .wrap { grid-template-columns: 1fr; } }
-  .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; color: var(--accent); font-weight: 700; margin-bottom: .9rem; }
-  .hero p.lead { font-size: clamp(1.1rem, 2.1vw, 1.3rem); color: var(--muted); max-width: 36rem; margin-top: 1.1rem; }
-  .hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
-
-  /* Photo placeholders: a tile pattern until the real photos arrive. */
-  .photo {
-    border-radius: var(--radius); min-height: 13rem; display: grid; place-items: end start; padding: 1rem;
-    color: #fff; font-size: .9rem; font-weight: 600;
-    background:
-      radial-gradient(circle at 25% 25%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
-      radial-gradient(circle at 75% 75%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
-      linear-gradient(135deg, var(--tile), #2f7c8a);
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
   }
-  .photo span { background: rgba(0,0,0,.45); padding: .3rem .65rem; border-radius: 999px; }
-  .photo.tall { min-height: clamp(16rem, 34vw, 24rem); }
-  .photo.warm { background:
-      radial-gradient(circle at 25% 25%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
-      radial-gradient(circle at 75% 75%, rgba(255,255,255,.16) 0 12%, transparent 13%) 0 0 / 3rem 3rem,
-      linear-gradient(135deg, var(--accent), #b9603a); }
 
-  section { padding: clamp(3rem, 7vw, 5rem) 0; }
-  section + section { border-top: 1px solid var(--line); }
-  .intro { color: var(--muted); max-width: 40rem; margin-top: .9rem; }
-  .cards { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); margin: 2rem 0 0; padding: 0; list-style: none; }
-  .card { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; overflow: hidden; display: flex; flex-direction: column; }
-  .card .photo { border-radius: 0; min-height: 10rem; }
-  .card .body { padding: 1.3rem 1.4rem 1.5rem; }
-  .card .who { color: var(--accent); font-weight: 700; font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; }
-  .card p.text { color: var(--muted); margin-top: .5rem; }
+  /* ---------- Demo line and header ---------- */
+  .demo { background: #14224a; color: #fff; font-size: .875rem; padding: .5rem 0; }
+  header.site {
+    position: sticky; top: 0; z-index: 20; height: var(--head);
+    background: var(--bg); border-bottom: 1px solid var(--line);
+    transition: background-color .9s ease, border-color .9s ease;
+  }
+  header.site .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .brand { font-family: var(--display); font-size: 1.35rem; text-decoration: none; white-space: nowrap; }
+  .head-right { display: flex; align-items: center; gap: 1.1rem; }
+  .head-right nav { display: flex; gap: 1.1rem; }
+  .head-right nav a { text-decoration: none; color: var(--muted); padding: .5rem 0; transition: color .9s ease; }
+  .head-right nav a:hover { color: var(--ink); }
+  .clock { display: inline-flex; align-items: center; gap: .5rem; font-variant-numeric: tabular-nums; font-weight: 600; min-width: 4.6rem; }
+  .orb { width: .95rem; height: .95rem; border-radius: 50%; background: var(--orb); transition: background-color .9s ease, box-shadow .9s ease; }
+  html[data-phase="night"] .orb { background: transparent; box-shadow: inset -.32rem -.12rem 0 0 var(--orb); }
+  .lang { font: inherit; font-size: .95rem; color: var(--ink); background: none; border: 0; border-bottom: 1.5px solid currentColor; padding: .2rem 0; cursor: pointer; min-height: 2.25rem; }
+  @media (max-width: 54rem) { .head-right nav { display: none; } }
+  @media (max-width: 26rem) { .brand { font-size: 1.15rem; } .head-right { gap: .8rem; } }
 
-  .included { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-wrap: wrap; gap: .6rem; }
-  .included li { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: .5rem 1rem; }
-  .note { margin-top: 1.25rem; color: var(--muted); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: .7rem 1.35rem;
+    border-radius: 6px; border: 1.5px solid var(--accent); background: var(--accent); color: var(--on-accent);
+    font: 600 1rem/1.2 var(--text); text-decoration: none; cursor: pointer;
+    transition: background-color .9s ease, border-color .9s ease, color .9s ease;
+  }
+  .btn.quiet { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.small { min-height: 2.5rem; padding: .45rem 1rem; }
+  @media (max-width: 47.99rem) { .head-right .btn { display: none; } }
 
-  .split { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin-top: 2rem; align-items: start; }
-  address { font-style: normal; font-size: 1.15rem; }
-  .contact-list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: .7rem; }
-  .contact-list a { font-weight: 600; color: var(--accent); overflow-wrap: anywhere; }
-  .book { background: var(--tint); border-radius: var(--radius); padding: 1.6rem; }
-  .book p { color: var(--muted); margin: .6rem 0 1.25rem; }
+  /* ---------- Photos ---------- */
+  figure { margin: 0; }
+  .shot { position: relative; overflow: hidden; border-radius: 1rem; background: var(--tiles) center / 48px 48px; }
+  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .shot.noimg img { visibility: hidden; }
+  .zoom { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+  .cap { margin-top: .6rem; font-size: .95rem; color: var(--muted); transition: color .9s ease; }
 
-  footer { background: var(--ink); color: #d9d2c7; padding: 2.5rem 0; font-size: .95rem; }
-  footer p + p { margin-top: .75rem; }
+  /* ---------- The door: the one big moment ---------- */
+  .door { --p: 0; position: relative; }
+  .door-inner { display: grid; grid-template-columns: 1.05fr .95fr; gap: 3rem; align-items: center; padding: clamp(2.5rem, 6vw, 5rem) 1.25rem; max-width: var(--wrap); margin: 0 auto; }
+  .door-copy .place { font-size: 1.05rem; color: var(--muted); margin-bottom: 1rem; }
+  .door-copy .lead { font-size: clamp(1.1rem, 1.7vw, 1.3rem); color: var(--muted); max-width: 30rem; margin-top: 1.4rem; }
+  .door-copy .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .door-frame {
+    position: relative; overflow: hidden; width: 100%; max-width: 26rem; aspect-ratio: 3 / 4; justify-self: center;
+    border-radius: 50% 50% 1.25rem 1.25rem / 37.5% 37.5% 1.25rem 1.25rem;
+    background: var(--tiles) center / 48px 48px;
+  }
+  .door-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .door-frame::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to top, rgba(9, 16, 40, .78), rgba(9, 16, 40, 0) 48%);
+    opacity: clamp(0, calc((var(--p) - .5) * 2.5), 1);
+  }
+  .door-cap {
+    position: absolute; left: clamp(1.25rem, 4vw, 3rem); right: 1.25rem; bottom: clamp(1.5rem, 5vh, 3rem); z-index: 1;
+    color: #fff; font-family: var(--display); font-size: clamp(1.9rem, 4.6vw, 3.6rem); line-height: 1.02;
+    opacity: clamp(0, calc((var(--p) - .6) * 3), 1);
+  }
+  .door-hint { display: none; }
+  @media (max-width: 51.99rem) {
+    .door-inner { grid-template-columns: 1fr; gap: 2rem; }
+  }
 
-  [data-lang="en"] { display: none; }
-  html[lang="en"] [data-lang="en"] { display: revert; }
-  html[lang="en"] [data-lang="es"] { display: none; }
+  /* Pinned version: the arch opens until the patio fills the screen. */
+  .pin .door { height: 230vh; }
+  .pin .door-pin { position: sticky; top: var(--head); height: calc(100vh - var(--head)); height: calc(100svh - var(--head)); overflow: hidden; }
+  .pin .door-inner { display: block; position: relative; height: 100%; max-width: none; padding: 0; }
+  .pin .door-copy {
+    position: absolute; z-index: 1; left: max(1.25rem, calc(50vw - 36.75rem)); top: 50%; width: min(38rem, 48vw);
+    transform: translateY(calc(-50% - var(--p) * 3rem));
+    opacity: clamp(0, calc(1 - var(--p) * 2.6), 1);
+  }
+  .pin .door-frame {
+    --w0: min(27rem, 34vw); --h0: min(36rem, 74%);
+    --w1: min(76rem, calc(100vw - 2.5rem)); --h1: calc(100% - 2.5rem);
+    --dx: calc(43vw - var(--w0) / 2); --dy: 0px;
+    --w: calc(var(--w0) + (var(--w1) - var(--w0)) * var(--p));
+    position: absolute; z-index: 2; left: 50%; top: 50%; max-width: none; aspect-ratio: auto;
+    width: var(--w);
+    height: calc(var(--h0) + (var(--h1) - var(--h0)) * var(--p));
+    transform: translate(calc(-50% + var(--dx) * (1 - var(--p))), calc(-50% + var(--dy) * (1 - var(--p))));
+    border-radius:
+      calc(var(--w) / 2 * (1 - var(--p)) + 1.5rem * var(--p))
+      calc(var(--w) / 2 * (1 - var(--p)) + 1.5rem * var(--p))
+      1.5rem 1.5rem;
+  }
+  .pin .door-hint {
+    display: block; position: absolute; z-index: 1; left: max(1.25rem, calc(50vw - 36.75rem)); bottom: 1.75rem;
+    font-size: .95rem; color: var(--muted);
+    opacity: clamp(0, calc(1 - var(--p) * 5), 1);
+  }
+  .door-hint i { display: inline-block; width: 1px; height: 2.25rem; background: currentColor; vertical-align: middle; margin-right: .75rem; }
+  @media (max-width: 51.99rem) {
+    .pin .door-copy { left: 1.25rem; right: 1.25rem; top: 1.5rem; width: auto; transform: translateY(calc(var(--p) * -2rem)); }
+    .pin .door-copy .actions { display: none; }
+    .pin .door-copy .lead { margin-top: .9rem; }
+    .pin .door-frame { --w0: min(17rem, 64vw); --h0: min(22rem, 44%); --dx: 0px; --dy: 15vh; --h1: calc(100% - 1.5rem); --w1: calc(100vw - 1.5rem); }
+    .pin .door-cap { bottom: 5.5rem; }
+    .pin .door-hint { display: none; }
+  }
+
+  /* ---------- The day: chapters with their hour ---------- */
+  .chapter { padding: clamp(4rem, 10vw, 8rem) 0; }
+  .chapter-grid { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 0 2rem; }
+  .hour {
+    font-family: var(--display); font-size: clamp(2.4rem, 4.6vw, 4rem); line-height: 1; color: var(--accent);
+    font-variant-numeric: tabular-nums; position: sticky; top: calc(var(--head) + 2rem); align-self: start;
+    transition: color .9s ease;
+  }
+  .chapter-body > .intro { color: var(--muted); max-width: 36rem; margin-top: 1.25rem; font-size: 1.15rem; transition: color .9s ease; }
+  @media (max-width: 51.99rem) {
+    .chapter-grid { grid-template-columns: 1fr; }
+    .hour { position: static; margin-bottom: .75rem; }
+  }
+
+  /* Patio: two photos, one overlapping the other */
+  .duo { display: grid; grid-template-columns: repeat(12, 1fr); margin-top: 3rem; align-items: start; }
+  .duo .a { grid-column: 1 / 10; grid-row: 1; }
+  .duo .b { grid-column: 8 / 13; grid-row: 1; margin-top: 34%; z-index: 1; }
+  .duo .a .shot { aspect-ratio: 4 / 3; }
+  .duo .b .shot { aspect-ratio: 1 / 1; border: .6rem solid var(--bg); border-radius: 1.5rem; transition: border-color .9s ease; }
+  .duo .b .cap { padding-left: .6rem; }
+  @media (max-width: 40rem) {
+    .duo { display: block; }
+    .duo .b { margin-top: 1.5rem; width: 78%; margin-left: auto; }
+    .duo .b .shot { border: 0; }
+    .duo .b .cap { padding-left: 0; }
+  }
+
+  /* Rooms: the picker */
+  .picker { display: grid; grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); margin-top: 3rem; align-items: start; }
+  .picker fieldset { border: 0; padding: 0; margin: 0; }
+  .picker legend { padding: 0; font-weight: 600; margin-bottom: .6rem; }
+  .seg { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .seg button {
+    min-width: 3rem; min-height: 3rem; padding: .5rem .95rem; border-radius: 6px; cursor: pointer;
+    font: 600 1rem/1.2 var(--text); color: var(--ink); background: transparent; border: 1.5px solid var(--ink);
+  }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .room-info { margin-top: 2rem; }
+  .room-info p { color: var(--muted); margin: .6rem 0 1.4rem; }
+  .solo { margin-top: 1rem; color: var(--geranium); font-weight: 600; }
+  .picker .btn { margin-top: 2rem; }
+  .stage { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+  .stage .shot { aspect-ratio: 4 / 3; }
+  .js .stage { display: block; position: relative; aspect-ratio: 4 / 3; }
+  .js .stage figure { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .5s ease, visibility 0s linear .5s; }
+  .js .stage figure.on { opacity: 1; visibility: visible; transition: opacity .5s ease; }
+  .js .stage .shot { height: 100%; aspect-ratio: auto; }
+  .js .stage .cap { display: none; }
+  .included { list-style: none; margin: 2.5rem 0 0; padding: 1.25rem 0 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: .4rem 1.75rem; color: var(--muted); }
+  .included li::before { content: ""; display: inline-block; width: .5rem; height: .5rem; background: var(--accent); transform: rotate(45deg); margin-right: .6rem; vertical-align: .08em; }
+  @media (max-width: 51.99rem) {
+    .picker { grid-template-columns: 1fr; }
+    .picker .stage { order: -1; }
+  }
+
+  /* Out into the old town: a strip you move sideways */
+  .strip-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+  .arrows { display: flex; gap: .5rem; }
+  .arrows button {
+    width: 3rem; height: 3rem; border-radius: 50%; border: 1.5px solid var(--ink); background: transparent; color: var(--ink);
+    font: 400 1.3rem/1 var(--text); cursor: pointer;
+  }
+  .arrows button:hover { background: var(--ink); color: var(--bg); }
+  @media (max-width: 40rem) { .arrows { display: none; } }
+  .strip {
+    display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
+    padding: 0 max(1.25rem, calc(50vw - 36.75rem)); margin-top: 3rem; -webkit-overflow-scrolling: touch;
+  }
+  .strip::-webkit-scrollbar { display: none; }
+  .strip figure { position: relative; flex: 0 0 auto; height: clamp(18rem, 56vh, 32rem); border-radius: 1rem; overflow: hidden; scroll-snap-align: center; background: var(--tiles) center / 48px 48px; }
+  .strip .zoom { height: 100%; width: auto; }
+  .strip img { display: block; height: 100%; width: auto; max-width: none; }
+  .strip figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 3rem 1.25rem 1rem; pointer-events: none;
+    color: #fff; font-family: var(--display); font-size: 1.5rem;
+    background: linear-gradient(to top, rgba(9, 16, 40, .75), rgba(9, 16, 40, 0));
+  }
+
+  /* Night: the lounge */
+  .pair { display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.25rem; margin-top: 3rem; }
+  .pair .shot { aspect-ratio: 4 / 3; }
+  .pair figure:last-child { margin-top: 4rem; }
+  @media (max-width: 40rem) { .pair { grid-template-columns: 1fr; } .pair figure:last-child { margin-top: 0; } }
+
+  /* Booking */
+  .book { padding: clamp(4rem, 10vw, 8rem) 0; border-top: 1px solid var(--line); transition: border-color .9s ease; }
+  .book-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); gap: clamp(2rem, 6vw, 5rem); margin-top: 3rem; align-items: start; }
+  .book .intro { color: var(--muted); max-width: 34rem; margin-top: 1.25rem; font-size: 1.15rem; }
+  form.ask { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  form.ask .full { grid-column: 1 / -1; }
+  form.ask label { display: block; font-weight: 600; margin-bottom: .35rem; }
+  form.ask input, form.ask select {
+    width: 100%; min-height: 3rem; padding: .6rem .8rem; border-radius: 6px;
+    font: 400 1rem/1.3 var(--text); color: var(--ink); background: var(--surface); border: 1.5px solid var(--line);
+  }
+  html[data-phase="night"] form.ask input, html[data-phase="night"] form.ask select { color-scheme: dark; }
+  .err { color: #ff9aa9; font-weight: 600; }
+  html:not([data-phase="night"]) .err { color: var(--geranium); }
+  .send { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .5rem; }
+  .fine { font-size: .92rem; color: var(--muted); }
+  .note {
+    background: #fbf8ee; color: #1c2440; border-radius: 4px; overflow: hidden;
+    transform: rotate(-1.2deg); box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, .35);
+  }
+  .note .band { height: 24px; background: var(--tiles) left center / 24px 24px; }
+  .note .to { font-size: .9rem; color: #4b5679; padding: 1.25rem 1.5rem 0; overflow-wrap: anywhere; }
+  .note pre { margin: 0; padding: .9rem 1.5rem 1.75rem; white-space: pre-wrap; font: 400 1rem/1.55 var(--text); }
+  @media (max-width: 51.99rem) { .book-grid { grid-template-columns: 1fr; } .note { transform: none; } }
+  @media (max-width: 30rem) { form.ask { grid-template-columns: 1fr; } }
+
+  /* Find us */
+  .find { padding: 0 0 clamp(4rem, 10vw, 7rem); }
+  .find-grid { display: grid; grid-template-columns: 4fr 5fr 3fr; gap: 1.5rem; margin-top: 3rem; align-items: stretch; }
+  .find address { font-style: normal; font-size: 1.15rem; }
+  .find ul { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: .8rem; }
+  .find li a { font-weight: 600; color: var(--accent); overflow-wrap: anywhere; transition: color .9s ease; }
+  .find li small { display: block; color: var(--muted); font-size: .9rem; }
+  .map { border-radius: 1rem; overflow: hidden; min-height: 22rem; background: var(--surface); }
+  .map iframe { display: block; width: 100%; height: 100%; min-height: 22rem; border: 0; }
+  .find .entrance .shot { aspect-ratio: 3 / 4; }
+  @media (max-width: 51.99rem) {
+    .find-grid { grid-template-columns: 1fr 1fr; }
+    .find-grid > div:first-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 36rem) { .find-grid { grid-template-columns: 1fr; } .find .entrance { width: 70%; } }
+
+  footer { border-top: 1px solid var(--line); padding: 2.5rem 0 3rem; font-size: .95rem; color: var(--muted); transition: border-color .9s ease, color .9s ease; }
+  footer .band { height: 24px; background: var(--tiles) left center / 24px 24px; margin-bottom: 2.5rem; border-radius: 2px; }
+  footer p + p { margin-top: .6rem; }
+
+  /* Phone: call and book are always one thumb away */
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-template-columns: 1fr 1fr; gap: .5rem;
+    padding: .55rem .75rem calc(.55rem + env(safe-area-inset-bottom));
+    background: var(--bg); border-top: 1px solid var(--line);
+    transition: background-color .9s ease, border-color .9s ease;
+  }
+  .bar .btn { min-height: 2.9rem; }
+  @media (min-width: 48rem) { .bar { display: none; } }
+  @media (max-width: 47.99rem) { body { padding-bottom: 4.5rem; } }
+
+  /* Full-size photo viewer */
+  dialog.lb { border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; }
+  dialog.lb::backdrop { background: rgba(6, 10, 26, .92); }
+  .lb-in { width: 100%; height: 100%; display: grid; grid-template-rows: 1fr auto; place-items: center; padding: 1rem; }
+  .lb-in img { max-width: 100%; max-height: calc(100vh - 7rem); object-fit: contain; border-radius: .5rem; }
+  .lb-row { display: flex; align-items: center; gap: 1rem; color: #fff; padding-top: .75rem; }
+  .lb-row p { min-width: 10rem; text-align: center; }
+  .lb-row button { width: 3rem; height: 3rem; border-radius: 50%; border: 1.5px solid #fff; background: transparent; color: #fff; font: 400 1.3rem/1 var(--text); cursor: pointer; }
+  .lb-row button:hover { background: #fff; color: #0d1630; }
 </style>
 </head>
 <body>
-<a class="skip" href="#main"><span data-lang="es">Saltar al contenido</span><span data-lang="en">Skip to content</span></a>
+<a class="skip" href="#main"><span class="es">Saltar al contenido</span><span class="en">Skip to content</span></a>
 
 <div class="demo" role="note">
   <div class="wrap">
-    <span data-lang="es">Demo hecha para Hostal Enriqueta por Lourenço Santos, Noir Digital. No aparece en Google.</span>
-    <span data-lang="en">Demo made for Hostal Enriqueta by Lourenço Santos, Noir Digital. Not listed on Google.</span>
+    <span class="es">Demo privada hecha para Hostal Enriqueta por Lourenço Santos, Noir Digital. No aparece en Google.</span>
+    <span class="en">Private demo made for Hostal Enriqueta by Lourenço Santos, Noir Digital. Not listed on Google.</span>
   </div>
 </div>
 
 <header class="site">
   <div class="wrap">
     <a class="brand" href="#top">Hostal Enriqueta</a>
-    <nav aria-label="Principal">
-      <ul>
-        <li class="hide-s"><a href="#habitaciones"><span data-lang="es">Habitaciones</span><span data-lang="en">Rooms</span></a></li>
-        <li class="hide-s"><a href="#llegar"><span data-lang="es">Cómo llegar</span><span data-lang="en">Find us</span></a></li>
-        <li class="hide-s"><a href="#reservas"><span data-lang="es">Reservas</span><span data-lang="en">Book</span></a></li>
-        <li><button class="lang" type="button" id="lang" aria-label="Switch to English">EN</button></li>
-      </ul>
-    </nav>
+    <div class="head-right">
+      <nav aria-label="Principal">
+        <a href="#patio"><span class="es">El patio</span><span class="en">The patio</span></a>
+        <a href="#habitaciones"><span class="es">Habitaciones</span><span class="en">Rooms</span></a>
+        <a href="#llegar"><span class="es">Cómo llegar</span><span class="en">Find us</span></a>
+      </nav>
+      <span class="clock" aria-hidden="true"><span class="orb"></span><span id="clock">9:00</span></span>
+      <button class="lang" type="button" id="lang">English</button>
+      <a class="btn small" href="#reservar"><span class="es">Reservar</span><span class="en">Book</span></a>
+    </div>
   </div>
 </header>
 
 <main id="main">
-  <div class="hero" id="top">
-    <div class="wrap">
-      <div>
-        <p class="eyebrow"><span data-lang="es">Hostal · Casco antiguo de Marbella</span><span data-lang="en">Guest house · Marbella old town</span></p>
-        <h1>
-          <span data-lang="es">Habitaciones económicas en pleno centro de Marbella</span>
-          <span data-lang="en">Affordable rooms in the heart of old Marbella</span>
-        </h1>
-        <p class="lead">
-          <span data-lang="es">Dobles, triples y cuádruples con baño privado, aire acondicionado y WiFi. Algunas dan a nuestro patio andaluz.</span>
-          <span data-lang="en">Double, triple and four-person rooms with private bathroom, air conditioning and WiFi. Some look onto our Andalusian patio.</span>
-        </p>
-        <div class="actions">
-          <a class="btn primary" href="tel:+34952827552"><span data-lang="es">Llamar al 952 82 75 52</span><span data-lang="en">Call +34 952 82 75 52</span></a>
-          <a class="btn ghost" href="#reservas"><span data-lang="es">Reservar por email</span><span data-lang="en">Book by email</span></a>
+
+  <!-- The door -->
+  <section class="door" id="top" data-phase="morning">
+    <div class="door-pin">
+      <div class="door-inner">
+        <div class="door-copy">
+          <p class="place"><span class="es">Casco antiguo de Marbella</span><span class="en">Marbella old town</span></p>
+          <h1>Hostal<br>Enriqueta</h1>
+          <p class="lead">
+            <span class="es">Un hostal económico con patio andaluz, en la calle de los Caballeros.</span>
+            <span class="en">An affordable guest house with an Andalusian patio, on Calle de los Caballeros.</span>
+          </p>
+          <div class="actions">
+            <a class="btn" href="#reservar"><span class="es">Reservar</span><span class="en">Book a room</span></a>
+            <a class="btn quiet" href="#habitaciones"><span class="es">Ver habitaciones</span><span class="en">See the rooms</span></a>
+          </div>
         </div>
+        <figure class="door-frame">
+          <img src="https://hostalenriqueta.com/Fotos%20nuevas/patio8.JPG" width="1000" height="750"
+               alt="El patio del hostal: macetas con geranios, azulejos y paredes encaladas"
+               data-alt-en="The guest house patio: pots of geraniums, tiles and whitewashed walls">
+          <figcaption class="door-cap">
+            <span class="es">Pasa. Este es el patio.</span>
+            <span class="en">Come in. This is the patio.</span>
+          </figcaption>
+        </figure>
+        <p class="door-hint"><i></i><span class="es">Sigue bajando para entrar</span><span class="en">Keep scrolling to step inside</span></p>
       </div>
-      <div class="photo tall" role="img" aria-label="Espacio para una foto del patio">
-        <span data-lang="es">Aquí va vuestra foto del patio</span><span data-lang="en">Your photo of the patio goes here</span>
-      </div>
-    </div>
-  </div>
-
-  <section id="habitaciones">
-    <div class="wrap">
-      <h2><span data-lang="es">Habitaciones</span><span data-lang="en">Rooms</span></h2>
-      <p class="intro">
-        <span data-lang="es">Unas son exteriores y otras interiores, con vistas al patio andaluz. Algunas tienen balcón.</span>
-        <span data-lang="en">Some face the street and others face inside, over the Andalusian patio. Some have a balcony.</span>
-      </p>
-      <ul class="cards">
-        <li class="card">
-          <div class="photo" role="img" aria-label="Espacio para una foto de la habitación doble"><span data-lang="es">Foto: habitación doble</span><span data-lang="en">Photo: double room</span></div>
-          <div class="body">
-            <p class="who"><span data-lang="es">1 o 2 personas</span><span data-lang="en">1 or 2 people</span></p>
-            <h3><span data-lang="es">Doble</span><span data-lang="en">Double</span></h3>
-            <p class="text">
-              <span data-lang="es">Con dos camas o con cama de matrimonio. Si viajas solo, el precio es más bajo.</span>
-              <span data-lang="en">With two beds or one double bed. A lower price if you are travelling alone.</span>
-            </p>
-          </div>
-        </li>
-        <li class="card">
-          <div class="photo warm" role="img" aria-label="Espacio para una foto de la habitación triple"><span data-lang="es">Foto: habitación triple</span><span data-lang="en">Photo: triple room</span></div>
-          <div class="body">
-            <p class="who"><span data-lang="es">3 personas</span><span data-lang="en">3 people</span></p>
-            <h3>Triple</h3>
-            <p class="text">
-              <span data-lang="es">Más amplia que las dobles, también disponible con tres camas.</span>
-              <span data-lang="en">Larger than the doubles, also available with three beds.</span>
-            </p>
-          </div>
-        </li>
-        <li class="card">
-          <div class="photo" role="img" aria-label="Espacio para una foto de la habitación cuádruple"><span data-lang="es">Foto: habitación cuádruple</span><span data-lang="en">Photo: four-person room</span></div>
-          <div class="body">
-            <p class="who"><span data-lang="es">4 personas</span><span data-lang="en">4 people</span></p>
-            <h3><span data-lang="es">Cuádruple</span><span data-lang="en">Four-person room</span></h3>
-            <p class="text">
-              <span data-lang="es">Nuestra habitación más grande. Solo tenemos dos: una con dos camas individuales y una de matrimonio, y otra con dos de matrimonio.</span>
-              <span data-lang="en">Our largest room. We have only two: one with two single beds and a double, one with two double beds.</span>
-            </p>
-          </div>
-        </li>
-      </ul>
-
-      <ul class="included" aria-label="En todas las habitaciones">
-        <li><span data-lang="es">Baño privado</span><span data-lang="en">Private bathroom</span></li>
-        <li><span data-lang="es">Aire acondicionado</span><span data-lang="en">Air conditioning</span></li>
-        <li><span data-lang="es">Ventilador de techo</span><span data-lang="en">Ceiling fan</span></li>
-        <li>WiFi</li>
-        <li>TV</li>
-      </ul>
-      <p class="note"><span data-lang="es">Todo incluido en todas las habitaciones.</span><span data-lang="en">All included in every room.</span></p>
     </div>
   </section>
 
-  <section id="llegar">
+  <!-- 9:00 -->
+  <section class="chapter" id="patio" data-phase="morning">
+    <div class="wrap chapter-grid">
+      <p class="hour">9:00</p>
+      <div class="chapter-body">
+        <h2><span class="es">La mañana empieza en el patio</span><span class="en">Morning starts in the patio</span></h2>
+        <p class="intro">
+          <span class="es">Azulejos, macetas y geranios en el centro de la casa. La recepción se abre a él, y algunas habitaciones también.</span>
+          <span class="en">Tiles, flowerpots and geraniums at the heart of the house. Reception opens onto it, and so do some of the rooms.</span>
+        </p>
+        <div class="duo">
+          <figure class="a">
+            <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/Recepcion.jpg" width="1233" height="912"
+              alt="La recepción, con las ventanas abiertas al patio" data-alt-en="Reception, with its windows open onto the patio"></button></div>
+            <figcaption class="cap"><span class="es">La recepción</span><span class="en">Reception</span></figcaption>
+          </figure>
+          <figure class="b">
+            <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/Patio%201.JPG" width="1000" height="750"
+              alt="El patio visto desde arriba" data-alt-en="The patio seen from above"></button></div>
+            <figcaption class="cap"><span class="es">El patio, desde arriba</span><span class="en">The patio, from above</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13:00 -->
+  <section class="chapter" id="habitaciones" data-phase="day">
+    <div class="wrap chapter-grid">
+      <p class="hour">13:00</p>
+      <div class="chapter-body">
+        <h2><span class="es">Elige tu habitación</span><span class="en">Choose your room</span></h2>
+        <p class="intro">
+          <span class="es">Unas dan a la calle y otras al patio. Algunas tienen balcón.</span>
+          <span class="en">Some face the street and others the patio. Some have a balcony.</span>
+        </p>
+
+        <div class="picker">
+          <div class="picker-controls">
+            <fieldset>
+              <legend><span class="es">¿Cuántos sois?</span><span class="en">How many of you?</span></legend>
+              <div class="seg">
+                <button type="button" data-guests="1" aria-pressed="false">1</button>
+                <button type="button" data-guests="2" aria-pressed="true">2</button>
+                <button type="button" data-guests="3" aria-pressed="false">3</button>
+                <button type="button" data-guests="4" aria-pressed="false">4</button>
+              </div>
+            </fieldset>
+            <p class="solo" id="solo" hidden>
+              <span class="es">Si viajas solo, el precio es más bajo.</span>
+              <span class="en">A lower price if you are travelling alone.</span>
+            </p>
+
+            <div class="room-info" data-room="doble">
+              <h3><span class="es">Doble</span><span class="en">Double</span></h3>
+              <p><span class="es">Para una o dos personas, con cama de matrimonio o con dos camas.</span><span class="en">For one or two people, with a double bed or two single beds.</span></p>
+              <fieldset>
+                <legend><span class="es">Camas</span><span class="en">Beds</span></legend>
+                <div class="seg">
+                  <button type="button" data-bed="doble-matrimonio" aria-pressed="true"><span class="es">De matrimonio</span><span class="en">Double bed</span></button>
+                  <button type="button" data-bed="doble-dos" aria-pressed="false"><span class="es">Dos camas</span><span class="en">Two beds</span></button>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="room-info" data-room="triple">
+              <h3>Triple</h3>
+              <p><span class="es">Más amplia que las dobles. También la hay con tres camas.</span><span class="en">Larger than the doubles. Also available with three single beds.</span></p>
+              <fieldset>
+                <legend><span class="es">Camas</span><span class="en">Beds</span></legend>
+                <div class="seg">
+                  <button type="button" data-bed="triple-mixta" aria-pressed="true"><span class="es">Matrimonio y una individual</span><span class="en">Double and a single</span></button>
+                  <button type="button" data-bed="triple-tres" aria-pressed="false"><span class="es">Tres camas</span><span class="en">Three beds</span></button>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="room-info" data-room="cuadruple">
+              <h3><span class="es">Cuádruple</span><span class="en">Four-person room</span></h3>
+              <p><span class="es">La más grande de la casa. Solo hay dos.</span><span class="en">The largest in the house. There are only two.</span></p>
+              <fieldset>
+                <legend><span class="es">Camas</span><span class="en">Beds</span></legend>
+                <div class="seg">
+                  <button type="button" data-bed="cuadruple-dobles" aria-pressed="true"><span class="es">Dos de matrimonio</span><span class="en">Two double beds</span></button>
+                  <button type="button" data-bed="cuadruple-mixta" aria-pressed="false"><span class="es">Matrimonio y dos individuales</span><span class="en">Double and two singles</span></button>
+                </div>
+              </fieldset>
+            </div>
+
+            <a class="btn" href="#reservar"><span class="es">Pedir esta habitación</span><span class="en">Ask for this room</span></a>
+          </div>
+
+          <div class="stage" aria-live="polite">
+            <figure class="on" data-view="doble-matrimonio">
+              <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/2P%20104%20Matrimonio%201.jpg" width="1000" height="750"
+                alt="Habitación doble con cama de matrimonio y balcón" data-alt-en="Double room with a double bed and a balcony"></button></div>
+              <figcaption class="cap"><span class="es">Doble, cama de matrimonio</span><span class="en">Double, double bed</span></figcaption>
+            </figure>
+            <figure data-view="doble-dos">
+              <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/2P%20205%20-%202%20Camas.jpg" width="789" height="584"
+                alt="Habitación doble con dos camas" data-alt-en="Double room with two single beds"></button></div>
+              <figcaption class="cap"><span class="es">Doble, dos camas</span><span class="en">Double, two beds</span></figcaption>
+            </figure>
+            <figure data-view="triple-mixta">
+              <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/3P%20206%20-%20Matrimonio%20%2B%20Individual.jpg" width="781" height="586"
+                alt="Habitación triple con cama de matrimonio y una individual" data-alt-en="Triple room with a double bed and a single"></button></div>
+              <figcaption class="cap"><span class="es">Triple, matrimonio y una individual</span><span class="en">Triple, double and a single</span></figcaption>
+            </figure>
+            <figure data-view="triple-tres">
+              <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/3P%20208%20-%203%20Camas.jpg" width="1000" height="750"
+                alt="Habitación triple con tres camas" data-alt-en="Triple room with three single beds"></button></div>
+              <figcaption class="cap"><span class="es">Triple, tres camas</span><span class="en">Triple, three beds</span></figcaption>
+            </figure>
+            <figure data-view="cuadruple-dobles">
+              <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/4P%20105%202Matrimonio%201.jpg" width="1000" height="743"
+                alt="Habitación cuádruple con dos camas de matrimonio" data-alt-en="Four-person room with two double beds"></button></div>
+              <figcaption class="cap"><span class="es">Cuádruple, dos de matrimonio</span><span class="en">Four-person room, two double beds</span></figcaption>
+            </figure>
+            <figure data-view="cuadruple-mixta">
+              <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/4p%20201%20-%20Matrimonio%20%2B%202Individual1.jpg" width="1000" height="750"
+                alt="Habitación cuádruple con cama de matrimonio y dos individuales" data-alt-en="Four-person room with a double bed and two singles"></button></div>
+              <figcaption class="cap"><span class="es">Cuádruple, matrimonio y dos individuales</span><span class="en">Four-person room, double and two singles</span></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <ul class="included">
+          <li><span class="es">Baño privado</span><span class="en">Private bathroom</span></li>
+          <li><span class="es">Aire acondicionado</span><span class="en">Air conditioning</span></li>
+          <li><span class="es">Ventilador de techo</span><span class="en">Ceiling fan</span></li>
+          <li>WiFi</li>
+          <li><span class="es">Televisión</span><span class="en">TV</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19:00 -->
+  <section class="chapter" id="calle" data-phase="dusk">
+    <div class="wrap chapter-grid">
+      <p class="hour">19:00</p>
+      <div class="chapter-body">
+        <div class="strip-head">
+          <h2><span class="es">Sales por la puerta y ya estás en el casco antiguo</span><span class="en">Step out of the door and you are in the old town</span></h2>
+          <div class="arrows">
+            <button type="button" id="prev" aria-label="Fotos anteriores" data-al-en="Previous photos">&larr;</button>
+            <button type="button" id="next" aria-label="Fotos siguientes" data-al-en="Next photos">&rarr;</button>
+          </div>
+        </div>
+        <p class="intro">
+          <span class="es">La plaza de los Naranjos, la iglesia de la Encarnación y la playa quedan a un paseo.</span>
+          <span class="en">Plaza de los Naranjos, the church of La Encarnación and the beach are a walk away.</span>
+        </p>
+      </div>
+    </div>
+    <div class="strip" id="strip" role="region" tabindex="0" aria-label="Fotos del casco antiguo" data-al-en="Photos of the old town">
+      <figure>
+        <button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/naranjos6.jpg" width="1600" height="1200"
+          alt="Terrazas bajo los naranjos en la plaza de los Naranjos" data-alt-en="Café tables under the orange trees in Plaza de los Naranjos"></button>
+        <figcaption>Plaza de los Naranjos</figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/encarnacion1.jpg" width="2048" height="1536"
+          alt="La torre de la iglesia de la Encarnación contra el cielo azul" data-alt-en="The tower of the church of La Encarnación against a blue sky"></button>
+        <figcaption><span class="es">Iglesia de la Encarnación</span><span class="en">Church of La Encarnación</span></figcaption>
+      </figure>
+      <figure>
+        <button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/playa1.jpg" width="912" height="684"
+          alt="La playa de Marbella, con sombrillas y pinos" data-alt-en="The beach in Marbella, with parasols and pine trees"></button>
+        <figcaption><span class="es">La playa</span><span class="en">The beach</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 23:00 -->
+  <section class="chapter" id="salon" data-phase="night">
+    <div class="wrap chapter-grid">
+      <p class="hour">23:00</p>
+      <div class="chapter-body">
+        <h2><span class="es">Y al volver, un salón donde sentarse</span><span class="en">And when you come back, a lounge to sit down in</span></h2>
+        <p class="intro">
+          <span class="es">Sofás, libros y una mesa para planear el día siguiente.</span>
+          <span class="en">Sofas, books and a table to plan tomorrow.</span>
+        </p>
+        <div class="pair">
+          <figure>
+            <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/Salon1.jpg" width="1233" height="912"
+              alt="El salón, con arcos, sillones y la recepción al fondo" data-alt-en="The lounge, with arches, armchairs and reception beyond"></button></div>
+          </figure>
+          <figure>
+            <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/Salon2.jpg" width="1233" height="912"
+              alt="El salón visto desde la escalera" data-alt-en="The lounge seen from the stairs"></button></div>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section class="book" id="reservar" data-phase="night">
     <div class="wrap">
-      <h2><span data-lang="es">Cómo llegar</span><span data-lang="en">Find us</span></h2>
-      <div class="split">
+      <h2><span class="es">Reserva en un minuto</span><span class="en">Book in a minute</span></h2>
+      <p class="intro">
+        <span class="es">Rellena cuatro datos y tu correo se abre con el mensaje ya escrito. O llama, si lo prefieres.</span>
+        <span class="en">Fill in four details and your email opens with the message already written. Or call, if you prefer.</span>
+      </p>
+      <div class="book-grid">
+        <form class="ask" id="ask" novalidate>
+          <div>
+            <label for="in"><span class="es">Llegada</span><span class="en">Arrival</span></label>
+            <input type="date" id="in" name="in">
+          </div>
+          <div>
+            <label for="out"><span class="es">Salida</span><span class="en">Departure</span></label>
+            <input type="date" id="out" name="out">
+          </div>
+          <div>
+            <label for="guests"><span class="es">Personas</span><span class="en">Guests</span></label>
+            <select id="guests" name="guests">
+              <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option>
+            </select>
+          </div>
+          <div>
+            <label for="room"><span class="es">Habitación</span><span class="en">Room</span></label>
+            <select id="room" name="room">
+              <option value="doble-matrimonio" data-es="Doble, cama de matrimonio" data-en="Double, double bed">Doble, cama de matrimonio</option>
+              <option value="doble-dos" data-es="Doble, dos camas" data-en="Double, two beds">Doble, dos camas</option>
+              <option value="triple-mixta" data-es="Triple, matrimonio y una individual" data-en="Triple, double and a single">Triple, matrimonio y una individual</option>
+              <option value="triple-tres" data-es="Triple, tres camas" data-en="Triple, three beds">Triple, tres camas</option>
+              <option value="cuadruple-dobles" data-es="Cuádruple, dos de matrimonio" data-en="Four-person room, two double beds">Cuádruple, dos de matrimonio</option>
+              <option value="cuadruple-mixta" data-es="Cuádruple, matrimonio y dos individuales" data-en="Four-person room, double and two singles">Cuádruple, matrimonio y dos individuales</option>
+              <option value="libre" data-es="La que tengáis libre" data-en="Whichever is free">La que tengáis libre</option>
+            </select>
+          </div>
+          <div class="full">
+            <label for="name"><span class="es">Tu nombre</span><span class="en">Your name</span></label>
+            <input type="text" id="name" name="name" autocomplete="name">
+          </div>
+          <p class="full err" id="err" role="alert" hidden>
+            <span class="es">La salida tiene que ser después de la llegada.</span>
+            <span class="en">Departure has to be after arrival.</span>
+          </p>
+          <div class="full send">
+            <a class="btn" id="send" href="mailto:h.enriqueta.marbella@gmail.com?subject=Reserva%20Hostal%20Enriqueta"><span class="es">Abrir mi correo con este mensaje</span><span class="en">Open my email with this message</span></a>
+            <a class="btn quiet" href="tel:+34952827552"><span class="es">Llamar al 952 82 75 52</span><span class="en">Call +34 952 82 75 52</span></a>
+          </div>
+          <p class="full fine">
+            <span class="es">Esta página no guarda ni envía nada: el mensaje sale desde tu propio correo.</span>
+            <span class="en">This page stores and sends nothing: the message goes out from your own email.</span>
+          </p>
+        </form>
+
+        <div class="note" aria-live="polite">
+          <div class="band"></div>
+          <p class="to"><span class="es">Para</span><span class="en">To</span>: h.enriqueta.marbella@gmail.com</p>
+          <pre id="preview">Hola:
+
+Me gustaría reservar en el Hostal Enriqueta.</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Find us -->
+  <section class="find" id="llegar" data-phase="night">
+    <div class="wrap">
+      <h2><span class="es">Calle de los Caballeros, 18</span><span class="en">Calle de los Caballeros, 18</span></h2>
+      <div class="find-grid">
         <div>
-          <address>Calle de los Caballeros 18<br><span data-lang="es">Casco antiguo, Marbella</span><span data-lang="en">Old town, Marbella</span></address>
-          <ul class="contact-list">
-            <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Hostal+Enriqueta+Calle+de+los+Caballeros+18+Marbella"><span data-lang="es">Abrir en Google Maps</span><span data-lang="en">Open in Google Maps</span></a></li>
+          <address>Calle de los Caballeros 18<br><span class="es">Casco antiguo, Marbella</span><span class="en">Old town, Marbella</span></address>
+          <ul>
+            <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Hostal+Enriqueta+Calle+de+los+Caballeros+18+Marbella" rel="noopener"><span class="es">Abrir en Google Maps</span><span class="en">Open in Google Maps</span></a></li>
             <li><a href="tel:+34952827552">(+34) 952 82 75 52</a></li>
+            <li><a href="tel:+34952770058">(+34) 952 77 00 58</a></li>
             <li><a href="mailto:h.enriqueta.marbella@gmail.com">h.enriqueta.marbella@gmail.com</a></li>
           </ul>
         </div>
-        <div class="photo warm" role="img" aria-label="Espacio para una foto de la fachada">
-          <span data-lang="es">Aquí va vuestra foto de la fachada</span><span data-lang="en">Your photo of the entrance goes here</span>
+        <div class="map">
+          <iframe loading="lazy" title="Mapa: Hostal Enriqueta, calle de los Caballeros 18, Marbella"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=-4.8887%2C36.5091%2C-4.8828%2C36.5121&amp;layer=mapnik&amp;marker=36.5106014%2C-4.8857539"></iframe>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="reservas">
-    <div class="wrap">
-      <h2><span data-lang="es">Reservas</span><span data-lang="en">Book a room</span></h2>
-      <div class="split">
-        <div class="book">
-          <h3><span data-lang="es">Por email</span><span data-lang="en">By email</span></h3>
-          <p>
-            <span data-lang="es">Dinos las fechas, cuántos sois y qué habitación preferís. Os respondemos con disponibilidad y precio.</span>
-            <span data-lang="en">Tell us your dates, how many you are and the room you prefer. We reply with availability and price.</span>
-          </p>
-          <a class="btn primary" data-lang="es" href="mailto:h.enriqueta.marbella@gmail.com?subject=Reserva%20Hostal%20Enriqueta&amp;body=Fechas%3A%0APersonas%3A%0AHabitaci%C3%B3n%3A%0ANombre%3A">Escribir para reservar</a>
-          <a class="btn primary" data-lang="en" href="mailto:h.enriqueta.marbella@gmail.com?subject=Booking%20request%20Hostal%20Enriqueta&amp;body=Dates%3A%0AGuests%3A%0ARoom%3A%0AName%3A">Email to book</a>
-        </div>
-        <div class="book">
-          <h3><span data-lang="es">Por teléfono</span><span data-lang="en">By phone</span></h3>
-          <p>
-            <span data-lang="es">Si lo prefieres, llámanos y lo dejamos reservado en un momento.</span>
-            <span data-lang="en">If you prefer, call us and we will book it for you straight away.</span>
-          </p>
-          <a class="btn ghost" href="tel:+34952827552">(+34) 952 82 75 52</a>
-        </div>
+        <figure class="entrance">
+          <div class="shot"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20nuevas/Calle.JPG" width="977" height="1302"
+            alt="La entrada del hostal en la calle de los Caballeros, con su cartel" data-alt-en="The guest house entrance on Calle de los Caballeros, with its sign"></button></div>
+          <figcaption class="cap"><span class="es">La entrada</span><span class="en">The entrance</span></figcaption>
+        </figure>
       </div>
     </div>
   </section>
 </main>
 
-<footer>
+<footer data-phase="night">
   <div class="wrap">
-    <p>Hostal Enriqueta · Calle de los Caballeros 18, Marbella</p>
+    <div class="band" aria-hidden="true"></div>
+    <p>Hostal Enriqueta, Calle de los Caballeros 18, Marbella</p>
     <p>
-      <span data-lang="es">Esto es una demo. Los textos salen de vuestra web actual y los recuadros de color son espacios para vuestras fotos. Hecha por Lourenço Santos, Noir Digital, Marbella.</span>
-      <span data-lang="en">This is a demo. The wording comes from your current website and the coloured panels are spaces for your photos. Made by Lourenço Santos, Noir Digital, Marbella.</span>
+      <span class="es">Esto es una demo privada. Los textos y todas las fotos son de vuestra web actual, hostalenriqueta.com, y las fotos se cargan desde ella. Mapa: © colaboradores de OpenStreetMap. Hecha por Lourenço Santos, Noir Digital, Marbella.</span>
+      <span class="en">This is a private demo. The wording and every photo come from your current website, hostalenriqueta.com, and the photos load from it. Map: © OpenStreetMap contributors. Made by Lourenço Santos, Noir Digital, Marbella.</span>
     </p>
   </div>
 </footer>
 
+<div class="bar">
+  <a class="btn quiet" href="tel:+34952827552"><span class="es">Llamar</span><span class="en">Call</span></a>
+  <a class="btn" href="#reservar"><span class="es">Reservar</span><span class="en">Book</span></a>
+</div>
+
+<dialog class="lb" id="lb" aria-label="Foto ampliada">
+  <div class="lb-in">
+    <img id="lb-img" alt="">
+    <div class="lb-row">
+      <button type="button" id="lb-prev" aria-label="Foto anterior" data-al-en="Previous photo">&larr;</button>
+      <p id="lb-cap"></p>
+      <button type="button" id="lb-next" aria-label="Foto siguiente" data-al-en="Next photo">&rarr;</button>
+      <button type="button" id="lb-close" aria-label="Cerrar" data-al-en="Close">&times;</button>
+    </div>
+  </div>
+</dialog>
+
 <script>
-  // Spanish first; English for visitors whose browser is not in Spanish.
-  (function () {
-    var root = document.documentElement, button = document.getElementById('lang');
-    function set(lang) {
-      root.lang = lang;
-      button.textContent = lang === 'es' ? 'EN' : 'ES';
-      button.setAttribute('aria-label', lang === 'es' ? 'Switch to English' : 'Cambiar a español');
+(function () {
+  var root = document.documentElement;
+  var $ = function (id) { return document.getElementById(id); };
+  var all = function (sel, el) { return Array.prototype.slice.call((el || document).querySelectorAll(sel)); };
+  root.classList.add('js');
+
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var header = document.querySelector('header.site');
+  var door = $('top');
+  var pinEl = door.querySelector('.door-pin');
+  var pinned = !reduce && window.innerHeight >= 560;
+  if (pinned) root.classList.add('pin');
+
+  /* ---------- Photos that fail to load fall back to the tile pattern ---------- */
+  function broken(img) { var f = img.closest('.shot, .door-frame, figure'); if (f) f.classList.add('noimg'); }
+  document.addEventListener('error', function (e) { if (e.target && e.target.tagName === 'IMG') broken(e.target); }, true);
+  all('img').forEach(function (img) { if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) broken(img); });
+
+  /* ---------- Language ---------- */
+  var T = {
+    es: {
+      subject: 'Reserva Hostal Enriqueta', hello: 'Hola:', want: 'Me gustaría reservar en el Hostal Enriqueta.',
+      arrive: 'Llegada', leave: 'Salida', guests: 'Personas', room: 'Habitación', open: 'por decidir',
+      night: 'noche', nights: 'noches', ask: '¿Tenéis disponibilidad y qué precio tendría?', thanks: 'Gracias,',
+      locale: 'es-ES', other: 'English'
+    },
+    en: {
+      subject: 'Booking request, Hostal Enriqueta', hello: 'Hello,', want: 'I would like to book a room at Hostal Enriqueta.',
+      arrive: 'Arrival', leave: 'Departure', guests: 'Guests', room: 'Room', open: 'to be decided',
+      night: 'night', nights: 'nights', ask: 'Do you have availability, and what would the price be?', thanks: 'Thank you,',
+      locale: 'en-GB', other: 'Español'
     }
-    set((navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
-    button.addEventListener('click', function () { set(root.lang === 'es' ? 'en' : 'es'); });
-  })();
+  };
+  var langBtn = $('lang');
+  all('img[alt]').forEach(function (i) { i.setAttribute('data-alt-es', i.getAttribute('alt')); });
+  all('[aria-label]').forEach(function (b) { if (b.hasAttribute('data-al-en')) b.setAttribute('data-al-es', b.getAttribute('aria-label')); });
+  function setLang(lang) {
+    root.lang = lang;
+    langBtn.textContent = T[lang].other;
+    all('option[data-es]').forEach(function (o) { o.textContent = o.getAttribute('data-' + lang); });
+    all('img[data-alt-en]').forEach(function (i) { i.alt = i.getAttribute('data-alt-' + lang); });
+    all('[data-al-en]').forEach(function (b) { b.setAttribute('aria-label', b.getAttribute('data-al-' + lang)); });
+    compose();
+  }
+  langBtn.addEventListener('click', function () { setLang(root.lang === 'es' ? 'en' : 'es'); });
+
+  /* ---------- Rooms ---------- */
+  var guestBtns = all('[data-guests]'), bedBtns = all('[data-bed]'), infos = all('.room-info'), views = all('.stage figure');
+  var solo = $('solo'), fGuests = $('guests'), fRoom = $('room');
+  var state = { guests: 2, bed: { doble: 'doble-matrimonio', triple: 'triple-mixta', cuadruple: 'cuadruple-dobles' } };
+  function roomFor(g) { return g <= 2 ? 'doble' : (g === 3 ? 'triple' : 'cuadruple'); }
+  function renderRooms(sync) {
+    var room = roomFor(state.guests), view = state.bed[room];
+    guestBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(Number(b.getAttribute('data-guests')) === state.guests)); });
+    bedBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-bed') === view)); });
+    infos.forEach(function (i) { i.hidden = i.getAttribute('data-room') !== room; });
+    views.forEach(function (v) { v.classList.toggle('on', v.getAttribute('data-view') === view); });
+    solo.hidden = state.guests !== 1;
+    if (sync) { fGuests.value = String(state.guests); fRoom.value = view; compose(); }
+  }
+  guestBtns.forEach(function (b) { b.addEventListener('click', function () { state.guests = Number(b.getAttribute('data-guests')); renderRooms(true); }); });
+  bedBtns.forEach(function (b) { b.addEventListener('click', function () {
+    var id = b.getAttribute('data-bed'); state.bed[id.split('-')[0]] = id; renderRooms(true);
+  }); });
+
+  /* ---------- Booking message ---------- */
+  var fIn = $('in'), fOut = $('out'), fName = $('name'), send = $('send'), preview = $('preview'), err = $('err');
+  function parse(v) { if (!v) return null; var a = v.split('-'); var d = new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); return isNaN(d.getTime()) ? null : d; }
+  function iso(d) { var m = d.getMonth() + 1, x = d.getDate(); return d.getFullYear() + '-' + (m < 10 ? '0' : '') + m + '-' + (x < 10 ? '0' : '') + x; }
+  function nice(d, t) {
+    try { return d.toLocaleDateString(t.locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
+    catch (e) { return iso(d); }
+  }
+  function compose() {
+    var t = T[root.lang] || T.es, a = parse(fIn.value), b = parse(fOut.value);
+    var bad = !!(a && b && b <= a);
+    err.hidden = !bad;
+    var n = (a && b && !bad) ? Math.round((b - a) / 86400000) : 0;
+    var roomText = fRoom.options[fRoom.selectedIndex] ? fRoom.options[fRoom.selectedIndex].textContent : '';
+    var lines = [
+      t.hello, '', t.want, '',
+      t.arrive + ': ' + (a ? nice(a, t) : '(' + t.open + ')'),
+      t.leave + ': ' + (b && !bad ? nice(b, t) + (n ? ' (' + n + ' ' + (n === 1 ? t.night : t.nights) + ')' : '') : '(' + t.open + ')'),
+      t.guests + ': ' + fGuests.value,
+      t.room + ': ' + roomText, '',
+      t.ask, '', t.thanks
+    ];
+    var name = fName.value.replace(/^\s+|\s+$/g, '');
+    if (name) lines.push(name);
+    var body = lines.join('\n');
+    preview.textContent = body;
+    send.href = 'mailto:h.enriqueta.marbella@gmail.com?subject=' + encodeURIComponent(t.subject) + '&body=' + encodeURIComponent(body);
+  }
+  var today = iso(new Date());
+  fIn.min = today; fOut.min = today;
+  [fIn, fOut, fGuests, fRoom, fName].forEach(function (f) {
+    f.addEventListener('input', compose); f.addEventListener('change', compose);
+  });
+  fIn.addEventListener('change', function () { if (fIn.value) fOut.min = fIn.value; });
+  $('ask').addEventListener('submit', function (e) { e.preventDefault(); });
+
+  /* ---------- Old-town strip ---------- */
+  var strip = $('strip');
+  function nudge(dir) { strip.scrollBy({ left: dir * strip.clientWidth * 0.8, behavior: reduce ? 'auto' : 'smooth' }); }
+  $('prev').addEventListener('click', function () { nudge(-1); });
+  $('next').addEventListener('click', function () { nudge(1); });
+
+  /* ---------- Full-size photo viewer ---------- */
+  var lb = $('lb'), lbImg = $('lb-img'), lbCap = $('lb-cap'), zooms = all('.zoom'), at = 0;
+  function show(i) {
+    at = (i + zooms.length) % zooms.length;
+    var im = zooms[at].querySelector('img');
+    lbImg.src = im.currentSrc || im.src; lbImg.alt = im.alt; lbCap.textContent = im.alt;
+    if (!lb.open) lb.showModal();
+  }
+  if (typeof lb.showModal === 'function') {
+    zooms.forEach(function (z, i) { z.addEventListener('click', function () { show(i); }); });
+    $('lb-prev').addEventListener('click', function () { show(at - 1); });
+    $('lb-next').addEventListener('click', function () { show(at + 1); });
+    $('lb-close').addEventListener('click', function () { lb.close(); });
+    lb.addEventListener('click', function (e) { if (e.target === lb || e.target.className === 'lb-in') lb.close(); });
+    lb.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') show(at - 1);
+      if (e.key === 'ArrowRight') show(at + 1);
+    });
+  } else {
+    zooms.forEach(function (z) { z.style.cursor = 'default'; });
+  }
+
+  /* ---------- Scroll: the door, the time of day, the clock ---------- */
+  var phased = all('[data-phase]').filter(function (el) { return el !== root; });
+  var clock = $('clock'), phase = 'morning', waiting = false;
+  function frame() {
+    waiting = false;
+    var vh = window.innerHeight, y = window.pageYOffset || root.scrollTop || 0;
+
+    if (pinned) {
+      var r = door.getBoundingClientRect();
+      var total = r.height - pinEl.offsetHeight;
+      var s = total > 0 ? (header.offsetHeight - r.top) / (total * 0.85) : 0;
+      s = s < 0 ? 0 : (s > 1 ? 1 : s);
+      door.style.setProperty('--p', (s * s * (3 - 2 * s)).toFixed(4));
+    }
+
+    var mid = vh * 0.5, next = phase;
+    for (var i = 0; i < phased.length; i++) {
+      var b = phased[i].getBoundingClientRect();
+      if (b.top <= mid && b.bottom > mid) { next = phased[i].getAttribute('data-phase'); break; }
+    }
+    if (next !== phase) { phase = next; root.setAttribute('data-phase', phase); }
+
+    var max = root.scrollHeight - vh, q = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
+    var mins = 540 + Math.round(q * 870 / 10) * 10, h = Math.floor(mins / 60), m = mins % 60;
+    clock.textContent = h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  function onScroll() { if (!waiting) { waiting = true; window.requestAnimationFrame(frame); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+
+  /* ---------- Start ---------- */
+  renderRooms(false);
+  setLang((navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
+  frame();
+})();
 </script>
 </body>
 </html>
