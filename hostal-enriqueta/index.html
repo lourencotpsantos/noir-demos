@@ -28,7 +28,7 @@
     --ease: cubic-bezier(.22, 1, .36, 1);
     --ease-io: cubic-bezier(.65, 0, .35, 1);
     --gutter: clamp(1.125rem, 4.5vw, 2.75rem);
-    --section: clamp(4.5rem, 2.5rem + 8vw, 9rem);
+    --section: clamp(4rem, 2.25rem + 8vw, 9rem);
     --head: 4.25rem;
     --wrap: 78rem;
     --edge: max(var(--gutter), calc((100vw - var(--wrap)) / 2 + var(--gutter)));
@@ -64,12 +64,12 @@
   .tag { display: flex; align-items: center; gap: .8rem; font: 600 .72rem/1.3 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--soft); }
   .tag .st { font-size: .9rem; }
   .h2 { font-size: clamp(2.7rem, 1.4rem + 6.4vw, 6rem); }
-  .h3 { font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.8rem); line-height: 1.05; }
+  .h3 { font-size: clamp(2.1rem, 1.6rem + 2vw, 3.2rem); line-height: 1.02; }
   .lead { font-size: clamp(1.05rem, .98rem + .4vw, 1.25rem); line-height: 1.6; color: var(--soft); }
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 3.25rem; padding: .8rem 1.6rem;
     border-radius: .5rem; border: 1px solid var(--albero); background: var(--albero); color: var(--ink);
-    font: 600 .98rem/1.2 var(--sans); text-decoration: none; cursor: pointer; white-space: nowrap;
+    font: 600 .98rem/1.2 var(--sans); text-decoration: none; cursor: pointer; text-align: center;
     transition: background-color .25s ease, color .25s ease, border-color .25s ease;
   }
   .btn:hover { background: #e7b958; border-color: #e7b958; }
@@ -85,6 +85,7 @@
 
   /* ---------- Motion ---------- */
   @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
   @keyframes openL { to { transform: translateX(-101%); } }
   @keyframes openR { to { transform: translateX(101%); } }
   @keyframes settle { from { transform: scale(1.16); } to { transform: scale(1); } }
@@ -97,7 +98,7 @@
     html { scroll-behavior: auto; }
     .rise { opacity: 1; animation: none; }
     .leaf { display: none; }
-    .portal img, .mq { animation: none !important; }
+    .portal img, .mq, dialog.menu[open] { animation: none !important; }
   }
 
   /* ---------- Demo line, progress, header ---------- */
@@ -112,40 +113,51 @@
   header.site .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   .brand { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; font: 400 1.65rem/1 var(--serif); }
   .brand .st { font-size: 1.1rem; }
-  .head-right { display: flex; align-items: center; gap: clamp(.9rem, 2vw, 2rem); }
+  .head-right { display: flex; align-items: center; gap: clamp(.6rem, 2vw, 2rem); }
   .head-right nav { display: flex; gap: clamp(1rem, 2vw, 2rem); }
   .head-right nav a { position: relative; text-decoration: none; font-size: .95rem; font-weight: 500; color: rgba(245, 241, 232, .72); padding: .5rem 0; transition: color .25s ease; }
   .head-right nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: .2rem; height: 1px; background: var(--albero); transform: scaleX(0); transform-origin: left; transition: transform .4s var(--ease); }
   .head-right nav a:hover, .head-right nav a[aria-current="true"] { color: var(--cal); }
   .head-right nav a[aria-current="true"]::after { transform: scaleX(1); }
-  .lang { min-width: 2.75rem; min-height: 2.75rem; background: none; border: 1px solid rgba(245, 241, 232, .22); border-radius: 50%; font: 600 .78rem/1 var(--sans); letter-spacing: .08em; cursor: pointer; transition: border-color .25s ease; }
-  .lang:hover { border-color: var(--cal); }
+  .lang, .menu-btn { min-width: 2.75rem; min-height: 2.75rem; background: none; border: 1px solid rgba(245, 241, 232, .22); border-radius: 999px; font: 600 .78rem/1 var(--sans); letter-spacing: .08em; cursor: pointer; transition: border-color .25s ease; }
+  .lang:hover, .menu-btn:hover { border-color: var(--cal); }
+  .menu-btn { display: none; padding: 0 1.1rem; letter-spacing: .14em; text-transform: uppercase; }
   header.site .btn { min-height: 2.75rem; padding: .5rem 1.2rem; font-size: .92rem; }
-  @media (max-width: 60rem) { .head-right nav { display: none; } }
+  @media (max-width: 60rem) { .head-right nav { display: none; } .menu-btn { display: inline-block; } }
   @media (max-width: 47.99rem) { header.site .btn { display: none; } }
 
+  /* Full-screen menu on phones and tablets */
+  dialog.menu { border: 0; padding: 0; margin: 0; width: 100vw; max-width: 100vw; height: 100vh; height: 100dvh; max-height: 100vh; max-height: 100dvh; background: var(--ink); color: var(--cal); }
+  dialog.menu::backdrop { background: var(--ink); }
+  dialog.menu[open] { animation: fade .35s ease both; }
+  .menu-in { min-height: 100%; display: flex; flex-direction: column; padding: 0 var(--gutter) calc(1.5rem + env(safe-area-inset-bottom)); }
+  .menu-top { height: var(--head); display: flex; align-items: center; justify-content: space-between; }
+  .menu-in nav { margin-top: 1.5rem; }
+  .menu-in nav a { display: flex; align-items: baseline; gap: 1.1rem; padding: 1rem 0; border-bottom: 1px solid rgba(245, 241, 232, .14); text-decoration: none; font: 400 clamp(2.2rem, 9.5vw, 3.2rem)/1 var(--serif); }
+  .menu-in nav a b { font: italic 400 1.1rem/1 var(--serif); color: var(--albero); min-width: 1.6rem; font-variant-numeric: lining-nums; }
+  .menu-foot { margin-top: auto; padding-top: 2rem; display: grid; gap: .75rem; }
+  .menu-foot .btn { width: 100%; }
+
   /* ---------- Cover: the name, and a doorway that opens onto the patio ---------- */
-  .cover { padding: calc(var(--head) + clamp(1.25rem, 3vh, 2.25rem)) 0 clamp(3rem, 8vw, 6rem); overflow: hidden; }
+  .cover { padding: calc(var(--head) + clamp(1rem, 3vh, 2.25rem)) 0 clamp(3rem, 8vw, 6rem); overflow: hidden; }
   .cover-labels { display: flex; justify-content: space-between; gap: 1rem; font: 600 .7rem/1.3 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--soft); }
   .wordmark { display: block; width: 100%; height: auto; margin-top: clamp(.4rem, 1vw, .9rem); overflow: visible; }
   .wordmark text { font-family: var(--serif); font-size: 236px; fill: currentColor; }
   .cover-grid { margin-top: clamp(.9rem, 2vw, 1.5rem); }
-  .portal { position: relative; overflow: hidden; aspect-ratio: 4 / 5; border-radius: .4rem; background: var(--ink-2); }
+  .portal { position: relative; overflow: hidden; aspect-ratio: 4 / 5; max-height: 62vh; max-height: 62svh; width: 100%; border-radius: .4rem; background: var(--ink-2); }
   .portal img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; animation: settle 2.6s var(--ease) .35s both; }
   .leaf { position: absolute; top: 0; bottom: 0; width: 50.5%; background: var(--ink-2); will-change: transform; }
   .leaf.l { left: 0; border-right: 1px solid rgba(217, 166, 64, .55); animation: openL 1.6s var(--ease-io) .5s forwards; }
   .leaf.r { right: 0; border-left: 1px solid rgba(217, 166, 64, .55); animation: openR 1.6s var(--ease-io) .5s forwards; }
   .portal-cap { position: absolute; left: .9rem; bottom: .8rem; font: 600 .68rem/1.3 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, .6); }
   .cover-text { margin-top: 1.5rem; }
-  .cover-text .line { font: 400 clamp(1.7rem, 1.2rem + 2.4vw, 2.6rem)/1.08 var(--serif); letter-spacing: -.01em; }
+  .cover-text .line { font: 400 clamp(1.9rem, 1.3rem + 2.6vw, 2.8rem)/1.06 var(--serif); letter-spacing: -.01em; }
   .cover-text .lead { margin-top: 1rem; max-width: 30rem; }
   .cover-text .actions { display: none; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
-  @media (min-width: 48rem) {
-    .cover-text .actions { display: flex; }
-  }
+  @media (min-width: 48rem) { .cover-text .actions { display: flex; } }
   @media (min-width: 56rem) {
     .cover-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gutter); align-items: end; }
-    .portal { grid-column: 6 / 13; grid-row: 1; aspect-ratio: 3 / 2; }
+    .portal { grid-column: 6 / 13; grid-row: 1; aspect-ratio: 3 / 2; max-height: none; }
     .cover-text { grid-column: 1 / 6; grid-row: 1; margin-top: 0; padding-bottom: .25rem; }
   }
 
@@ -187,38 +199,45 @@
   .rail { position: relative; flex: 1; height: 1px; background: var(--line); }
   .rail i { position: absolute; left: 0; top: -1px; width: 100%; height: 3px; background: var(--accent); transform: scaleX(.2); transform-origin: left; transition: transform .25s linear; }
   .arrows { display: none; gap: .5rem; }
-  .arrows button { width: 3rem; height: 3rem; border-radius: 50%; border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 1.1rem; line-height: 1; transition: border-color .25s ease, background-color .25s ease, color .25s ease; }
+  .arrows button { width: 3rem; height: 3rem; border-radius: 50%; border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 1.1rem; line-height: 1; transition: border-color .25s ease; }
   .arrows button:hover { border-color: var(--fg); }
   .hint { font: 600 .68rem/1 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--soft); }
   @media (hover: hover) and (min-width: 48rem) { .arrows { display: flex; } .hint { display: none; } .car-track { cursor: grab; } }
 
-  .car.house .slide { --w: 80vw; --ar: 4 / 5; }
-  .car.rooms .slide { --w: 88vw; --ar: 4 / 3; }
-  .car.near  .slide { --w: 70vw; --ar: 4 / 5; }
+  .car.house .slide { --w: 84vw; --ar: 4 / 5; }
+  .car.near  .slide { --w: 72vw; --ar: 4 / 5; }
   @media (min-width: 48rem) {
     .car.house .slide { --w: min(44rem, 56vw); --ar: 4 / 3; }
-    .car.rooms .slide { --w: min(50rem, 60vw); }
     .car.near  .slide { --w: min(24.5rem, 30vw); }
   }
 
-  /* Rooms */
-  .chips { display: flex; gap: .5rem; margin-top: clamp(2rem, 4vw, 3rem); overflow-x: auto; scrollbar-width: none; }
-  .chips::-webkit-scrollbar { display: none; }
-  .chips button { flex: none; min-height: 3rem; padding: .55rem 1.25rem; border-radius: 999px; border: 1px solid var(--line); background: transparent; cursor: pointer; font: 500 .98rem/1.2 var(--sans); transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
-  .chips button small { font: inherit; color: var(--soft); margin-left: .45rem; transition: color .25s ease; }
-  .chips button[aria-pressed="true"] { background: var(--ink); color: var(--cal); border-color: var(--ink); }
-  .chips button[aria-pressed="true"] small { color: rgba(245, 241, 232, .7); }
-  .car.rooms { margin-top: 1.5rem; }
-  .room-below { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2rem var(--gutter); margin-top: clamp(2.25rem, 5vw, 4rem); align-items: start; }
-  .room-info-wrap { grid-column: 1 / 7; min-height: 9rem; }
-  .room-info p { color: var(--soft); margin-top: .9rem; max-width: 32rem; }
-  .room-info + .room-info { margin-top: 2rem; }
-  .js .room-info + .room-info { margin-top: 0; }
-  .room-info .btn { margin-top: 1.6rem; }
-  .included { grid-column: 8 / 13; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  .included li { display: flex; align-items: center; gap: .9rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
-  .included .st { font-size: .8rem; background: var(--albero-deep); }
-  @media (max-width: 56rem) { .room-below { display: block; } .included { margin-top: 2.25rem; } .room-info-wrap { min-height: 0; } }
+  /* ---------- Rooms: three rooms, each with its own photo and bed choice ---------- */
+  .included { list-style: none; margin: clamp(2rem, 4vw, 3rem) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem 1.75rem; }
+  .included li { display: flex; align-items: center; gap: .7rem; font-size: .98rem; }
+  .included .st { font-size: .75rem; background: var(--albero-deep); }
+  .rooms { margin-top: clamp(2rem, 4vw, 3.5rem); border-bottom: 1px solid var(--line); }
+  .room { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gutter); align-items: center; padding: clamp(2.25rem, 5vw, 4.5rem) 0; border-top: 1px solid var(--line); }
+  .room-photo { grid-column: 1 / 8; position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: .4rem; background: var(--panel); }
+  .room-text { grid-column: 9 / 13; }
+  .room:nth-child(even) .room-photo { grid-column: 6 / 13; order: 2; }
+  .room:nth-child(even) .room-text { grid-column: 1 / 5; order: 1; }
+  .room-photo figure { position: absolute; inset: 0; transition: opacity .6s var(--ease), visibility 0s linear 0s; }
+  .js .room-photo figure:not(.on) { opacity: 0; visibility: hidden; transition: opacity .6s var(--ease), visibility 0s linear .6s; }
+  .room-photo .frame { position: absolute; inset: 0; border-radius: 0; }
+  .badge { position: absolute; z-index: 2; left: .8rem; bottom: .8rem; pointer-events: none; padding: .45rem .85rem; border-radius: 999px; background: rgba(19, 18, 17, .8); color: var(--cal); font: 600 .7rem/1.2 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
+  .room-text .num { font: italic 400 1.4rem/1 var(--serif); color: var(--accent); font-variant-numeric: lining-nums; margin-bottom: .6rem; }
+  .room-text .desc { color: var(--soft); margin-top: .9rem; }
+  .switch { border: 0; padding: 0; margin: 1.5rem 0 0; min-width: 0; }
+  .switch legend { padding: 0; margin-bottom: .55rem; font: 600 .7rem/1.3 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+  .switch div { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; padding: .25rem; border-radius: .6rem; background: #fffdf8; border: 1px solid rgba(19, 18, 17, .2); }
+  .switch button { min-height: 3rem; padding: .45rem .5rem; border: 0; border-radius: .4rem; background: transparent; cursor: pointer; font: 500 .95rem/1.2 var(--sans); transition: background-color .25s ease, color .25s ease; }
+  .switch button[aria-pressed="true"] { background: var(--ink); color: var(--cal); }
+  .room-text .btn { margin-top: 1.25rem; width: 100%; }
+  @media (max-width: 56rem) {
+    .room { display: block; padding: 2.25rem 0 2.5rem; }
+    .room-photo { margin: 0 calc(var(--gutter) * -1); border-radius: 0; }
+    .room-text { margin-top: 1.4rem; }
+  }
 
   /* One line over a photo */
   .band { position: relative; min-height: clamp(26rem, 86vh, 46rem); display: grid; align-items: end; overflow: hidden; }
@@ -239,8 +258,9 @@
 
   /* Booking */
   .book-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2.5rem var(--gutter); margin-top: clamp(2.5rem, 5vw, 4.5rem); align-items: start; }
-  form.ask { grid-column: 1 / 8; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1.25rem; }
+  form.ask { grid-column: 1 / 8; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1rem; }
   form.ask .full { grid-column: 1 / -1; }
+  form.ask > div { min-width: 0; }
   .lab { display: block; margin-bottom: .55rem; font: 600 .7rem/1.3 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
   form.ask input, form.ask select {
     display: block; width: 100%; min-width: 0; min-height: 3.5rem; padding: .85rem 1rem; border-radius: .5rem; -webkit-appearance: none; appearance: none;
@@ -249,12 +269,13 @@
   }
   form.ask select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 1.35rem) 50%, calc(100% - 1rem) 50%; background-size: .35rem .35rem; background-repeat: no-repeat; padding-right: 2.5rem; }
   form.ask input:focus, form.ask select:focus { outline: none; border-color: var(--ink); }
-  .step { display: flex; align-items: center; justify-content: space-between; min-height: 3.5rem; border-radius: .5rem; background: #fffdf8; border: 1px solid rgba(19, 18, 17, .22); padding: 0 .35rem; }
-  .step button { width: 2.9rem; height: 2.9rem; border-radius: 50%; border: 0; background: transparent; cursor: pointer; font-size: 1.5rem; line-height: 1; transition: background-color .2s ease; }
+  .step { display: flex; align-items: center; justify-content: space-between; min-height: 3.5rem; border-radius: .5rem; background: #fffdf8; border: 1px solid rgba(19, 18, 17, .22); padding: 0 .3rem; }
+  .step button { width: 2.9rem; height: 2.9rem; flex: none; border-radius: 50%; border: 0; background: transparent; cursor: pointer; font-size: 1.5rem; line-height: 1; transition: background-color .2s ease; }
   .step button:hover { background: var(--cal-2); }
   .step button:disabled { opacity: .3; cursor: default; }
   .step output { font: 400 1.7rem/1 var(--serif); font-variant-numeric: lining-nums tabular-nums; }
   .send { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .5rem; }
+  .send .btn { flex: 1 1 14rem; }
   .send .btn.ghost { border-color: rgba(19, 18, 17, .3); }
   .fine { font-size: .9rem; color: var(--soft); }
   .ticket { grid-column: 9 / 13; position: sticky; top: calc(var(--head) + 1.5rem); background: var(--ink); color: var(--cal); border-radius: .6rem; padding: 1.75rem 1.6rem 1.5rem; }
@@ -268,7 +289,7 @@
   .ticket dd.small { font-size: 1.3rem; }
   .ticket .to { padding-top: 1rem; border-top: 1px dashed rgba(245, 241, 232, .3); font-size: .85rem; color: rgba(245, 241, 232, .7); overflow-wrap: anywhere; }
   @media (max-width: 56rem) { .book-grid { display: block; } .ticket { position: static; margin-top: 2.5rem; } }
-  @media (max-width: 22rem) { form.ask { grid-template-columns: 1fr; } }
+  @media (max-width: 20rem) { form.ask { grid-template-columns: 1fr; } }
 
   /* Find us */
   .find-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2.5rem var(--gutter); margin-top: clamp(2.5rem, 5vw, 4.5rem); align-items: stretch; }
@@ -281,7 +302,14 @@
   .find-text .btn { margin-top: 2rem; }
   .map { grid-column: 7 / 13; border-radius: .4rem; overflow: hidden; min-height: 24rem; background: var(--ink-2); }
   .map iframe { display: block; width: 100%; height: 100%; min-height: 24rem; border: 0; }
-  @media (max-width: 56rem) { .find-grid { display: block; } .map { margin-top: 2.5rem; min-height: 19rem; } .map iframe { min-height: 19rem; } }
+  @media (max-width: 56rem) {
+    .find-grid { display: block; }
+    .find-text .btn { width: 100%; }
+    .map { margin-top: 2.5rem; min-height: 19rem; }
+    .map iframe { min-height: 19rem; }
+  }
+  /* On a touch screen the map would trap the page scroll, so it is a picture there; the button opens the real map */
+  @media (hover: none) { .map iframe { pointer-events: none; } }
 
   footer { padding: clamp(3rem, 7vw, 5rem) 0 2.5rem; border-top: 1px solid var(--line); font-size: .9rem; color: var(--soft); }
   footer .wordmark { color: rgba(245, 241, 232, .14); margin: 0 0 2rem; }
@@ -306,8 +334,8 @@
   .lb-in img { max-width: 100%; max-height: calc(100vh - 8.5rem); max-height: calc(100dvh - 8.5rem); object-fit: contain; border-radius: .4rem; }
   .lb-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 0 calc(.5rem + env(safe-area-inset-bottom)); }
   .lb-row p { min-width: 8rem; max-width: 52vw; text-align: center; font: italic 400 1.2rem/1.2 var(--serif); }
-  .lb-row button { width: 3rem; height: 3rem; flex: none; border-radius: 50%; border: 1px solid rgba(245, 241, 232, .3); background: transparent; color: var(--cal); font-size: 1.15rem; line-height: 1; cursor: pointer; }
-  .lb-row button:hover { border-color: var(--cal); }
+  .lb-row button, .menu-top button { width: 3rem; height: 3rem; flex: none; border-radius: 50%; border: 1px solid rgba(245, 241, 232, .3); background: transparent; color: var(--cal); font-size: 1.15rem; line-height: 1; cursor: pointer; }
+  .lb-row button:hover, .menu-top button:hover { border-color: var(--cal); }
 </style>
 </head>
 <body class="dark">
@@ -332,10 +360,31 @@
         <a href="#llegar"><span class="es">Cómo llegar</span><span class="en">Find us</span></a>
       </nav>
       <button class="lang" type="button" id="lang" aria-label="Switch to English">EN</button>
+      <button class="menu-btn" type="button" id="menu-open" aria-haspopup="dialog"><span class="es">Menú</span><span class="en">Menu</span></button>
       <a class="btn" href="#reservar"><span class="es">Reservar</span><span class="en">Book</span></a>
     </div>
   </div>
 </header>
+
+<dialog class="menu" id="menu" aria-label="Menú">
+  <div class="menu-in">
+    <div class="menu-top">
+      <span class="brand"><i class="st" aria-hidden="true"></i>Enriqueta</span>
+      <button type="button" id="menu-close" aria-label="Cerrar el menú" data-al-en="Close the menu">&times;</button>
+    </div>
+    <nav aria-label="Menú">
+      <a href="#casa"><b>01</b><span><span class="es">La casa</span><span class="en">The house</span></span></a>
+      <a href="#habitaciones"><b>02</b><span><span class="es">Habitaciones</span><span class="en">Rooms</span></span></a>
+      <a href="#alrededores"><b>03</b><span><span class="es">Alrededores</span><span class="en">Nearby</span></span></a>
+      <a href="#reservar"><b>04</b><span><span class="es">Reservar</span><span class="en">Book</span></span></a>
+      <a href="#llegar"><b>05</b><span><span class="es">Cómo llegar</span><span class="en">Find us</span></span></a>
+    </nav>
+    <div class="menu-foot">
+      <a class="btn" href="tel:+34952827552"><span class="es">Llamar al 952 82 75 52</span><span class="en">Call +34 952 82 75 52</span></a>
+      <a class="btn ghost" href="mailto:h.enriqueta.marbella@gmail.com">h.enriqueta.marbella@gmail.com</a>
+    </div>
+  </div>
+</dialog>
 
 <main id="main">
 
@@ -439,96 +488,95 @@
 
   <!-- Rooms -->
   <section class="section light" id="habitaciones" data-nav>
-    <div class="wrap head2">
-      <div>
-        <p class="tag rv"><i class="st" aria-hidden="true"></i><span class="es">Habitaciones</span><span class="en">Rooms</span></p>
-        <h2 class="h2 rv" style="--d:80ms"><span class="es">Elige <i>tu habitación.</i></span><span class="en">Choose <i>your room.</i></span></h2>
-      </div>
-      <p class="lead rv" style="--d:160ms">
-        <span class="es">Unas dan a la calle y otras al patio. Algunas tienen balcón.</span>
-        <span class="en">Some face the street and others the patio. Some have a balcony.</span>
-      </p>
-    </div>
     <div class="wrap">
-      <div class="chips" role="group" aria-label="Tipo de habitación" data-al-en="Room type">
-        <button type="button" data-room="doble" aria-pressed="true"><span class="es">Doble</span><span class="en">Double</span><small><span class="es">1 o 2</span><span class="en">1 or 2</span></small></button>
-        <button type="button" data-room="triple" aria-pressed="false">Triple<small>3</small></button>
-        <button type="button" data-room="cuadruple" aria-pressed="false"><span class="es">Cuádruple</span><span class="en">Four-person</span><small>4</small></button>
+      <div class="head2">
+        <div>
+          <p class="tag rv"><i class="st" aria-hidden="true"></i><span class="es">Habitaciones</span><span class="en">Rooms</span></p>
+          <h2 class="h2 rv" style="--d:80ms"><span class="es">Tres habitaciones, <i>elige la tuya.</i></span><span class="en">Three rooms, <i>choose yours.</i></span></h2>
+        </div>
+        <p class="lead rv" style="--d:160ms">
+          <span class="es">Unas dan a la calle y otras al patio. Algunas tienen balcón.</span>
+          <span class="en">Some face the street and others the patio. Some have a balcony.</span>
+        </p>
       </div>
-    </div>
-    <div class="car rooms" data-car id="rooms-car">
-      <div class="car-track" tabindex="0" role="region" aria-label="Fotos de las habitaciones" data-al-en="Photos of the rooms">
-        <figure class="slide">
-          <div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/2P%20104%20Matrimonio%201.jpg" width="1000" height="750"
-            alt="Habitación doble con cama de matrimonio y balcón" data-alt-en="Double room with a double bed and a balcony"></button></div>
-        </figure>
-        <figure class="slide">
-          <div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/2P%20205%20-%202%20Camas.jpg" width="789" height="584"
-            alt="Habitación doble con dos camas" data-alt-en="Double room with two single beds"></button></div>
-        </figure>
-        <figure class="slide">
-          <div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/3P%20206%20-%20Matrimonio%20%2B%20Individual.jpg" width="781" height="586"
-            alt="Habitación triple con cama de matrimonio y una individual" data-alt-en="Triple room with a double bed and a single"></button></div>
-        </figure>
-        <figure class="slide">
-          <div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/3P%20208%20-%203%20Camas.jpg" width="1000" height="750"
-            alt="Habitación triple con tres camas" data-alt-en="Triple room with three single beds"></button></div>
-        </figure>
-        <figure class="slide">
-          <div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/4P%20105%202Matrimonio%201.jpg" width="1000" height="743"
-            alt="Habitación cuádruple con dos camas de matrimonio" data-alt-en="Four-person room with two double beds"></button></div>
-        </figure>
-        <figure class="slide">
-          <div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/4p%20201%20-%20Matrimonio%20%2B%202Individual1.jpg" width="1000" height="750"
-            alt="Habitación cuádruple con cama de matrimonio y dos individuales" data-alt-en="Four-person room with a double bed and two singles"></button></div>
-        </figure>
-      </div>
-      <div class="wrap car-ui">
-        <span class="count"><span class="now">01</span> <em>/ 06</em></span>
-        <span class="rail"><i class="fill"></i></span>
-        <span class="hint"><span class="es">Desliza</span><span class="en">Swipe</span></span>
-        <span class="arrows"><button type="button" class="prev" aria-label="Habitación anterior" data-al-en="Previous room">&larr;</button><button type="button" class="next" aria-label="Habitación siguiente" data-al-en="Next room">&rarr;</button></span>
-      </div>
-    </div>
-    <div class="wrap room-below">
-      <div class="room-info-wrap" aria-live="polite">
-        <div class="room-info" data-view="doble-matrimonio">
-          <h3 class="h3"><span class="es">Doble, <i>cama de matrimonio</i></span><span class="en">Double, <i>double bed</i></span></h3>
-          <p><span class="es">Para una o dos personas. Si viajas solo, el precio es más bajo.</span><span class="en">For one or two guests. A lower price if you are travelling alone.</span></p>
-          <a class="btn inkb" href="#reservar"><span class="es">Pedir esta habitación</span><span class="en">Ask for this room</span></a>
-        </div>
-        <div class="room-info" data-view="doble-dos">
-          <h3 class="h3"><span class="es">Doble, <i>dos camas</i></span><span class="en">Double, <i>two beds</i></span></h3>
-          <p><span class="es">Para una o dos personas. Si viajas solo, el precio es más bajo.</span><span class="en">For one or two guests. A lower price if you are travelling alone.</span></p>
-          <a class="btn inkb" href="#reservar"><span class="es">Pedir esta habitación</span><span class="en">Ask for this room</span></a>
-        </div>
-        <div class="room-info" data-view="triple-mixta">
-          <h3 class="h3"><span class="es">Triple, <i>matrimonio y una individual</i></span><span class="en">Triple, <i>double and a single</i></span></h3>
-          <p><span class="es">Para tres personas. Más amplia que las dobles.</span><span class="en">For three guests. Larger than the doubles.</span></p>
-          <a class="btn inkb" href="#reservar"><span class="es">Pedir esta habitación</span><span class="en">Ask for this room</span></a>
-        </div>
-        <div class="room-info" data-view="triple-tres">
-          <h3 class="h3"><span class="es">Triple, <i>tres camas</i></span><span class="en">Triple, <i>three beds</i></span></h3>
-          <p><span class="es">Para tres personas, cada una en su cama. Más amplia que las dobles.</span><span class="en">For three guests, each in their own bed. Larger than the doubles.</span></p>
-          <a class="btn inkb" href="#reservar"><span class="es">Pedir esta habitación</span><span class="en">Ask for this room</span></a>
-        </div>
-        <div class="room-info" data-view="cuadruple-dobles">
-          <h3 class="h3"><span class="es">Cuádruple, <i>dos de matrimonio</i></span><span class="en">Four-person, <i>two double beds</i></span></h3>
-          <p><span class="es">Para cuatro personas. La más grande de la casa: solo hay dos.</span><span class="en">For four guests. The largest in the house: there are only two.</span></p>
-          <a class="btn inkb" href="#reservar"><span class="es">Pedir esta habitación</span><span class="en">Ask for this room</span></a>
-        </div>
-        <div class="room-info" data-view="cuadruple-mixta">
-          <h3 class="h3"><span class="es">Cuádruple, <i>matrimonio y dos individuales</i></span><span class="en">Four-person, <i>double and two singles</i></span></h3>
-          <p><span class="es">Para cuatro personas. La más grande de la casa: solo hay dos.</span><span class="en">For four guests. The largest in the house: there are only two.</span></p>
-          <a class="btn inkb" href="#reservar"><span class="es">Pedir esta habitación</span><span class="en">Ask for this room</span></a>
-        </div>
-      </div>
-      <ul class="included">
+      <ul class="included rv" aria-label="En todas las habitaciones" data-al-en="In every room">
         <li><i class="st" aria-hidden="true"></i><span class="es">Baño privado</span><span class="en">Private bathroom</span></li>
         <li><i class="st" aria-hidden="true"></i><span class="es">Aire acondicionado</span><span class="en">Air conditioning</span></li>
         <li><i class="st" aria-hidden="true"></i><span class="es">Ventilador de techo</span><span class="en">Ceiling fan</span></li>
-        <li><i class="st" aria-hidden="true"></i><span class="es">WiFi y televisión</span><span class="en">WiFi and TV</span></li>
+        <li><i class="st" aria-hidden="true"></i>WiFi</li>
+        <li><i class="st" aria-hidden="true"></i><span class="es">Televisión</span><span class="en">TV</span></li>
       </ul>
+
+      <div class="rooms">
+        <article class="room" data-room="doble" data-view="doble-matrimonio">
+          <div class="room-photo">
+            <figure class="on" data-view="doble-matrimonio"><div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/2P%20104%20Matrimonio%201.jpg" width="1000" height="750"
+              alt="Habitación doble con cama de matrimonio y balcón" data-alt-en="Double room with a double bed and a balcony"></button></div></figure>
+            <figure data-view="doble-dos"><div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/2P%20205%20-%202%20Camas.jpg" width="789" height="584"
+              alt="Habitación doble con dos camas" data-alt-en="Double room with two single beds"></button></div></figure>
+            <span class="badge"><span class="es">1 o 2 personas</span><span class="en">1 or 2 guests</span></span>
+          </div>
+          <div class="room-text">
+            <p class="num">01</p>
+            <h3 class="h3"><span class="es">La doble</span><span class="en">The double</span></h3>
+            <p class="desc"><span class="es">Para una o dos personas. Si viajas solo, el precio es más bajo.</span><span class="en">For one or two guests. A lower price if you are travelling alone.</span></p>
+            <fieldset class="switch">
+              <legend><span class="es">Elige las camas</span><span class="en">Choose the beds</span></legend>
+              <div>
+                <button type="button" data-bed="doble-matrimonio" aria-pressed="true"><span class="es">De matrimonio</span><span class="en">Double bed</span></button>
+                <button type="button" data-bed="doble-dos" aria-pressed="false"><span class="es">Dos camas</span><span class="en">Two beds</span></button>
+              </div>
+            </fieldset>
+            <a class="btn inkb pick" href="#reservar"><span class="es">Pedir la doble</span><span class="en">Ask for the double</span></a>
+          </div>
+        </article>
+
+        <article class="room" data-room="triple" data-view="triple-mixta">
+          <div class="room-photo">
+            <figure class="on" data-view="triple-mixta"><div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/3P%20206%20-%20Matrimonio%20%2B%20Individual.jpg" width="781" height="586"
+              alt="Habitación triple con cama de matrimonio y una individual" data-alt-en="Triple room with a double bed and a single"></button></div></figure>
+            <figure data-view="triple-tres"><div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/3P%20208%20-%203%20Camas.jpg" width="1000" height="750"
+              alt="Habitación triple con tres camas" data-alt-en="Triple room with three single beds"></button></div></figure>
+            <span class="badge"><span class="es">3 personas</span><span class="en">3 guests</span></span>
+          </div>
+          <div class="room-text">
+            <p class="num">02</p>
+            <h3 class="h3"><span class="es">La triple</span><span class="en">The triple</span></h3>
+            <p class="desc"><span class="es">Para tres personas. Más amplia que las dobles.</span><span class="en">For three guests. Larger than the doubles.</span></p>
+            <fieldset class="switch">
+              <legend><span class="es">Elige las camas</span><span class="en">Choose the beds</span></legend>
+              <div>
+                <button type="button" data-bed="triple-mixta" aria-pressed="true"><span class="es">Matrimonio + 1</span><span class="en">Double + 1</span></button>
+                <button type="button" data-bed="triple-tres" aria-pressed="false"><span class="es">Tres camas</span><span class="en">Three beds</span></button>
+              </div>
+            </fieldset>
+            <a class="btn inkb pick" href="#reservar"><span class="es">Pedir la triple</span><span class="en">Ask for the triple</span></a>
+          </div>
+        </article>
+
+        <article class="room" data-room="cuadruple" data-view="cuadruple-dobles">
+          <div class="room-photo">
+            <figure class="on" data-view="cuadruple-dobles"><div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/4P%20105%202Matrimonio%201.jpg" width="1000" height="743"
+              alt="Habitación cuádruple con dos camas de matrimonio" data-alt-en="Four-person room with two double beds"></button></div></figure>
+            <figure data-view="cuadruple-mixta"><div class="frame"><button class="zoom" type="button"><img loading="lazy" src="https://hostalenriqueta.com/Fotos%20Habitaciones/4p%20201%20-%20Matrimonio%20%2B%202Individual1.jpg" width="1000" height="750"
+              alt="Habitación cuádruple con cama de matrimonio y dos individuales" data-alt-en="Four-person room with a double bed and two singles"></button></div></figure>
+            <span class="badge"><span class="es">4 personas</span><span class="en">4 guests</span></span>
+          </div>
+          <div class="room-text">
+            <p class="num">03</p>
+            <h3 class="h3"><span class="es">La cuádruple</span><span class="en">The four-person room</span></h3>
+            <p class="desc"><span class="es">Para cuatro personas. La más grande de la casa: solo hay dos.</span><span class="en">For four guests. The largest in the house: there are only two.</span></p>
+            <fieldset class="switch">
+              <legend><span class="es">Elige las camas</span><span class="en">Choose the beds</span></legend>
+              <div>
+                <button type="button" data-bed="cuadruple-dobles" aria-pressed="true"><span class="es">Dos de matrimonio</span><span class="en">Two doubles</span></button>
+                <button type="button" data-bed="cuadruple-mixta" aria-pressed="false"><span class="es">Matrimonio + 2</span><span class="en">Double + 2</span></button>
+              </div>
+            </fieldset>
+            <a class="btn inkb pick" href="#reservar"><span class="es">Pedir la cuádruple</span><span class="en">Ask for this room</span></a>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -751,13 +799,22 @@
   }
   langBtn.addEventListener('click', function () { setLang(root.lang === 'es' ? 'en' : 'es'); });
 
+  /* ---------- Full-screen menu ---------- */
+  var menu = $('menu'), menuOpen = $('menu-open');
+  if (typeof menu.showModal === 'function') {
+    menuOpen.addEventListener('click', function () { menu.showModal(); });
+    $('menu-close').addEventListener('click', function () { menu.close(); });
+    all('a', menu).forEach(function (a) { a.addEventListener('click', function () { menu.close(); }); });
+  } else {
+    menuOpen.hidden = true;
+  }
+
   /* ---------- Galleries: swipe, drag, arrows, counter, progress ---------- */
-  var cars = {};
   all('[data-car]').forEach(function (car) {
     var track = car.querySelector('.car-track'), slides = all('.slide', track);
     var now = car.querySelector('.now'), fill = car.querySelector('.fill');
     var prev = car.querySelector('.prev'), next = car.querySelector('.next');
-    var idx = -1, waiting = false, listeners = [];
+    var idx = -1, waiting = false;
     function nearest() {
       var base = track.scrollLeft + slides[0].offsetLeft, best = 0, dist = Infinity;
       slides.forEach(function (s, i) { var d = Math.abs(s.offsetLeft - base); if (d < dist) { dist = d; best = i; } });
@@ -772,11 +829,7 @@
       var vis = track.scrollWidth > 0 ? Math.min(1, track.clientWidth / track.scrollWidth) : 1;
       if (fill) fill.style.transform = 'scaleX(' + Math.min(1, vis + q * (1 - vis)).toFixed(4) + ')';
       var best = nearest();
-      if (best !== idx) {
-        idx = best;
-        if (now) now.textContent = pad(idx + 1);
-        listeners.forEach(function (fn) { fn(idx); });
-      }
+      if (best !== idx) { idx = best; if (now) now.textContent = pad(idx + 1); }
     }
     function go(i) {
       i = Math.max(0, Math.min(slides.length - 1, i));
@@ -816,41 +869,31 @@
     track.addEventListener('click', function (e) { if (moved > 8) { e.preventDefault(); e.stopPropagation(); moved = 0; } }, true);
     track.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
-    var api = { go: go, on: function (fn) { listeners.push(fn); }, index: function () { return idx; }, measure: measure };
-    if (car.id) cars[car.id] = api;
     measure();
     window.addEventListener('load', measure);
   });
 
-  /* ---------- Rooms: the gallery, the chips and the text move together ---------- */
-  var VIEWS = ['doble-matrimonio', 'doble-dos', 'triple-mixta', 'triple-tres', 'cuadruple-dobles', 'cuadruple-mixta'];
-  var FIRST = { doble: 0, triple: 2, cuadruple: 4 }, PEOPLE = { doble: 2, triple: 3, cuadruple: 4 };
-  var chips = all('.chips [data-room]'), infos = all('.room-info'), fRoom = $('room'), rooms = cars['rooms-car'];
-  var guests = 2, nights = 2, touched = false;
-  function showRoom(i) {
-    var view = VIEWS[i] || VIEWS[0], type = view.split('-')[0];
-    chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-room') === type)); });
-    infos.forEach(function (n) { n.hidden = n.getAttribute('data-view') !== view; });
-    if (touched) {
-      fRoom.value = view;
-      if (guests > PEOPLE[type] || (type !== 'doble' && guests < PEOPLE[type])) { guests = PEOPLE[type]; }
-      compose();
+  /* ---------- Rooms: each room has its own bed choice and its own button ---------- */
+  var FIRST = { doble: 'doble-matrimonio', triple: 'triple-mixta', cuadruple: 'cuadruple-dobles' };
+  var PEOPLE = { doble: 2, triple: 3, cuadruple: 4 };
+  var fRoom = $('room'), guests = 2, nights = 2;
+  all('.room').forEach(function (room) {
+    var type = room.getAttribute('data-room');
+    var beds = all('[data-bed]', room), views = all('.room-photo figure', room);
+    function setView(view) {
+      room.setAttribute('data-view', view);
+      beds.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-bed') === view)); });
+      views.forEach(function (v) { v.classList.toggle('on', v.getAttribute('data-view') === view); });
     }
-  }
-  if (rooms) {
-    var holdUntil = 0;
-    rooms.on(function (i) { if (Date.now() >= holdUntil) showRoom(i); });
-    chips.forEach(function (c) { c.addEventListener('click', function () {
-      /* Jump straight to the chosen type; ignore the rooms that slide past on the way */
-      var target = FIRST[c.getAttribute('data-room')];
-      touched = true; holdUntil = Date.now() + 900;
-      rooms.go(target); showRoom(target);
-      window.setTimeout(function () { showRoom(rooms.index()); }, 950);
-    }); });
-    var roomsTrack = $('rooms-car').querySelector('.car-track');
-    ['pointerdown', 'touchstart', 'keydown'].forEach(function (ev) { roomsTrack.addEventListener(ev, function () { touched = true; }, { passive: true }); });
-    all('#rooms-car .arrows button').forEach(function (b) { b.addEventListener('click', function () { touched = true; }); });
-  }
+    beds.forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-bed')); }); });
+    var pick = room.querySelector('.pick');
+    if (pick) pick.addEventListener('click', function () {
+      /* Carry the choice down to the booking form; the link itself scrolls there */
+      fRoom.value = room.getAttribute('data-view');
+      if (type === 'doble') { if (guests > 2) guests = 2; } else { guests = PEOPLE[type]; }
+      compose();
+    });
+  });
 
   /* ---------- Booking ---------- */
   var fIn = $('in'), fName = $('name'), send = $('send');
@@ -897,10 +940,9 @@
         else {
           guests = Math.max(min, Math.min(max, guests + d));
           /* Suggest a room that fits, unless they asked for whichever is free */
-          var type = fRoom.value.split('-')[0];
           if (fRoom.value !== 'libre') {
             var want = guests <= 2 ? 'doble' : (guests === 3 ? 'triple' : 'cuadruple');
-            if (type !== want) fRoom.value = VIEWS[FIRST[want]];
+            if (fRoom.value.split('-')[0] !== want) fRoom.value = FIRST[want];
           }
         }
         compose();
@@ -913,21 +955,25 @@
 
   /* ---------- Full-size photo viewer ---------- */
   var lb = $('lb'), lbImg = $('lb-img'), lbCap = $('lb-cap'), zooms = all('.zoom'), at = 0;
-  function show(i) {
-    at = (i + zooms.length) % zooms.length;
+  function seen(z) { var f = z.closest('.room-photo figure'); return !f || f.classList.contains('on'); }
+  function show(i, dir) {
+    var n = zooms.length, tries = 0;
+    at = (i + n) % n;
+    /* Skip the room photo that is not the one currently chosen */
+    while (!seen(zooms[at]) && tries < n) { at = (at + (dir || 1) + n) % n; tries++; }
     var im = zooms[at].querySelector('img');
     lbImg.src = im.currentSrc || im.src; lbImg.alt = im.alt; lbCap.textContent = im.alt;
     if (!lb.open) lb.showModal();
   }
   if (typeof lb.showModal === 'function') {
-    zooms.forEach(function (z, i) { z.addEventListener('click', function () { show(i); }); });
-    $('lb-prev').addEventListener('click', function () { show(at - 1); });
-    $('lb-next').addEventListener('click', function () { show(at + 1); });
+    zooms.forEach(function (z, i) { z.addEventListener('click', function () { show(i, 1); }); });
+    $('lb-prev').addEventListener('click', function () { show(at - 1, -1); });
+    $('lb-next').addEventListener('click', function () { show(at + 1, 1); });
     $('lb-close').addEventListener('click', function () { lb.close(); });
     lb.addEventListener('click', function (e) { if (e.target === lb || e.target.className === 'lb-in') lb.close(); });
     lb.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') show(at - 1);
-      if (e.key === 'ArrowRight') show(at + 1);
+      if (e.key === 'ArrowLeft') show(at - 1, -1);
+      if (e.key === 'ArrowRight') show(at + 1, 1);
     });
     /* Swipe between photos on a phone */
     var tx = null;
@@ -935,17 +981,16 @@
     lb.addEventListener('touchend', function (e) {
       if (tx === null) return;
       var dx = e.changedTouches[0].clientX - tx; tx = null;
-      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
+      if (Math.abs(dx) > 50) { if (dx < 0) show(at + 1, 1); else show(at - 1, -1); }
     }, { passive: true });
   } else {
     zooms.forEach(function (z) { z.style.cursor = 'default'; });
   }
 
-  /* ---------- Header: clear over the cover, and the menu shows where you are ---------- */
-  var site = $('site'), cover = $('top');
+  /* ---------- Header: clear at the very top, and the menu shows where you are ---------- */
+  var site = $('site');
   if (hasIO) {
     site.classList.add('over');
-    /* Clear while the thin demo line at the very top is still in view */
     new IntersectionObserver(function (es) { site.classList.toggle('over', es[0].isIntersecting); },
       { threshold: 0 }).observe(document.querySelector('.demo'));
     var links = all('#nav a');
@@ -986,7 +1031,6 @@
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }, { passive: true });
 
   /* ---------- Start ---------- */
-  showRoom(0);
   setLang((navigator.language || 'es').toLowerCase().indexOf('es') === 0 ? 'es' : 'en');
   paint();
 })();
