@@ -88,16 +88,75 @@
   window.matchMedia('(min-width: 1100px)').addEventListener('change', function (m) { if (m.matches && nav.classList.contains('is-open')) setMenu(false); });
 
   /* ---------------- reading progress ---------------- */
-  var bar = $('read-bar'), ticking = false;
+  /* One passive scroll listener and one rAF for every scroll-linked effect on the page.
+     Each task is a function; effects register with ADV.addScroll and switch themselves off
+     when their section is off-screen. Where CSS scroll-driven animations exist, the
+     progress bar runs on the compositor and is not in this list at all. */
+  var SD = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'));
+  var bar = $('read-bar'), ticking = false, scrollTasks = [];
+  function runScroll() {
+    ticking = false;
+    for (var i = 0; i < scrollTasks.length; i++) scrollTasks[i]();
+  }
   function onScroll() {
     if (ticking) return; ticking = true;
-    requestAnimationFrame(function () {
-      var h = document.documentElement.scrollHeight - innerHeight;
-      bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, scrollY / h) : 0) + ')';
-      ticking = false;
-    });
+    requestAnimationFrame(runScroll);
   }
+  if (SD) document.documentElement.classList.add('sd');
+  else scrollTasks.push(function () {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, scrollY / h) : 0) + ')';
+  });
   addEventListener('scroll', onScroll, { passive: true });
+
+  /* ---------------- small motion helpers shared with fx.js ---------------- */
+  var COLORS = ['#FF5B3A', '#FFC928', '#2457F5', '#14B48C', '#B79CFF'];
+  function sparkle(el, n, colors) {
+    if (REDUCED || !el || !el.animate) return;
+    var host = el, r = el.getBoundingClientRect();
+    for (var i = 0; i < (n || 10); i++) {
+      var s = document.createElement('i');
+      s.className = 'spark';
+      s.style.background = (colors || COLORS)[i % (colors || COLORS).length];
+      host.appendChild(s);
+      var a = Math.PI * 2 * i / (n || 10) + Math.random() * .5, d = 34 + Math.random() * 40;
+      s.style.left = (r.width / 2) + 'px'; s.style.top = (r.height / 2) + 'px';
+      s.animate([{ transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+                 { transform: 'translate(calc(-50% + ' + Math.cos(a) * d + 'px), calc(-50% + ' + Math.sin(a) * d + 'px)) scale(0)', opacity: 0 }],
+                { duration: 620 + Math.random() * 200, easing: 'cubic-bezier(.2,.8,.2,1)' }).onfinish = (function (x) { return function () { x.remove(); }; })(s);
+    }
+  }
+  /* Confetti on a canvas that only exists for ~1.8 s: one rAF loop, then it stops and clears. */
+  function confetti(canvas, power) {
+    if (REDUCED || !canvas || !canvas.getContext) return;
+    var host = canvas.parentNode, w = host.clientWidth, h = host.clientHeight, dpr = Math.min(2, devicePixelRatio || 1);
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    var ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+    var N = Math.round(60 + (power || 1) * 50), P = [];
+    for (var i = 0; i < N; i++) P.push({ x: w / 2 + (Math.random() - .5) * w * .3, y: h * .45, vx: (Math.random() - .5) * 9, vy: -6 - Math.random() * 9,
+      r: 4 + Math.random() * 5, a: Math.random() * 6, va: (Math.random() - .5) * .4, c: COLORS[i % COLORS.length], round: Math.random() < .3 });
+    var t0 = performance.now();
+    canvas.classList.add('is-on');
+    (function frame(t) {
+      var k = (t - t0) / 1800;
+      ctx.clearRect(0, 0, w, h);
+      if (k >= 1) { canvas.classList.remove('is-on'); return; }
+      ctx.globalAlpha = k > .7 ? (1 - k) / .3 : 1;
+      for (var i = 0; i < N; i++) {
+        var p = P[i]; p.vy += .32; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.a += p.va;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c;
+        if (p.round) { ctx.beginPath(); ctx.arc(0, 0, p.r * .6, 0, 6.3); ctx.fill(); } else ctx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2);
+        ctx.restore();
+      }
+      requestAnimationFrame(frame);
+    })(t0);
+  }
+  window.ADV = {
+    getLang: function () { return lang; }, D: function () { return D(); }, EN: EN,
+    onLang: function (fn) { langListeners.push(fn); }, REDUCED: REDUCED, SD: SD,
+    addScroll: function (fn) { scrollTasks.push(fn); }, kick: onScroll,
+    sparkle: sparkle, confetti: confetti
+  };
 
   /* ---------------- typing / translating headline ---------------- */
   var WORDS = ['English', 'español', 'français', 'Deutsch', 'русский', '中文', 'العربية'];
@@ -155,7 +214,7 @@
     var f = field.closest('.field'); f.classList.remove('is-flash'); void f.offsetWidth; f.classList.add('is-flash');
   }
   function prefill(opts) {
-    if (opts.course) { fCourse.value = opts.course; clearError(fCourse); flash(fCourse); }
+    if (opts.course) { fCourse.value = opts.course; clearError(fCourse); fCourse.closest('.field').classList.add('is-ok'); flash(fCourse); }
     if (opts.level !== undefined) { fLevel.value = opts.level; levelFromTest = !!opts.fromTest; flash(fLevel); }
     if (opts.when) fWhen.value = opts.when;
     if (opts.exam !== undefined) examChoice = opts.exam;
@@ -294,8 +353,29 @@
     });
   }
   langListeners.push(renderResult);
+  var trail = $('finder-trail');
+  var TRAIL_KEYS = ['who', 'goal', 'when'];
+  function renderTrail() {
+    trail.innerHTML = '';
+    TRAIL_KEYS.forEach(function (k, i) {
+      if (!answers[k] || i + 1 >= stepIdx) return;
+      var src = finder.querySelector('.opt[data-k="' + k + '"][data-v="' + answers[k] + '"]');
+      if (!src) return;
+      var li = document.createElement('li');
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'trail-chip'; b.dataset.k = k; b.dataset.step = i + 1;
+      b.innerHTML = src.querySelector('svg').outerHTML;
+      var t = document.createElement('span'); t.textContent = src.querySelector('.opt-t').textContent;
+      b.appendChild(t);
+      b.setAttribute('aria-label', D().trailEdit + ': ' + t.textContent);
+      b.addEventListener('click', function () { goStep(i + 1, true); });
+      li.appendChild(b); trail.appendChild(li);
+    });
+  }
+  langListeners.push(function () { if (trail) renderTrail(); });
   function goStep(n, focus) {
     stepIdx = n;
+    renderTrail();
     qsa('.finder-step', finder).forEach(function (s) { s.classList.toggle('is-active', +s.dataset.step === n); });
     qsa('.steps li', finder).forEach(function (li, i) {
       li.classList.toggle('is-done', i + 1 < n);
@@ -315,10 +395,35 @@
       qsa('.opt[data-k="' + k + '"]', finder).forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
       var next = stepIdx + 1;
       if (next === 4) { lastRec = recommend(answers); renderResult(); }
-      setTimeout(function () { goStep(next, true); }, REDUCED ? 0 : 180);
+      if (REDUCED) { goStep(next, true); return; }
+      sparkle(b, 8);
+      setTimeout(function () {
+        /* The chosen card morphs into its answer chip (View Transitions where supported). */
+        if (document.startViewTransition) {
+          b.style.viewTransitionName = 'fpick';
+          var chip;
+          var vt = document.startViewTransition(function () {
+            b.style.viewTransitionName = '';
+            goStep(next, false);
+            chip = trail.querySelector('[data-k="' + k + '"]');
+            if (chip) chip.style.viewTransitionName = 'fpick';
+          });
+          vt.finished.then(function () {
+            if (chip) chip.style.viewTransitionName = '';
+            var h = next === 4 ? $('fr-title') : finder.querySelector('.finder-step[data-step="' + next + '"] .finder-q');
+            if (h) h.focus({ preventScroll: true });
+            if (next === 4) celebrateResult();
+          }, function () {});
+        } else { goStep(next, true); if (next === 4) celebrateResult(); }
+      }, 160);
     });
   });
   qsa('.opt', finder).forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
+  function celebrateResult() {
+    var res = finder.querySelector('.finder-result');
+    res.classList.remove('is-celebrate'); void res.offsetWidth; res.classList.add('is-celebrate');
+    sparkle(finder.querySelector('.fr-kicker'), 12);
+  }
   $('finder-back').addEventListener('click', function () { goStep(Math.max(1, stepIdx - 1), true); });
   $('finder-restart').addEventListener('click', function () {
     answers = {}; qsa('.opt', finder).forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
@@ -355,14 +460,21 @@
   var qi = 0, correct = 0, answered = false;
   var qIntro = $('quiz-intro'), qRun = $('quiz-run'), qRes = $('quiz-result');
   var qQ = $('quiz-q'), qOpts = $('quiz-opts'), qFb = $('quiz-feedback'), qNext = $('quiz-next');
-  var resultLevel = null;
+  var resultLevel = null, streak = 0;
+  var LV_ORDER = ['A1', 'A2', 'B1', 'B2', 'C1'];
+  function setClimb(f, lv) {
+    $('quiz-bar').style.transform = 'scaleX(' + f + ')';
+    $('climb-rail').style.transform = 'translateX(' + (f * 100) + '%)';
+    var reached = LV_ORDER.indexOf(lv);
+    qsa('.climb-marks li').forEach(function (li, j) { li.classList.toggle('is-on', j <= reached); });
+  }
   function escapeHtml(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function renderQ(focus) {
     var Q = QUESTIONS[qi], d = D();
     answered = false;
     $('quiz-count').textContent = (qi + 1) + ' / ' + QUESTIONS.length;
     $('quiz-count').setAttribute('aria-label', d.count(qi + 1, QUESTIONS.length));
-    $('quiz-bar').style.width = (qi / QUESTIONS.length * 100) + '%';
+    setClimb(qi / QUESTIONS.length, Q.lv);
     $('quiz-level').textContent = Q.lv;
     var parts = Q.q.split('___');
     qQ.innerHTML = escapeHtml(parts[0]) + '<span class="gap" aria-label="' + (lang === 'en' ? 'blank' : 'hueco') + '">&nbsp;</span>' + escapeHtml(parts[1] || '');
@@ -399,7 +511,18 @@
     div.querySelector('span').textContent = (ok ? d.right : d.wrong + ' ' + d.answerIs + ' «' + Q.o[Q.a] + '».') + ' ' + tr(Q.x);
     if (lang === 'en' && !ok) div.querySelector('span').textContent = d.wrong + ' ' + d.answerIs + ' “' + Q.o[Q.a] + '”. ' + tr(Q.x);
     qFb.appendChild(div);
-    $('quiz-bar').style.width = ((qi + 1) / QUESTIONS.length * 100) + '%';
+    setClimb((qi + 1) / QUESTIONS.length, Q.lv);
+    streak = ok ? streak + 1 : 0;
+    var sk = $('quiz-streak');
+    $('quiz-streak-n').textContent = streak;
+    sk.classList.toggle('is-on', streak >= 2);
+    if (ok) {
+      sparkle(btns[Q.a], streak >= 3 ? 16 : 10);
+      if (streak >= 2) { sk.classList.remove('is-bump'); void sk.offsetWidth; sk.classList.add('is-bump'); }
+      var rk = $('climb-rail'); rk.classList.remove('is-boost'); void rk.offsetWidth; rk.classList.add('is-boost');
+    } else if (!REDUCED) {
+      var wb = btns[i]; wb.classList.remove('is-shake'); void wb.offsetWidth; wb.classList.add('is-shake');
+    }
     qNext.hidden = false;
     $('quiz-next-label').textContent = qi === QUESTIONS.length - 1 ? d.seeResult : (lang === 'en' ? EN.next : 'Siguiente');
     qNext.focus({ preventScroll: true });
@@ -426,12 +549,15 @@
     renderResultQuiz();
     $('qr-level').parentNode.setAttribute('tabindex', '-1');
     $('qr-level').parentNode.focus({ preventScroll: false });
+    confetti($('confetti'), LV_ORDER.indexOf(resultLevel) / 2 + .6);
+    document.dispatchEvent(new CustomEvent('adv:level', { detail: resultLevel }));
   }
-  $('quiz-start').addEventListener('click', function () { qIntro.hidden = true; qRun.hidden = false; qi = 0; correct = 0; renderQ(true); });
+  function resetGame() { streak = 0; $('quiz-streak-n').textContent = '0'; $('quiz-streak').classList.remove('is-on'); }
+  $('quiz-start').addEventListener('click', function () { qIntro.hidden = true; qRun.hidden = false; qi = 0; correct = 0; resetGame(); renderQ(true); });
   qNext.addEventListener('click', function () {
     if (qi < QUESTIONS.length - 1) { qi++; renderQ(true); } else showResult();
   });
-  $('quiz-again').addEventListener('click', function () { qRes.hidden = true; qRun.hidden = false; qi = 0; correct = 0; resultLevel = null; qsa('.rung').forEach(function (r) { r.classList.remove('is-you'); }); renderQ(true); });
+  $('quiz-again').addEventListener('click', function () { qRes.hidden = true; qRun.hidden = false; qi = 0; correct = 0; resultLevel = null; resetGame(); qsa('.rung').forEach(function (r) { r.classList.remove('is-you'); }); renderQ(true); });
   $('qr-enrol').addEventListener('click', function () {
     var cur = fCourse.value;
     prefill({ course: cur && cur !== 'spanish' ? cur : 'adults', level: resultLevel, fromTest: true });
@@ -447,7 +573,11 @@
     b.addEventListener('click', function () {
       var lvl = b.dataset.lvl;
       qsa('.chip-btn').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-      qsa('.cal-row').forEach(function (r) { r.hidden = !(lvl === 'all' || r.dataset.lvl === lvl); });
+      var n = 0;
+      qsa('.cal-row').forEach(function (r) {
+        r.hidden = !(lvl === 'all' || r.dataset.lvl === lvl);
+        if (!r.hidden && !REDUCED) { r.style.setProperty('--k', n++); r.classList.remove('is-in'); void r.offsetWidth; r.classList.add('is-in'); }
+      });
     });
   });
 
@@ -472,8 +602,9 @@
   Object.keys(validators).forEach(function (id) {
     var el = $(id);
     el.addEventListener('blur', function () { if (el.value !== '') setError(el, !validators[id]()); });
-    el.addEventListener('input', function () { if (validators[id]()) clearError(el); });
-    el.addEventListener('change', function () { if (validators[id]()) clearError(el); });
+    var ok = function () { var v = validators[id](); el.closest('.field').classList.toggle('is-ok', v); if (v) clearError(el); };
+    el.addEventListener('input', ok);
+    el.addEventListener('change', ok);
   });
   function buildMessage() {
     var d = D(), lines = [d.msgHello, ''];
@@ -486,10 +617,16 @@
     if (fNotes.value.trim()) lines.push(d.msgNotes + ': ' + fNotes.value.trim());
     return lines.join('\n');
   }
+  var typingT = null;
   function renderPreview() {
     var out = $('cp-out');
     if (!fCourse.value && !fName.value.trim() && !fPhone.value.trim()) { out.textContent = D().chatEmpty; return; }
     out.textContent = buildMessage();
+    if (REDUCED) return;
+    var cp = out.closest('.chat-preview');
+    cp.classList.add('is-typing');
+    clearTimeout(typingT);
+    typingT = setTimeout(function () { cp.classList.remove('is-typing'); out.classList.remove('is-new'); void out.offsetWidth; out.classList.add('is-new'); }, 650);
   }
   langListeners.push(renderPreview);
   [fCourse, fLevel, fWhen, fName, fPhone, fNotes].forEach(function (el) {
@@ -511,6 +648,8 @@
     if (firstBad) { status.textContent = d.statusErr; status.style.color = 'var(--coral-d)'; firstBad.focus(); return; }
     var msg = buildMessage();
     status.style.color = '';
+    var sb = form.querySelector('[data-send="' + sendMode + '"]');
+    if (!REDUCED && sb) { sb.classList.remove('is-sent'); void sb.offsetWidth; sb.classList.add('is-sent'); sparkle(sb, 12); }
     if (sendMode === 'wa') {
       status.textContent = d.statusWa;
       window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
@@ -525,7 +664,7 @@
      Decorative Russian, Chinese and Arabic words are filled in after load: the system
      fallback-font lookup for these scripts is slow on first use and would block the first layout. */
   function fillGlyphs(root) { qsa('[data-glyph]', root).forEach(function (el) { el.textContent = el.dataset.glyph; }); }
-  var glyphHosts = qsa('.ticker-wrap, .ml-bubbles');
+  var glyphHosts = qsa('.ticker-wrap, .ml-bubbles, .team');
   if ('IntersectionObserver' in window) {
     var gio = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { if (en.isIntersecting) { fillGlyphs(en.target); gio.unobserve(en.target); } });
@@ -536,4 +675,14 @@
   /* ---------------- init ---------------- */
   applyLang();
   onScroll();
+  /* Hero bubbles in Russian, Chinese and Arabic: filled once the page has settled (same reason as above). */
+  var bubbleGlyphs = function () {
+    if (!bubbleGlyphs) return;
+    bubbleGlyphs = null;
+    ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(function (t) { removeEventListener(t, fillB, true); });
+    (window.requestIdleCallback || setTimeout)(function () { fillGlyphs($('bubble-field')); document.dispatchEvent(new Event('adv:glyphs')); });
+  };
+  function fillB() { if (bubbleGlyphs) bubbleGlyphs(); }
+  ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(function (t) { addEventListener(t, fillB, { capture: true, passive: true }); });
+  addEventListener('load', function () { setTimeout(fillB, 7000); });
 })();

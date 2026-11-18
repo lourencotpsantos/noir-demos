@@ -32,3 +32,9 @@ Both fonts are under the SIL Open Font License 1.1. The licence texts are in `fo
 ## Icons and illustrations
 
 All icons, the speech-bubble logo mark, the map diagram and the accommodation diagram are original inline SVGs drawn for this concept.
+
+The premium interactive layer adds no new photos. Everything it shows is original work drawn for this concept, with no third-party assets:
+- the "A day in Marbella" scroll scene (school, residence, beach and old-town illustrations, plus the hills and house-row backdrops),
+- the passport stamps, the rocket, the climbing and walking speech-bubble mascots, and the split-flap exam board.
+
+The JavaScript (`js/fx.js`) is hand-written vanilla code with no libraries.

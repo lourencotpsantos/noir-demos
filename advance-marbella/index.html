@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="css/styles.css">
 <script defer src="js/i18n.js"></script>
 <script defer src="js/main.js"></script>
+<script defer src="js/fx.js"></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -118,10 +119,16 @@
           <img src="img/hero-1200.webp" srcset="img/hero-800.webp 800w, img/hero-1200.webp 1200w, img/hero-2400.webp 2400w" sizes="(min-width: 900px) 46vw, 100vw" width="2400" height="1600" alt="Cuatro jóvenes conversan y se ríen alrededor de una mesa con apuntes y una tableta" data-i18n-attr="alt:heroAlt" fetchpriority="high" decoding="async">
         </picture>
       </div>
-      <div class="bubble bubble-a" aria-hidden="true" lang="en">Hello!</div>
-      <div class="bubble bubble-b" aria-hidden="true" lang="es">¡Hola!</div>
-      <div class="bubble bubble-c" aria-hidden="true" lang="fr">Bonjour !</div>
-      <div class="bubble bubble-d" aria-hidden="true" lang="de">Hallo!</div>
+      <div class="bubble-field" id="bubble-field" aria-hidden="true">
+        <span class="bubble bubble-a" lang="en">Hello!</span>
+        <span class="bubble bubble-b" lang="es">¡Hola!</span>
+        <span class="bubble bubble-c" lang="fr">Bonjour !</span>
+        <span class="bubble bubble-d" lang="de">Hallo!</span>
+        <span class="bubble bubble-e" lang="ru" data-glyph="Привет!"></span>
+        <span class="bubble bubble-f" lang="zh" data-glyph="你好！"></span>
+        <span class="bubble bubble-g" lang="ar" dir="rtl" data-glyph="مرحبا!"></span>
+      </div>
+      <p class="bubble-hint" aria-hidden="true"><span class="bh-dot"></span><span data-i18n="bubbleHint">Arrastra o explota las burbujas</span><span class="bh-count" id="bh-count"></span></p>
       <a class="hero-rating" href="https://www.google.com/maps/search/?api=1&amp;query=Advance+Marbella+Escuela+de+Idiomas+Calle+Ramiro+Campos+Turmo+6+Marbella" target="_blank" rel="noopener">
         <span class="hr-stars" aria-hidden="true"><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg></span>
         <span class="hr-text"><strong data-i18n="r48">4,8</strong> <span data-i18n="ratingGoogle">en Google · 105 reseñas</span></span>
@@ -149,7 +156,7 @@
     </div>
 
     <div class="courses" role="list">
-      <article class="course reveal" role="listitem">
+      <div class="course reveal" role="listitem">
         <div class="course-media"><img src="img/kids-800.webp" srcset="img/kids-800.webp 800w, img/kids-1600.webp 1600w" sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 86vw" width="1600" height="1224" loading="lazy" decoding="async" alt="Un niño con gafas escribe concentrado en su cuaderno en una clase luminosa" data-i18n-attr="alt:kidsAlt"><span class="course-tag tag-sun" data-i18n="kidsTag">3–11 años</span></div>
         <div class="course-body">
           <h3 class="h3" data-i18n="kidsTitle">Niños</h3>
@@ -157,9 +164,9 @@
           <ul class="course-meta"><li><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="meta115">Clases de 1 h 15 min</span></li><li><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg>Starters · Movers · Flyers</li></ul>
           <div class="course-foot"><p class="price"><span class="ph" data-i18n="phPrice">[precio]</span><small data-i18n="perMonth">/ mes</small></p><a class="btn btn-soft btn-sm" href="#matricula" data-course="kids"><span data-i18n="ctaBook">Reservar plaza</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </div>
-      </article>
+      </div>
 
-      <article class="course reveal" role="listitem">
+      <div class="course reveal" role="listitem">
         <div class="course-media"><img src="img/teens-800.webp" srcset="img/teens-800.webp 800w, img/teens-1600.webp 1600w" sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 86vw" width="1600" height="900" loading="lazy" decoding="async" alt="Una adolescente estudia y toma apuntes en una mesa junto a la ventana" data-i18n-attr="alt:teensAlt"><span class="course-tag tag-blue" data-i18n="teensTag">12–17 años</span></div>
         <div class="course-body">
           <h3 class="h3" data-i18n="teensTitle">Adolescentes</h3>
@@ -167,9 +174,9 @@
           <ul class="course-meta"><li><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="meta115">Clases de 1 h 15 min</span></li><li><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg><span data-i18n="metaCambridge">Cambridge A2–C2</span></li></ul>
           <div class="course-foot"><p class="price"><span class="ph" data-i18n="phPrice">[precio]</span><small data-i18n="perMonth">/ mes</small></p><a class="btn btn-soft btn-sm" href="#matricula" data-course="teens"><span data-i18n="ctaBook">Reservar plaza</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </div>
-      </article>
+      </div>
 
-      <article class="course reveal" role="listitem">
+      <div class="course reveal" role="listitem">
         <div class="course-media"><img src="img/adults-800.webp" srcset="img/adults-800.webp 800w, img/adults-1600.webp 1600w" sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 86vw" width="1600" height="1069" loading="lazy" decoding="async" alt="Un grupo de adultos toma notas durante una clase" data-i18n-attr="alt:adultsAlt"><span class="course-tag tag-coral" data-i18n="adultsTag">Adultos</span></div>
         <div class="course-body">
           <h3 class="h3" data-i18n="adultsTitle">Inglés para adultos</h3>
@@ -177,9 +184,9 @@
           <ul class="course-meta"><li><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg><span data-i18n="metaGroup">5–9 alumnos por grupo</span></li><li><svg class="ic" aria-hidden="true"><use href="#i-adult"/></svg><span data-i18n="metaLevels">Niveles A1–C2</span></li></ul>
           <div class="course-foot"><p class="price"><span class="ph" data-i18n="phPrice">[precio]</span><small data-i18n="perMonth">/ mes</small></p><a class="btn btn-soft btn-sm" href="#matricula" data-course="adults"><span data-i18n="ctaBook">Reservar plaza</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </div>
-      </article>
+      </div>
 
-      <article class="course reveal" role="listitem">
+      <div class="course reveal" role="listitem">
         <div class="course-media"><img src="img/exams-800.webp" srcset="img/exams-800.webp 800w, img/exams-1600.webp 1600w" sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 86vw" width="1600" height="1441" loading="lazy" decoding="async" alt="Estudiantes concentrados repasando en una sala de estudio con estanterías de libros" data-i18n-attr="alt:examsAlt"><span class="course-tag tag-mint" data-i18n="intTag">Intensivos</span></div>
         <div class="course-body">
           <h3 class="h3" data-i18n="intTitle">Intensivos Cambridge</h3>
@@ -192,9 +199,9 @@
           <p class="fine" data-i18n="intFine">Precios publicados en su web para el verano de 2023: incluyen matrícula, no el material. Pendientes de actualizar.</p>
           <div class="course-foot"><span></span><a class="btn btn-soft btn-sm" href="#matricula" data-course="intensive"><span data-i18n="ctaBook">Reservar plaza</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </div>
-      </article>
+      </div>
 
-      <article class="course reveal" role="listitem">
+      <div class="course reveal" role="listitem">
         <div class="course-media"><img src="img/work-800.webp" srcset="img/work-800.webp 800w, img/work-1200.webp 1200w" sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 86vw" width="1200" height="1500" loading="lazy" decoding="async" alt="Tres profesionales conversan sonrientes en una oficina luminosa" data-i18n-attr="alt:workAlt"><span class="course-tag tag-lilac" data-i18n="bizTag">Empresas</span></div>
         <div class="course-body">
           <h3 class="h3" data-i18n="bizTitle">Inglés para empresas</h3>
@@ -202,9 +209,9 @@
           <ul class="chips" aria-label="Sectores" data-i18n-attr="aria-label:sectors"><li data-i18n="sec1">Hostelería</li><li data-i18n="sec2">Banca</li><li data-i18n="sec3">Inmobiliarias</li><li data-i18n="sec4">Despachos</li><li data-i18n="sec5">Clínicas</li></ul>
           <div class="course-foot"><p class="price"><span data-i18n="quote">Presupuesto a medida</span></p><a class="btn btn-soft btn-sm" href="#matricula" data-course="business"><span data-i18n="ctaQuote">Pedir propuesta</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </div>
-      </article>
+      </div>
 
-      <article class="course course-spanish reveal" role="listitem">
+      <div class="course course-spanish reveal" role="listitem">
         <div class="course-media"><img src="img/oldtown-800.webp" srcset="img/oldtown-800.webp 800w, img/oldtown-1200.webp 1200w" sizes="(min-width: 1100px) 380px, (min-width: 700px) 46vw, 86vw" width="1200" height="1500" loading="lazy" decoding="async" alt="Callejuela blanca con macetas y faroles en un casco antiguo andaluz" data-i18n-attr="alt:oldtownAlt"><span class="course-tag tag-sun" lang="en">Learn Spanish</span></div>
         <div class="course-body">
           <h3 class="h3" data-i18n="spCardTitle">Español para extranjeros</h3>
@@ -212,7 +219,7 @@
           <ul class="course-meta"><li><svg class="ic" aria-hidden="true"><use href="#i-user"/></svg><span data-i18n="metaMax9">Máximo 9 alumnos</span></li><li><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg><span data-i18n="metaRes">Alojamiento</span></li></ul>
           <div class="course-foot"><p class="price"><small data-i18n="from">desde</small> 85 €<small data-i18n="perMonth">/ mes</small></p><a class="btn btn-soft btn-sm" href="#spanish"><span data-i18n="ctaSeeSpanish">Ver cursos</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
         </div>
-      </article>
+      </div>
     </div>
 
     <div class="more-langs reveal">
@@ -227,8 +234,35 @@
   </div>
 </section>
 
+<!-- ============ PASSPORT JOURNEY ============ -->
+<section class="section section-passport" id="ruta" aria-labelledby="ruta-title">
+  <div class="wrap passport-grid">
+    <div class="section-head reveal">
+      <p class="eyebrow" data-i18n="routeEyebrow">Tu ruta en Advance</p>
+      <h2 id="ruta-title" class="h2" data-i18n="routeTitle">Un pasaporte con un sello por cada paso.</h2>
+      <p class="lead" data-i18n="routeLead">Así es el camino de un alumno, desde el primer test hasta el examen oficial. Baja y ve sellando tu pasaporte.</p>
+      <div class="pp-meter" aria-hidden="true"><span class="pp-meter-n" id="pp-count">0</span><span class="pp-meter-of">/ 6</span><span class="pp-meter-l" data-i18n="routeStamps">sellos</span></div>
+    </div>
+    <div class="passport" id="passport">
+      <div class="pp-cover" aria-hidden="true">
+        <svg class="pp-crest" viewBox="0 0 48 48"><path d="M9 4h30a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H23L12 45v-9H9a6 6 0 0 1-6-6V10a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16.5 29l7.5-18 7.5 18M19.5 23h9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="pp-cover-t" data-i18n="routePassport">Pasaporte de idiomas</span>
+        <span class="pp-cover-s">Advance · Marbella</span>
+      </div>
+      <ol class="pp-page">
+        <li class="stamp-row"><div class="stamp st-coral"><span class="st-n">01</span><span class="st-ring" data-i18n="stamp1r">Online · 2 min</span></div><div class="st-copy"><h3 data-i18n="stamp1t">Test orientativo</h3><p data-i18n="stamp1d">Haz el test de esta página y descubre tu nivel aproximado.</p></div></li>
+        <li class="stamp-row"><div class="stamp st-blue"><span class="st-n">02</span><span class="st-ring" data-i18n="stamp2r">En la escuela</span></div><div class="st-copy"><h3 data-i18n="stamp2t">Prueba escrita y oral</h3><p data-i18n="stamp2d">Siempre es el primer paso: confirma tu nivel real.</p></div></li>
+        <li class="stamp-row"><div class="stamp st-mint"><span class="st-n">03</span><span class="st-ring" data-i18n="stamp3r">A tu medida</span></div><div class="st-copy"><h3 data-i18n="stamp3t">Grupo y horario</h3><p data-i18n="stamp3d">Según tu nivel y tu disponibilidad, te confirmamos grupo y horario.</p></div></li>
+        <li class="stamp-row"><div class="stamp st-sun"><span class="st-n">04</span><span class="st-ring">1 h 15 min</span></div><div class="st-copy"><h3 data-i18n="stamp4t">Clases que cunden</h3><p data-i18n="stamp4d">Método comunicativo con profesores nativos y titulados.</p></div></li>
+        <li class="stamp-row"><div class="stamp st-lilac"><span class="st-n">05</span><span class="st-ring">A2 · B1 · B2 · C1</span></div><div class="st-copy"><h3 data-i18n="stamp5t">Examen Cambridge</h3><p data-i18n="stamp5d">Por ordenador, en la propia escuela.</p></div></li>
+        <li class="stamp-row"><div class="stamp st-ink"><span class="st-n">06</span><span class="st-ring" data-i18n="stamp6r">Siguiente nivel</span></div><div class="st-copy"><h3 data-i18n="stamp6t">¡Y a por el siguiente!</h3><p data-i18n="stamp6d">Cada nivel del MCER es un escalón más hacia C2.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
 <!-- ============ COURSE FINDER ============ -->
-<section class="section section-finder" id="buscador" aria-labelledby="finder-title">
+<section class="section section-finder" id="buscador" data-live aria-labelledby="finder-title">
   <div class="wrap finder-grid">
     <div class="section-head reveal">
       <p class="eyebrow eyebrow-light" data-i18n="finderEyebrow">Encuentra tu curso</p>
@@ -243,6 +277,8 @@
         </ol>
         <button type="button" class="link-btn finder-back" id="finder-back" hidden><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg><span data-i18n="back">Atrás</span></button>
       </div>
+
+      <ul class="finder-trail" id="finder-trail" aria-label="Tus respuestas" data-i18n-attr="aria-label:trailLabel"></ul>
 
       <div class="finder-step is-active" data-step="1">
         <h3 class="finder-q" tabindex="-1" data-i18n="fq1">¿Para quién es el curso?</h3>
@@ -299,7 +335,7 @@
       <p class="note"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><span data-i18n="testNote">Es orientativo: tu nivel real lo confirma la prueba escrita y oral en la escuela.</span></p>
     </div>
 
-    <div class="quiz reveal" id="quiz">
+    <div class="quiz reveal" id="quiz"><canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
       <div class="quiz-intro" id="quiz-intro">
         <div class="qi-bubbles" aria-hidden="true"><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span></div>
         <p class="qi-text" data-i18n="quizIntro">Elige la opción correcta para completar cada frase. Si no lo sabes, no adivines: también es información útil.</p>
@@ -309,7 +345,12 @@
       <div class="quiz-run" id="quiz-run" hidden>
         <div class="quiz-head">
           <p class="quiz-count" id="quiz-count">1 / 10</p>
-          <div class="quiz-bar" aria-hidden="true"><span id="quiz-bar"></span></div>
+          <p class="quiz-streak" id="quiz-streak" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1 3.5 5 5.6 5 10.2A5 5 0 0 1 12 17.5a5 5 0 0 1-5-5.3c0-2 1-3.4 2-4.4.2 1.6 1 2.6 2 3 0-3.2.4-5.8 1-8.8zM7 19.5h10V22H7z"/></svg><span id="quiz-streak-n">0</span></p>
+        </div>
+        <div class="climb" aria-hidden="true">
+          <div class="climb-track"><span class="climb-fill" id="quiz-bar"></span></div>
+          <ol class="climb-marks"><li>A1</li><li>A2</li><li>B1</li><li>B2</li><li>C1</li></ol>
+          <div class="climb-rail" id="climb-rail"><span class="rocket"><svg viewBox="0 0 40 40"><path d="M20 3c6 4 9 11 9 18l-4 6H15l-4-6c0-7 3-14 9-18z" fill="#fff" stroke="#10233F" stroke-width="2.4" stroke-linejoin="round"/><circle cx="20" cy="16" r="3.6" fill="#2457F5" stroke="#10233F" stroke-width="2"/><path d="M11 21l-5 6 6 1M29 21l5 6-6 1" fill="#FF5B3A" stroke="#10233F" stroke-width="2.2" stroke-linejoin="round"/><path class="flame" d="M16 28c0 4 2 7 4 9 2-2 4-5 4-9z" fill="#FFC928"/></svg></span></div>
         </div>
         <p class="quiz-level" id="quiz-level" aria-hidden="true">A1</p>
         <h3 class="quiz-q" id="quiz-q" tabindex="-1" lang="en"></h3>
@@ -342,6 +383,8 @@
       <h2 id="ladder-title" class="h2" data-i18n="ladderTitle">De «hello» a «proficiency», escalón a escalón.</h2>
       <p class="lead" data-i18n="ladderLead">Los niveles de Advance siguen el Marco Común Europeo (MCER) y los exámenes de Cambridge. Así se sube la escalera.</p>
     </div>
+    <div class="ladder-wrap">
+    <div class="climber" id="climber" aria-hidden="true"><span class="climber-say" id="climber-say">A1</span><svg viewBox="0 0 48 48"><path d="M9 4h30a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H23L12 45v-9H9a6 6 0 0 1-6-6V10a6 6 0 0 1 6-6z" fill="#FF5B3A" stroke="#10233F" stroke-width="2.2"/><circle cx="18" cy="18" r="2.6" fill="#10233F"/><circle cx="30" cy="18" r="2.6" fill="#10233F"/><path d="M18 25q6 5 12 0" fill="none" stroke="#10233F" stroke-width="2.6" stroke-linecap="round"/></svg></div>
     <ol class="ladder" id="ladder">
       <li class="rung" style="--i:0"><div class="rung-step"><span class="rung-code">A1</span></div><div class="rung-card"><h3 data-i18n="lA1t">Principiante</h3><p data-i18n="lA1d">Te presentas, pides un café y entiendes frases sencillas.</p><span class="rung-exam">Pre A1 Starters · A1 Movers</span></div></li>
       <li class="rung" style="--i:1"><div class="rung-step"><span class="rung-code">A2</span></div><div class="rung-card"><h3 data-i18n="lA2t">Elemental</h3><p data-i18n="lA2d">Te defiendes en situaciones cotidianas: compras, rutas, trabajo básico.</p><span class="rung-exam">A2 Key (KET) · A2 Flyers</span></div></li>
@@ -350,6 +393,37 @@
       <li class="rung" style="--i:4"><div class="rung-step"><span class="rung-code">C1</span></div><div class="rung-card"><h3 data-i18n="lC1t">Avanzado</h3><p data-i18n="lC1d">Te expresas con precisión en contextos académicos y profesionales.</p><span class="rung-exam">C1 Advanced (CAE)</span></div></li>
       <li class="rung" style="--i:5"><div class="rung-step"><span class="rung-code">C2</span></div><div class="rung-card"><h3 data-i18n="lC2t">Maestría</h3><p data-i18n="lC2d">Dominas el idioma con matices, casi como un nativo.</p><span class="rung-exam">C2 Proficiency (CPE)</span></div></li>
     </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORD OF THE DAY ============ -->
+<section class="section section-word" id="palabra" aria-labelledby="word-title">
+  <div class="wrap word-grid">
+    <div class="section-head reveal">
+      <p class="eyebrow" data-i18n="wordEyebrow">Palabra del día</p>
+      <h2 id="word-title" class="h2" data-i18n="wordTitle">Una palabra, siete idiomas.</h2>
+      <p class="lead" data-i18n="wordLead">Toca un idioma para traducirla. Después, ponte a prueba: escríbela y gana tu sello.</p>
+    </div>
+    <div class="word reveal" id="word">
+      <canvas class="confetti" id="wc-confetti" aria-hidden="true"></canvas>
+      <div class="wc-card" id="wc-card">
+        <p class="wc-kicker"><span class="wc-pill" id="wc-lang">English</span><span class="wc-day" id="wc-day"></span></p>
+        <p class="wc-word" id="wc-word" lang="en">beach</p>
+        <p class="wc-gloss" id="wc-gloss"></p>
+      </div>
+      <div class="wc-langs" role="group" aria-label="Traducir a" data-i18n-attr="aria-label:wordTranslate"><button type="button" class="wc-chip" data-wl="en" aria-pressed="true">EN</button><button type="button" class="wc-chip" data-wl="es" aria-pressed="false">ES</button><button type="button" class="wc-chip" data-wl="fr" aria-pressed="false">FR</button><button type="button" class="wc-chip" data-wl="de" aria-pressed="false">DE</button><button type="button" class="wc-chip" data-wl="ru" aria-pressed="false">RU</button><button type="button" class="wc-chip" data-wl="zh" aria-pressed="false">ZH</button><button type="button" class="wc-chip" data-wl="ar" aria-pressed="false">AR</button></div>
+      <form class="wc-play" id="wc-play" novalidate>
+        <label class="wc-label" for="wc-input" id="wc-label">—</label>
+        <div class="wc-slots" id="wc-slots" aria-hidden="true"></div>
+        <div class="wc-row">
+          <input id="wc-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" aria-describedby="wc-msg">
+          <button type="submit" class="btn btn-dark" data-i18n="wordCheck">Comprobar</button>
+        </div>
+        <p class="wc-msg" id="wc-msg" role="status"></p>
+        <div class="wc-foot"><button type="button" class="link-btn" id="wc-hint"><span data-i18n="wordHint">Pista</span></button><button type="button" class="link-btn" id="wc-next"><svg class="ic" aria-hidden="true"><use href="#i-redo"/></svg><span data-i18n="wordNext">Otra palabra</span></button><span class="wc-score" id="wc-score" aria-hidden="true"></span></div>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -367,6 +441,24 @@
         <li><svg class="ic" aria-hidden="true"><use href="#i-cal"/></svg><div><strong data-i18n="cf2t">Resultados rápidos</strong><span data-i18n="cf2d">Inscripción unas dos semanas antes y resultados unas dos semanas después.</span></div></li>
         <li><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg><div><strong data-i18n="cf3t">100 % de aprobados*</strong><span data-i18n="cf3d">*Dato que anuncia la escuela en su web actual; pendiente de confirmar.</span></div></li>
       </ul>
+    </div>
+
+    <div class="cam-board reveal">
+      <div class="board">
+        <p class="board-label"><span class="board-led" aria-hidden="true"></span><span data-i18n="boardLabel">Próxima convocatoria</span></p>
+        <div class="flaps" id="flaps" aria-hidden="true"></div>
+        <div class="board-count" aria-hidden="true">
+          <div class="bc"><span class="bc-d">--</span><small data-i18n="bcDays">días</small></div>
+          <div class="bc"><span class="bc-d">--</span><small data-i18n="bcHours">horas</small></div>
+          <div class="bc"><span class="bc-d">--</span><small data-i18n="bcMins">min</small></div>
+        </div>
+        <p class="board-note"><span data-i18n="boardNote">Cuenta atrás lista para cuando la escuela publique las fechas:</span> <span class="ph" data-i18n="phDate">[fecha]</span></p>
+      </div>
+      <ol class="exam-journey" id="exam-journey">
+        <li class="ej"><span class="ej-dot"><svg class="ic" aria-hidden="true"><use href="#i-cal"/></svg></span><strong data-i18n="ej1t">Inscripción</strong><span data-i18n="ej1d">Unas dos semanas antes</span></li>
+        <li class="ej"><span class="ej-dot"><svg class="ic" aria-hidden="true"><use href="#i-monitor"/></svg></span><strong data-i18n="ej2t">Examen</strong><span data-i18n="ej2d">Por ordenador, en Advance</span></li>
+        <li class="ej"><span class="ej-dot"><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg></span><strong data-i18n="ej3t">Resultados</strong><span data-i18n="ej3d">Unas dos semanas después</span></li>
+      </ol>
     </div>
 
     <div class="calendar reveal">
@@ -413,6 +505,37 @@
         <figure class="sp-ph sp-ph1"><img src="img/church-800.webp" srcset="img/church-800.webp 800w, img/church-1200.webp 1200w" sizes="(min-width: 900px) 300px, 50vw" width="1200" height="1500" loading="lazy" decoding="async" alt="Torre blanca y amarilla de la iglesia de la Encarnación entre casas encaladas del casco antiguo de Marbella" data-i18n-attr="alt:churchAlt"></figure>
         <figure class="sp-ph sp-ph2"><img src="img/beach-800.webp" srcset="img/beach-800.webp 800w, img/beach-1600.webp 1600w" sizes="(min-width: 900px) 360px, 50vw" width="1600" height="900" loading="lazy" decoding="async" alt="Paseo marítimo con palmeras y gente en la playa al atardecer" data-i18n-attr="alt:beachAlt"></figure>
         <span class="bubble bubble-sp" aria-hidden="true" lang="es">¿Un café?</span>
+      </div>
+    </div>
+
+    <div class="scene" id="scene">
+      <div class="scene-stage">
+        <div class="sc-sky" aria-hidden="true"><span class="sc-dusk"></span><span class="sc-sun"></span><span class="sc-cloud sc-c1"></span><span class="sc-cloud sc-c2"></span></div>
+        <div class="sc-layer sc-far" aria-hidden="true"></div>
+        <div class="sc-horizon" aria-hidden="true"></div>
+        <div class="sc-layer sc-mid" aria-hidden="true"></div>
+        <div class="sc-layer sc-near" aria-hidden="true">
+          <svg class="lm lm-1" viewBox="0 0 320 260"><path d="M20 250V120l140-70 140 70v130z" fill="#FFF8EC"/><path d="M8 126L160 46l152 80" fill="none" stroke="#C8553D" stroke-width="16" stroke-linejoin="round"/><rect x="128" y="176" width="64" height="74" rx="32" fill="#2457F5"/><rect x="132" y="180" width="56" height="70" rx="28" fill="#1638B8"/><g fill="#9CC3FF" stroke="#10233F" stroke-width="3"><rect x="48" y="140" width="46" height="46" rx="6"/><rect x="226" y="140" width="46" height="46" rx="6"/></g><path d="M134 92h52a7 7 0 0 1 7 7v24a7 7 0 0 1-7 7h-26l-12 10v-10h-14a7 7 0 0 1-7-7V99a7 7 0 0 1 7-7z" fill="#FF5B3A" stroke="#10233F" stroke-width="3"/><path d="M151 122l9-22 9 22M154 115h12" fill="none" stroke="#10233F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 250h280" stroke="#10233F" stroke-width="4"/><g fill="#14B48C"><circle cx="60" cy="236" r="16"/><circle cx="262" cy="236" r="16"/></g></svg>
+          <svg class="lm lm-2" viewBox="0 0 320 260"><rect x="50" y="40" width="220" height="210" fill="#FFF0D6" stroke="#10233F" stroke-width="4"/><path d="M40 44h240" stroke="#C8553D" stroke-width="14" stroke-linecap="round"/><g fill="#FFC928" stroke="#10233F" stroke-width="3"><rect x="76" y="72" width="40" height="44" rx="5"/><rect x="140" y="72" width="40" height="44" rx="5"/><rect x="204" y="72" width="40" height="44" rx="5"/><rect x="76" y="140" width="40" height="44" rx="5"/><rect x="204" y="140" width="40" height="44" rx="5"/></g><rect x="138" y="182" width="44" height="68" rx="4" fill="#10233F"/><g stroke="#10233F" stroke-width="3" fill="none"><path d="M70 120h52M134 120h52M198 120h52M70 188h52M198 188h52"/></g><g fill="#FF5B3A"><circle cx="84" cy="114" r="6"/><circle cx="100" cy="114" r="6"/><circle cx="212" cy="182" r="6"/><circle cx="228" cy="182" r="6"/></g><g fill="#14B48C"><circle cx="92" cy="110" r="5"/><circle cx="220" cy="178" r="5"/></g></svg>
+          <svg class="lm lm-3" viewBox="0 0 320 260"><path d="M20 196q30-12 60 0t80 0 80 0 60 0q20 30 0 64H20q-20-34 0-64z" fill="#2457F5"/><path d="M0 214q40-10 80 0t80 0 80 0 80 0" fill="none" stroke="#9CC3FF" stroke-width="4"/><path d="M14 238q66-16 146-10t146 6q14 13 0 26H14q-14-11 0-22z" fill="#FFD98A"/><g stroke="#7A4A1E" stroke-width="9" stroke-linecap="round" fill="none"><path d="M70 236q-6-70 14-130"/><path d="M246 236q8-60-8-110"/></g><g fill="#14B48C"><path d="M84 106q-40-6-58 18 32-10 58-18zM84 106q30-24 64-14-34 2-64 14zM84 106q-20-30-56-28 32 8 56 28zM84 106q36 4 50 30-26-20-50-30z"/><path d="M238 126q-36-8-54 14 30-8 54-14zM238 126q30-22 60-10-32 0-60 10zM238 126q-14-28-46-28 28 8 46 28z"/></g><path d="M150 234v-60" stroke="#10233F" stroke-width="4"/><path d="M112 178q38-36 76 0z" fill="#FF5B3A" stroke="#10233F" stroke-width="3"/></svg>
+          <svg class="lm lm-4" viewBox="0 0 320 260"><rect x="134" y="40" width="52" height="210" fill="#FFF8EC" stroke="#10233F" stroke-width="4"/><path d="M128 44h64l-32-30z" fill="#FFC928" stroke="#10233F" stroke-width="4" stroke-linejoin="round"/><rect x="146" y="64" width="28" height="36" rx="14" fill="#10233F"/><circle cx="160" cy="128" r="14" fill="#FFC928" stroke="#10233F" stroke-width="3"/><path d="M160 120v8l6 4" stroke="#10233F" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M20 250V150h100v100zM200 250V160h100v90z" fill="#FFFFFF" stroke="#10233F" stroke-width="4"/><path d="M14 152l56-26 56 26M194 162l56-24 56 24" fill="none" stroke="#C8553D" stroke-width="10" stroke-linejoin="round"/><g fill="#10233F"><rect x="44" y="180" width="22" height="28" rx="3"/><rect x="226" y="186" width="22" height="28" rx="3"/></g><g fill="#FF5B3A"><circle cx="48" cy="210" r="5"/><circle cx="58" cy="210" r="5"/><circle cx="230" cy="216" r="5"/><circle cx="240" cy="216" r="5"/><circle cx="90" cy="168" r="5"/><circle cx="270" cy="176" r="5"/></g></svg>
+        </div>
+        <div class="sc-ground" aria-hidden="true"></div>
+        <div class="sc-beach" aria-hidden="true">
+          <div class="sc-sea"></div>
+          <svg class="sc-palms" viewBox="0 0 360 220"><g stroke="#7A4A1E" stroke-width="9" stroke-linecap="round" fill="none"><path d="M60 214q-6-70 14-130"/><path d="M300 214q8-60-8-110"/></g><g fill="#14B48C"><path d="M74 84q-40-6-58 18 32-10 58-18zM74 84q30-24 64-14-34 2-64 14zM74 84q-20-30-56-28 32 8 56 28zM74 84q36 4 50 30-26-20-50-30z"/><path d="M292 104q-36-8-54 14 30-8 54-14zM292 104q30-22 60-10-32 0-60 10zM292 104q-14-28-46-28 28 8 46 28zM292 104q34 6 44 30-24-20-44-30z"/></g><path d="M226 214v-62" stroke="#10233F" stroke-width="4"/><path d="M186 156q40-38 80 0z" fill="#FF5B3A" stroke="#10233F" stroke-width="3"/><path d="M110 212q14-14 40 0z" fill="#E7B865"/></svg>
+        </div>
+        <div class="sc-walker" aria-hidden="true" lang="es">
+          <span class="sc-say"><span class="sw sw1">¡Buenos días!</span><span class="sw sw2">¡Hogar, dulce hogar!</span><span class="sw sw3">¡A la playa!</span><span class="sw sw4">¿Un café?</span></span>
+          <svg viewBox="0 0 48 56"><path d="M9 4h30a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H9a6 6 0 0 1-6-6V10a6 6 0 0 1 6-6z" fill="#FFC928" stroke="#10233F" stroke-width="2.4"/><circle cx="18" cy="17" r="2.6" fill="#10233F"/><circle cx="30" cy="17" r="2.6" fill="#10233F"/><path d="M18 24q6 5 12 0" fill="none" stroke="#10233F" stroke-width="2.6" stroke-linecap="round"/><g class="legs" stroke="#10233F" stroke-width="3.4" stroke-linecap="round"><path class="leg1" d="M18 36v14"/><path class="leg2" d="M30 36v14"/></g></svg>
+        </div>
+        <div class="sc-head"><p class="sc-eyebrow" data-i18n="sceneEyebrow">Un día en Marbella</p><ol class="sc-dots" aria-hidden="true"><li></li><li></li><li></li><li></li></ol></div>
+        <ol class="sc-caps">
+          <li class="sc-cap"><span class="sc-chip">1 h 15 min</span><h3 class="h3" data-i18n="sceneC1t">La escuela</h3><p data-i18n="sceneC1d">Clases de 1 h 15 min, con 9 alumnos como máximo. Hablas en español desde el primer día.</p></li>
+          <li class="sc-cap"><span class="sc-chip" data-i18n="smNext">al lado</span><h3 class="h3" data-i18n="smRes">Residencia</h3><p data-i18n="sceneC2d">Justo al lado de la escuela: baño privado, aire acondicionado y WiFi.</p></li>
+          <li class="sc-cap"><span class="sc-chip">200 m</span><h3 class="h3" data-i18n="smBeach">Playa</h3><p data-i18n="sceneC3d">A 200 metros de la residencia, para practicar lo aprendido al sol.</p></li>
+          <li class="sc-cap"><span class="sc-chip" data-i18n="sm5">5 min a pie</span><h3 class="h3" data-i18n="smOld">Casco antiguo</h3><p data-i18n="sceneC4d">Calles blancas y plazas a cinco minutos andando: el aula continúa fuera.</p></li>
+        </ol>
       </div>
     </div>
 
@@ -507,19 +630,19 @@
       <h2 id="team-title" class="h2" data-i18n="teamTitle">Profesores que disfrutan enseñando.</h2>
       <p class="lead" data-i18n="teamLead">Nativos, titulados y con mucha experiencia. Toca una burbuja para saber más.</p>
     </div>
-    <ul class="team" id="team">
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-coral" aria-hidden="true">A</span><span class="tm-name">Andrew</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">BA (Hons) · PGCE · DELTA<br><span data-i18n="natEnglishM">Inglés</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-blue" aria-hidden="true">L</span><span class="tm-name">Lisa</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">BA (Hons) English<br><span data-i18n="natEnglishF">Inglesa</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-sun" aria-hidden="true">J</span><span class="tm-name">Jenny</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">BA (Hons) · CELTA<br><span data-i18n="natNZ">Neozelandesa</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-mint" aria-hidden="true">J</span><span class="tm-name">Jasmin</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">CELTA<br><span data-i18n="natEnEs">Inglesa / española</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-lilac" aria-hidden="true">S</span><span class="tm-name">Steve</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">Trinity Dip · PGCE<br><span data-i18n="natEnglishM">Inglés</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-coral" aria-hidden="true">S</span><span class="tm-name">Shelley</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">BA (Hons) · PGCE<br><span data-i18n="natEnglishF">Inglesa</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-blue" aria-hidden="true">A</span><span class="tm-name">Alena</span><span class="tm-role" data-i18n="roleRussian">Ruso</span><span class="tm-more">BA (Hons) · MA<br><span data-i18n="natRussian">Rusa</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-sun" aria-hidden="true">A</span><span class="tm-name">Andrea</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">CELTA<br><span data-i18n="natUS">Estadounidense</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-mint" aria-hidden="true">R</span><span class="tm-name">Rachel</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">BA (Hons)<br><span data-i18n="natUS">Estadounidense</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-lilac" aria-hidden="true">R</span><span class="tm-name">Rosa</span><span class="tm-role" data-i18n="roleFrench">Francés</span><span class="tm-more"><span data-i18n="qualFrench">Filología Francesa</span><br><span data-i18n="natEsFr">Bilingüe español-francés</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-coral" aria-hidden="true">M</span><span class="tm-name">Mary</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span><span class="tm-more">BA (Hons) · TEFL<br><span data-i18n="natUS">Estadounidense</span></span></button></li>
-      <li><button type="button" class="tm" aria-expanded="false"><span class="tm-av av-blue" aria-hidden="true">I</span><span class="tm-name">Isabel</span><span class="tm-role" data-i18n="roleSpanish">Español</span><span class="tm-more"><span data-i18n="qualSpanish">Dra. en Filología Hispánica</span><br><span data-i18n="natSpanish">Española</span></span></button></li>
+    <ul class="team reveal" id="team">
+      <li style="--k:0"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-coral" aria-hidden="true">A</span><span class="tm-name">Andrew</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">BA (Hons) · PGCE · DELTA<br><span data-i18n="natEnglishM">Inglés</span></span></button></li>
+      <li style="--k:1"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-blue" aria-hidden="true">L</span><span class="tm-name">Lisa</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">BA (Hons) English<br><span data-i18n="natEnglishF">Inglesa</span></span></button></li>
+      <li style="--k:2"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-sun" aria-hidden="true">J</span><span class="tm-name">Jenny</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">BA (Hons) · CELTA<br><span data-i18n="natNZ">Neozelandesa</span></span></button></li>
+      <li style="--k:3"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-mint" aria-hidden="true">J</span><span class="tm-name">Jasmin</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">CELTA<br><span data-i18n="natEnEs">Inglesa / española</span></span></button></li>
+      <li style="--k:4"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-lilac" aria-hidden="true">S</span><span class="tm-name">Steve</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">Trinity Dip · PGCE<br><span data-i18n="natEnglishM">Inglés</span></span></button></li>
+      <li style="--k:5"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-coral" aria-hidden="true">S</span><span class="tm-name">Shelley</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">BA (Hons) · PGCE<br><span data-i18n="natEnglishF">Inglesa</span></span></button></li>
+      <li style="--k:6"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="ru" data-glyph="Привет!"></span><span class="tm-face tm-front"><span class="tm-av av-blue" aria-hidden="true">A</span><span class="tm-name">Alena</span><span class="tm-role" data-i18n="roleRussian">Ruso</span></span><span class="tm-more tm-face tm-back">BA (Hons) · MA<br><span data-i18n="natRussian">Rusa</span></span></button></li>
+      <li style="--k:7"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-sun" aria-hidden="true">A</span><span class="tm-name">Andrea</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">CELTA<br><span data-i18n="natUS">Estadounidense</span></span></button></li>
+      <li style="--k:8"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-mint" aria-hidden="true">R</span><span class="tm-name">Rachel</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">BA (Hons)<br><span data-i18n="natUS">Estadounidense</span></span></button></li>
+      <li style="--k:9"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="fr">Salut !</span><span class="tm-face tm-front"><span class="tm-av av-lilac" aria-hidden="true">R</span><span class="tm-name">Rosa</span><span class="tm-role" data-i18n="roleFrench">Francés</span></span><span class="tm-more tm-face tm-back"><span data-i18n="qualFrench">Filología Francesa</span><br><span data-i18n="natEsFr">Bilingüe español-francés</span></span></button></li>
+      <li style="--k:10"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="en">Hi!</span><span class="tm-face tm-front"><span class="tm-av av-coral" aria-hidden="true">M</span><span class="tm-name">Mary</span><span class="tm-role" data-i18n="roleEnglish">Inglés</span></span><span class="tm-more tm-face tm-back">BA (Hons) · TEFL<br><span data-i18n="natUS">Estadounidense</span></span></button></li>
+      <li style="--k:11"><button type="button" class="tm" aria-expanded="false"><span class="tm-hi" aria-hidden="true" lang="es">¡Hola!</span><span class="tm-face tm-front"><span class="tm-av av-blue" aria-hidden="true">I</span><span class="tm-name">Isabel</span><span class="tm-role" data-i18n="roleSpanish">Español</span></span><span class="tm-more tm-face tm-back"><span data-i18n="qualSpanish">Dra. en Filología Hispánica</span><br><span data-i18n="natSpanish">Española</span></span></button></li>
     </ul>
     <p class="fine reveal" data-i18n="teamFine">Nombres y titulaciones tal como aparecen en la página «Profesores» de su web actual. La escuela confirmará el equipo de este curso.</p>
   </div>
@@ -528,7 +651,7 @@
 <!-- ============ REVIEWS ============ -->
 <section class="section section-reviews" aria-labelledby="rev-title">
   <div class="wrap">
-    <div class="reviews reveal">
+    <div class="reviews reveal" data-live>
       <div class="rev-score">
         <p class="rev-num" data-i18n="r48">4,8</p>
         <p class="rev-stars" aria-hidden="true"><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg><svg class="ic"><use href="#i-star"/></svg></p>
@@ -556,6 +679,7 @@
         <div class="cp-body">
           <p class="cp-msg cp-in" data-i18n="cpHello">¡Hola! ¿En qué curso te apuntamos?</p>
           <p class="cp-msg cp-out" id="cp-out">…</p>
+          <span class="cp-typing"><i></i><i></i><i></i></span>
         </div>
       </div>
     </div>
@@ -665,6 +789,7 @@
         <g font-family="Figtree, Arial, sans-serif" font-weight="700" font-size="13" fill="#10233F">
           <text x="200" y="280" text-anchor="middle" fill="#123C7A" data-i18n="mapSea">Mar Mediterráneo</text>
         </g>
+        <circle class="map-ring" cx="150" cy="150" r="20" fill="none" stroke="#FF5B3A" stroke-width="3"/><circle class="map-ring ring-2" cx="246" cy="164" r="20" fill="none" stroke="#2457F5" stroke-width="3"/>
         <g class="map-pin pin-1"><circle cx="150" cy="150" r="20" fill="#FF5B3A"/><text x="150" y="155" text-anchor="middle" font-family="Figtree, Arial, sans-serif" font-weight="800" font-size="15" fill="#10233F">1</text></g>
         <g class="map-pin pin-2"><circle cx="246" cy="164" r="20" fill="#2457F5"/><text x="246" y="169" text-anchor="middle" font-family="Figtree, Arial, sans-serif" font-weight="800" font-size="15" fill="#fff">2</text></g>
       </svg>

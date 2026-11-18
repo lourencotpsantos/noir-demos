@@ -46,11 +46,12 @@ Licence: https://unsplash.com/license
 ## Fonts
 
 Self-hosted in `fonts/` (woff2 from the Fontsource npm packages, SIL Open Font License 1.1; licence files included):
-- Shippori Mincho (display). `ichiban-jp-subset.woff2` is a subset of Shippori Mincho Medium containing only the kana and kanji used on the page (made with fontTools `pyftsubset`).
+- Shippori Mincho (display). `ichiban-jp-subset.woff2` is a subset of Shippori Mincho Medium containing only the kana and kanji used on the page (made with fontTools `pyftsubset`; rebuilt on 18 Nov 2026 to add 回転寿司 and 火 for the sushi belt).
 - Zen Kaku Gothic New (text).
 
 ## Other
 
 - Map: © OpenStreetMap contributors (embedded iframe, ODbL), loaded only when the visitor scrolls near it.
-- Illustrations: the seal, seigaiha wave tile, flames, allergen glyphs and all line icons are original inline SVG/CSS drawn for this concept.
+- Illustrations: the seal, seigaiha wave tile, flames, allergen glyphs and all line icons are original inline SVG/CSS drawn for this concept. The premium motion layer adds more original work, also drawn in code for this concept: the canvas fire and embers in the hero, the brush-stroke 一番, the paper lanterns, the ink-wash section edges, the teppanyaki show props (spatulas, shrimp, onion-ring volcano, flame burst), the sushi-belt plates, the chopsticks, the ticket printer and the hanko stamp. No new photos were added.
+- Motion code: `js/fx.js` (vanilla JS, no library).
 - Menu content (dish names, descriptions and prices) is transcribed from Ichiban's own PDF menu at ichibanmarbella.com/menu/menu.pdf. Allergen icons on the site are Noir Digital's orientative reading of the ingredients, not a copy of the PDF's allergen marks.

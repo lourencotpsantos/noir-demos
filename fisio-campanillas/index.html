@@ -10,8 +10,6 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%2318342C'/%3E%3Cpath d='M32 12c-8 6 8 12 0 20s8 14 0 20' fill='none' stroke='%23A8D5BF' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preload" href="fonts/manrope-latin-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" as="image" type="image/webp" href="img/hero-m-800.webp" media="(max-width: 767px)" fetchpriority="high">
-<link rel="preload" as="image" type="image/webp" imagesrcset="img/hero-800.webp 800w, img/hero-1400.webp 1400w, img/hero-2400.webp 2400w" imagesizes="100vw" media="(min-width: 768px)">
 <link rel="stylesheet" href="css/styles.css">
 <script defer src="js/i18n.js"></script>
 <script defer src="js/main.js"></script>
@@ -53,74 +51,193 @@
 
 <!-- HERO -->
 <section class="hero" aria-labelledby="hero-title">
-  <picture class="hero-media">
-    <source media="(max-width: 767px)" srcset="img/hero-m-800.webp" width="800" height="1000">
-    <img src="img/hero-1400.webp" srcset="img/hero-800.webp 800w, img/hero-1400.webp 1400w, img/hero-2400.webp 2400w" sizes="100vw" width="2400" height="1600" alt="Manos de una fisioterapeuta trabajando con suavidad la zona del omóplato de una paciente tumbada" data-i18n-attr="alt:heroAlt" fetchpriority="high" decoding="async">
-  </picture>
-  <div class="hero-wash" aria-hidden="true"></div>
   <svg class="hero-flow" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
     <path class="flow-a" pathLength="1" d="M-40 640 C 240 520, 420 760, 720 640 S 1180 480, 1480 600" />
     <path class="flow-b" pathLength="1" d="M-40 700 C 260 600, 460 820, 760 700 S 1200 560, 1480 660" />
   </svg>
-
-  <div class="wrap hero-inner">
-    <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="heroEyebrow">Campanillas · Málaga · a minutos del PTA</span></p>
-    <h1 id="hero-title" class="hero-title"><span class="ln"><span data-i18n="heroT1">Vuelve a moverte</span></span> <span class="ln"><em data-i18n="heroT2">sin dolor.</em></span></h1>
-    <p class="hero-lead" data-i18n="heroLead">Fisioterapia, osteopatía y pilates en grupos reducidos. Tratamientos personalizados en los que la terapia manual va por delante de los aparatos.</p>
-    <div class="hero-ctas">
-      <a class="btn btn-primary btn-lg" href="#cita">
-        <span data-i18n="ctaBook">Pedir cita</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a class="btn btn-soft btn-lg" href="#mapa-dolor">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".5"/></svg>
-        <span data-i18n="ctaWhere">¿Dónde te duele?</span>
-      </a>
+  <div class="wrap hero-grid">
+    <div class="hero-inner">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span><span data-i18n="heroEyebrow">Campanillas · Málaga · a minutos del PTA</span></p>
+      <h1 id="hero-title" class="hero-title"><span class="ln"><span data-i18n="heroT1">Vuelve a moverte</span></span> <span class="ln"><em data-i18n="heroT2">sin dolor.</em></span></h1>
+      <p class="hero-lead" data-i18n="heroLead">Fisioterapia, osteopatía y pilates en grupos reducidos. Tratamientos personalizados en los que la terapia manual va por delante de los aparatos.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary btn-lg" href="#cita">
+          <span data-i18n="ctaBook">Pedir cita</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-soft btn-lg" href="#mapa-dolor">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".5"/></svg>
+          <span data-i18n="ctaWhere">¿Dónde te duele?</span>
+        </a>
+      </div>
+      <ul class="hero-facts" aria-label="Datos clave" data-i18n-attr="aria-label:factsLabel">
+        <li><strong>4,7 <span class="star" aria-hidden="true">★</span></strong><span data-i18n="factGoogle">21 reseñas en Google</span></li>
+        <li><strong data-i18n="factAuthT">Autorizado</strong><span data-i18n="factAuth">por la Consejería de Salud</span></li>
+        <li><strong data-i18n="factLateT">Hasta las 21:00</strong><span data-i18n="factLate">de lunes a viernes</span></li>
+      </ul>
     </div>
-    <ul class="hero-facts" aria-label="Datos clave" data-i18n-attr="aria-label:factsLabel">
-      <li><strong>4,7 <span class="star" aria-hidden="true">★</span></strong><span data-i18n="factGoogle">21 reseñas en Google</span></li>
-      <li><strong data-i18n="factAuthT">Autorizado</strong><span data-i18n="factAuth">por la Consejería de Salud</span></li>
-      <li><strong data-i18n="factLateT">Hasta las 21:00</strong><span data-i18n="factLate">de lunes a viernes</span></li>
-    </ul>
-  </div>
 
-  <button type="button" class="breath" id="breath" aria-pressed="false" aria-describedby="breath-hint">
-    <span class="breath-ring" aria-hidden="true"><span class="breath-core"></span></span>
-    <span class="breath-text">
-      <span class="breath-word" aria-hidden="true"><span class="bw-in" data-i18n="breathIn">Inspira</span><span class="bw-out" data-i18n="breathOut">Espira</span></span>
-      <span class="breath-ctrl" data-i18n="breathPause">Pausar respiración</span>
-    </span>
-  </button>
-  <span id="breath-hint" class="sr-only" data-i18n="breathHint">Animación de respiración: 4 segundos inspirando, 6 espirando.</span>
+    <div class="hero-stage">
+      <div class="stage-tilt anim-loop" id="stage">
+        <div class="stage-arch" aria-hidden="true">
+          <span class="stage-light" id="stage-light"></span>
+          <span class="stage-sun"></span>
+          <svg class="stage-waves" viewBox="0 0 600 700" preserveAspectRatio="xMidYMax slice">
+            <path d="M-20 470 C 120 420, 220 520, 330 470 S 520 400, 640 450" />
+            <path d="M-20 520 C 140 470, 240 570, 350 520 S 540 450, 640 500" />
+          </svg>
+          <svg class="pose" id="pose" viewBox="0 0 600 420">
+            <rect class="pose-mat" x="56" y="331" width="488" height="11" rx="5.5"/>
+            <ellipse class="pose-shadow" cx="350" cy="334" rx="190" ry="5"/>
+            <g class="fig" id="fig">
+              <g class="f-thigh">
+                <path class="f-limb" d="M330 314 L 425 312"/>
+                <g class="f-shin"><path class="f-limb" d="M425 312 L 515 314 L 524 296"/></g>
+              </g>
+              <g class="f-torso">
+                <path class="f-trunk" d="M330 314 C 290 318, 245 316, 205 310 L 188 305"/>
+                <g class="f-head"><circle class="f-skull" cx="170" cy="300" r="19"/></g>
+                <g class="f-arm">
+                  <path class="f-limb f-limb-arm" d="M205 310 L 262 318"/>
+                  <g class="f-fore"><path class="f-limb f-limb-arm" d="M262 318 L 318 322"/></g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <p class="stage-tag" aria-hidden="true"><span class="st-dot"></span><span data-i18n="stageTag">Pilates en grupos reducidos</span></p>
+      </div>
+      <button type="button" class="breath anim-loop" id="breath" aria-pressed="false" aria-describedby="breath-hint">
+        <span class="breath-ring" aria-hidden="true"><span class="breath-core"></span></span>
+        <span class="breath-text">
+          <span class="breath-word" aria-hidden="true"><span class="bw-in" data-i18n="breathIn">Inspira</span><span class="bw-out" data-i18n="breathOut">Espira</span></span>
+          <span class="breath-ctrl" data-i18n="breathPause">Pausar respiración</span>
+        </span>
+      </button>
+      <span id="breath-hint" class="sr-only" data-i18n="breathHint">Animación de respiración: 4 segundos inspirando, 6 espirando. Este botón también pausa las animaciones de la página.</span>
+    </div>
+  </div>
+  <span class="scroll-cue" aria-hidden="true"><span></span></span>
 </section>
 
-<!-- APPROACH + SPINE -->
+<!-- APPROACH + SPINE (pinned scene on desktop) -->
 <section class="section approach" id="enfoque" aria-labelledby="enfoque-title">
+  <div class="approach-pin">
   <div class="wrap approach-grid">
     <div class="approach-copy">
       <p class="eyebrow" data-i18n="apEyebrow">Nuestra forma de trabajar</p>
       <h2 id="enfoque-title" class="h2" data-i18n-html="apTitle">Tus manos expertas, <em>no una máquina.</em></h2>
       <p class="lead" data-i18n="apLead">Somos fisioterapeutas especializados en osteopatía y terapia manual. Cada tratamiento se diseña para ti, y siempre priorizamos la terapia manual sobre el uso de aparatos.</p>
-      <ol class="steps">
+      <ol class="steps" id="ap-steps">
         <li class="reveal"><span class="step-n">01</span><div><h3 data-i18n="ap1T">Escuchamos y valoramos</h3><p data-i18n="ap1">Qué te duele, desde cuándo y qué te impide hacer. Medimos movilidad y fuerza para saber de dónde partimos.</p></div></li>
         <li class="reveal"><span class="step-n">02</span><div><h3 data-i18n="ap2T">Tratamos con las manos</h3><p data-i18n="ap2">Terapia manual y osteopatía, con ejercicio terapéutico cuando ayuda. Sesiones personalizadas, sin prisas.</p></div></li>
         <li class="reveal"><span class="step-n">03</span><div><h3 data-i18n="ap3T">Te damos herramientas</h3><p data-i18n="ap3">Pilates en grupos reducidos y pautas para casa, para que la mejoría dure fuera de la camilla.</p></div></li>
       </ol>
     </div>
-    <figure class="spine-fig" aria-hidden="true">
-      <svg class="spine" viewBox="0 0 220 640" id="spine-svg">
+    <figure class="spine-fig anim-loop" id="spine-fig">
+      <div class="spine-state" aria-hidden="true">
+        <span class="ss ss-tense"><span class="ss-dot"></span><span data-i18n="spTense">Tensión</span></span>
+        <span class="ss ss-calm"><span class="ss-dot"></span><span data-i18n="spCalm">Equilibrio</span></span>
+      </div>
+      <svg class="spine" viewBox="0 0 220 640" id="spine-svg" aria-hidden="true">
         <defs>
           <linearGradient id="spG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FB39C"/><stop offset=".55" stop-color="#3F6F5E"/><stop offset="1" stop-color="#E0906F"/></linearGradient>
+          <radialGradient id="tenseG"><stop offset="0" stop-color="#E07A5F" stop-opacity=".42"/><stop offset="1" stop-color="#E07A5F" stop-opacity="0"/></radialGradient>
+          <radialGradient id="calmG"><stop offset="0" stop-color="#7FB39C" stop-opacity=".4"/><stop offset="1" stop-color="#7FB39C" stop-opacity="0"/></radialGradient>
         </defs>
+        <g class="sp-tense-glow"><circle cx="104" cy="150" r="70" fill="url(#tenseG)"/><circle cx="120" cy="450" r="78" fill="url(#tenseG)"/></g>
+        <g class="sp-calm-glow"><ellipse cx="110" cy="320" rx="100" ry="290" fill="url(#calmG)"/></g>
+        <g class="sp-tense-lines" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 120 l10 -8 l8 10 l10 -9 l8 10 l10 -8"/>
+          <path d="M126 112 l10 -8 l8 10 l10 -9 l8 10 l10 -8"/>
+          <path d="M36 182 l9 -7 l8 9 l9 -8 l8 9"/>
+          <path d="M138 176 l9 -7 l8 9 l9 -8 l8 9"/>
+          <path d="M52 430 l10 -8 l8 10 l10 -9 l8 10 l10 -8"/>
+          <path d="M148 440 l10 -8 l8 10 l10 -9 l8 10"/>
+          <path d="M60 492 l9 -7 l8 9 l9 -8 l8 9"/>
+          <path d="M142 500 l9 -7 l8 9 l9 -8 l8 9"/>
+        </g>
+        <g class="sp-calm-lines" fill="none" stroke-linecap="round">
+          <path d="M44 96 C 30 200, 40 300, 70 380 S 70 560, 60 610"/>
+          <path d="M176 96 C 190 200, 182 300, 156 380 S 156 560, 164 610"/>
+          <path d="M20 160 C 10 260, 22 360, 44 440"/>
+          <path d="M200 160 C 212 260, 198 360, 180 440"/>
+        </g>
         <path class="spine-guide" d="M110 24 C 80 110, 82 170, 108 250 S 150 400, 118 480 S 92 580, 110 618" />
         <path class="spine-line" id="spine-line" d="M110 24 C 80 110, 82 170, 108 250 S 150 400, 118 480 S 92 580, 110 618" pathLength="1" />
         <g class="vertebrae" id="vertebrae"></g>
       </svg>
-      <span class="spine-label sl-1" data-i18n="spCerv">Cervical</span>
-      <span class="spine-label sl-2" data-i18n="spDors">Dorsal</span>
-      <span class="spine-label sl-3" data-i18n="spLumb">Lumbar</span>
-      <span class="spine-label sl-4" data-i18n="spSacr">Sacro</span>
+      <span class="spine-label sl-1" aria-hidden="true" data-i18n="spCerv">Cervical</span>
+      <span class="spine-label sl-2" aria-hidden="true" data-i18n="spDors">Dorsal</span>
+      <span class="spine-label sl-3" aria-hidden="true" data-i18n="spLumb">Lumbar</span>
+      <span class="spine-label sl-4" aria-hidden="true" data-i18n="spSacr">Sacro</span>
+      <figcaption class="spine-cap" data-i18n="spCap">Ilustración: desplázate y mira cómo la columna se alinea.</figcaption>
     </figure>
+  </div>
+  </div>
+</section>
+
+<!-- STORY: from pain to movement (illustrative compare) -->
+<section class="section story-sec" id="historia" aria-labelledby="story-title">
+  <div class="wrap story">
+    <div class="story-copy">
+      <div class="reveal">
+        <p class="eyebrow" data-i18n="stEyebrow">Del dolor al movimiento</p>
+        <h2 id="story-title" class="h2" data-i18n-html="stTitle">De la tensión <em>al movimiento.</em></h2>
+        <p class="lead" data-i18n="stLead">Desliza para ver el camino que solemos recorrer contigo, de la primera molestia a moverte con más libertad.</p>
+      </div>
+      <ol class="chapters" id="chapters">
+        <li class="chapter" data-ch="0"><span class="ch-n">1</span><div><h3 data-i18n="ch1T">Tensión y dolor</h3><p data-i18n="ch1">Llegas con una molestia que te limita: la espalda cargada, el cuello rígido o una lesión que no termina de curar.</p></div></li>
+        <li class="chapter" data-ch="1"><span class="ch-n">2</span><div><h3 data-i18n="ch2T">Valoración y terapia manual</h3><p data-i18n="ch2">Buscamos el origen y tratamos con las manos, sesión a sesión, revisando cómo evolucionas.</p></div></li>
+        <li class="chapter" data-ch="2"><span class="ch-n">3</span><div><h3 data-i18n="ch3T">Movimiento y autonomía</h3><p data-i18n="ch3">Ejercicio terapéutico y pilates para que vuelvas a moverte con confianza y sepas cuidarte en casa.</p></div></li>
+      </ol>
+    </div>
+    <div class="cmp reveal" id="cmp">
+      <div class="cmp-frame anim-loop" id="cmp-frame" style="--k:.5">
+        <span class="cmp-bg cmp-bg-after" aria-hidden="true"></span>
+        <svg viewBox="0 0 400 440" class="cmp-svg" aria-hidden="true">
+          <g class="cmp-calm"><circle cx="204" cy="200" r="160"/><circle cx="204" cy="200" r="126"/></g>
+          <g class="cmp-pain">
+            <circle class="cmp-glow cg-1" cx="232" cy="122" r="46"/>
+            <circle class="cmp-glow cg-2" cx="184" cy="226" r="50"/>
+          </g>
+          <ellipse class="cmp-shadow" cx="208" cy="410" rx="70" ry="6"/>
+          <g class="pz-idle">
+            <g class="cmp-fig">
+              <path class="back" d="M210 252 L 214 330 L 212 404 L 232 406"/>
+              <path d="M200 252 L 196 330 L 198 404 L 218 406"/>
+              <g class="pz-torso">
+                <g class="pz-arm pz-arm-b"><path class="back" d="M205 150 L 208 202 L 210 250"/></g>
+                <path class="trunk" d="M205 254 C 198 214, 198 176, 204 146"/>
+                <g class="pz-neck">
+                  <path d="M204 146 L 205 128"/>
+                  <circle class="skull" cx="206" cy="104" r="22"/>
+                </g>
+                <g class="pz-arm pz-arm-f"><path d="M203 150 L 206 202 L 208 250"/></g>
+              </g>
+            </g>
+          </g>
+          <g class="cmp-zig cmp-pain">
+            <path d="M246 70 l8 -7 l6 9 l8 -8 l6 9"/>
+            <path d="M180 112 l-8 -6 l-4 9 l-8 -6"/>
+            <path d="M150 214 l-8 -6 l-4 9 l-8 -6 l-4 9"/>
+            <path d="M152 250 l-8 -6 l-4 9 l-8 -6"/>
+          </g>
+        </svg>
+        <span class="cmp-label cl-before" aria-hidden="true" data-i18n="cmpBefore">Antes</span>
+        <span class="cmp-label cl-after" aria-hidden="true" data-i18n="cmpAfter">Después</span>
+      </div>
+      <div class="cmp-ctrl">
+        <label class="sr-only" for="cmp-range" data-i18n="cmpLabel">Del dolor al movimiento: desliza a la derecha para ver el cambio</label>
+        <span class="cmp-end" aria-hidden="true" data-i18n="cmpPain">Dolor</span>
+        <span class="cmp-track">
+          <span class="cmp-fill" aria-hidden="true"><span class="cmp-knob"><svg viewBox="0 0 24 24"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+          <input class="cmp-range" id="cmp-range" type="range" min="0" max="100" value="50" step="1">
+        </span>
+        <span class="cmp-end" aria-hidden="true" data-i18n="cmpMove">Movimiento</span>
+      </div>
+      <p class="cmp-note" data-i18n="cmpNote">Ilustración orientativa, no es un caso real. Cada proceso es distinto y empieza con una valoración.</p>
+    </div>
   </div>
 </section>
 
@@ -139,7 +256,7 @@
           <button type="button" class="bm-view" data-view="front" aria-pressed="true" data-i18n="bmFront">Delante</button>
           <button type="button" class="bm-view" data-view="back" aria-pressed="false" data-i18n="bmBack">Detrás</button>
         </div>
-        <div class="bm-figure-wrap">
+        <div class="bm-figure-wrap anim-loop" id="bm-wrap">
           <svg class="bm-figure" id="bm-figure" viewBox="0 0 200 470" role="group" aria-label="Figura del cuerpo con zonas seleccionables" data-i18n-attr="aria-label:bmFigLabel">
             <defs>
                             <radialGradient id="glowG"><stop offset="0" stop-color="#E07A5F" stop-opacity=".55"/><stop offset="1" stop-color="#E07A5F" stop-opacity="0"/></radialGradient>
@@ -278,6 +395,35 @@
   </div>
 </section>
 
+<!-- BREATH MOMENT -->
+<section class="breathe-sec" id="respira" aria-labelledby="respira-title">
+  <span class="bs-blob bs-b1 anim-loop" aria-hidden="true"></span>
+  <span class="bs-blob bs-b2 anim-loop" aria-hidden="true"></span>
+  <div class="wrap bs-inner">
+    <div class="bs-copy reveal">
+      <p class="eyebrow" data-i18n="bsEyebrow">Una pausa</p>
+      <h2 id="respira-title" class="h2" data-i18n-html="bsTitle">Respira con nosotros. <em>Diez segundos para ti.</em></h2>
+      <p class="lead" data-i18n="bsLead">Inspira mientras el círculo crece y suelta el aire mientras se encoge: 4 segundos dentro, 6 fuera. Repite tres veces antes de seguir.</p>
+    </div>
+    <div class="bs-stage anim-loop" id="bs-stage">
+      <div class="bs-orb" aria-hidden="true">
+        <svg class="bs-track" viewBox="0 0 200 200"><circle class="bs-arc-in" cx="100" cy="100" r="94" pathLength="100"/><circle class="bs-arc-out" cx="100" cy="100" r="94" pathLength="100"/></svg>
+        <span class="bs-orbit"><span class="bs-dot"></span></span>
+        <span class="bs-ring bs-r3"></span>
+        <span class="bs-ring bs-r2"></span>
+        <span class="bs-ring bs-r1"></span>
+        <span class="bs-core"></span>
+        <span class="bs-words"><span class="bs-in" data-i18n="breathIn">Inspira</span><span class="bs-out" data-i18n="breathOut">Espira</span></span>
+      </div>
+      <div class="bs-controls">
+        <button type="button" class="btn bs-btn" id="bs-btn" aria-pressed="false"><span class="bs-ico" aria-hidden="true"></span><span id="bs-btn-t" data-i18n="bsPause">Pausar</span></button>
+        <p class="bs-count"><span data-i18n="bsCount">Respiraciones</span> <strong id="bs-n">0</strong><span aria-hidden="true"> / 3</span></p>
+      </div>
+      <p class="bs-legend" aria-hidden="true"><span><i class="lg-in"></i><span data-i18n="bsIn4">Inspira 4 s</span></span><span><i class="lg-out"></i><span data-i18n="bsOut6">Espira 6 s</span></span></p>
+    </div>
+  </div>
+</section>
+
 <!-- PILATES TIMETABLE -->
 <section class="section pilates-sec" id="pilates" aria-labelledby="pil-title">
   <div class="wrap">
@@ -292,11 +438,11 @@
 
     <div class="tt">
       <div class="tt-bar">
-        <div class="tt-filters" role="group" aria-label="Filtrar por nivel" data-i18n-attr="aria-label:ttFilterLabel">
+        <div class="tt-filters anim-loop" role="group" aria-label="Filtrar por nivel" data-i18n-attr="aria-label:ttFilterLabel">
           <button type="button" class="pill" data-level="all" aria-pressed="true" data-i18n="lvAll">Todos</button>
-          <button type="button" class="pill" data-level="ini" aria-pressed="false"><span class="lv-dot lv-ini" aria-hidden="true"></span><span data-i18n="lvIni">Iniciación</span></button>
-          <button type="button" class="pill" data-level="int" aria-pressed="false"><span class="lv-dot lv-int" aria-hidden="true"></span><span data-i18n="lvInt">Intermedio</span></button>
-          <button type="button" class="pill" data-level="pre" aria-pressed="false"><span class="lv-dot lv-pre" aria-hidden="true"></span><span data-i18n="lvPre">Embarazo y postparto</span></button>
+          <button type="button" class="pill" data-level="ini" aria-pressed="false"><svg class="mf mf-ini" viewBox="0 0 48 48" aria-hidden="true"><path class="mf-mat" d="M4 42h40"/><circle cx="8" cy="35" r="3.6"/><path d="M12 36 L 28 37 M15 37 L 25 39 M28 37 L 43 38"/><g class="mf-leg"><path d="M28 37 L 43 36"/></g></svg><span class="lv-dot lv-ini" aria-hidden="true"></span><span data-i18n="lvIni">Iniciación</span></button>
+          <button type="button" class="pill" data-level="int" aria-pressed="false"><svg class="mf mf-int" viewBox="0 0 48 48" aria-hidden="true"><path class="mf-mat" d="M4 42h40"/><circle cx="18" cy="15" r="3.6"/><path d="M18 20 L 19 38 L 40 39"/><g class="mf-arm"><path d="M18 24 L 30 25"/><circle class="mf-ball" cx="34" cy="25" r="4"/></g></svg><span class="lv-dot lv-int" aria-hidden="true"></span><span data-i18n="lvInt">Intermedio</span></button>
+          <button type="button" class="pill" data-level="pre" aria-pressed="false"><svg class="mf mf-pre" viewBox="0 0 48 48" aria-hidden="true"><path class="mf-mat" d="M4 42h40"/><circle cx="24" cy="14" r="3.6"/><path d="M24 19 L 24 37 M24 25 Q 32 30 25 36 M12 40 Q 24 33 36 40"/><g class="mf-al"><path d="M24 23 L 15 31"/></g><g class="mf-ar"><path d="M24 23 L 33 31"/></g></svg><span class="lv-dot lv-pre" aria-hidden="true"></span><span data-i18n="lvPre">Embarazo y postparto</span></button>
         </div>
         <div class="tt-days" role="group" aria-label="Día" data-i18n-attr="aria-label:ttDayLabel" id="tt-days"></div>
       </div>
@@ -305,7 +451,7 @@
       <p class="ph-note"><span class="ph" data-i18n="phSchedule">[horario de ejemplo]</span> <span data-i18n="ttNote">La web actual no publica el horario de pilates: estas clases son de muestra, dentro del horario del centro, para enseñar cómo se vería.</span></p>
     </div>
 
-    <aside class="pta reveal" aria-labelledby="pta-title">
+    <aside class="pta reveal anim-loop" aria-labelledby="pta-title">
       <svg class="pta-art" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="58" fill="#E6EFEA"/><path d="M24 84h72M34 84V50h18v34M56 84V36h22v48M82 84V58h10v26" fill="none" stroke="#3F6F5E" stroke-width="3" stroke-linejoin="round"/><circle cx="86" cy="32" r="8" fill="#F2C6A8"/></svg>
       <div>
         <h3 id="pta-title" data-i18n="ptaT">¿Trabajas en el Parque Tecnológico?</h3>
@@ -325,14 +471,20 @@
       <p class="lead" data-i18n="prLead">Elige el tratamiento y el bono para ver cuánto te sale cada sesión.</p>
     </div>
 
-    <div class="calc reveal">
+    <div class="calc reveal anim-loop">
       <div class="calc-tabs" role="group" aria-label="Tratamiento" data-i18n-attr="aria-label:calcTreatLabel">
         <button type="button" class="calc-tab" data-calc="core" aria-pressed="true" data-i18n="calcCore">Fisio, osteopatía y pilates</button>
         <button type="button" class="calc-tab" data-calc="dren" aria-pressed="false" data-i18n="calcDren">Drenaje linfático</button>
       </div>
       <div class="calc-packs" id="calc-packs" role="group" aria-label="Bono" data-i18n-attr="aria-label:calcPackLabel"></div>
-      <div class="calc-out" aria-live="polite">
-        <div class="calc-big"><span class="calc-per" id="calc-per">30 €</span><span class="calc-unit" data-i18n="perSession">por sesión</span></div>
+      <div class="calc-out">
+        <p class="sr-only" id="calc-live" aria-live="polite"></p>
+        <div class="calc-big" aria-hidden="true"><span class="calc-per" id="calc-per">30 €</span><span class="calc-unit" data-i18n="perSession">por sesión</span></div>
+        <div class="calc-meter" aria-hidden="true">
+          <div class="cm-row"><span data-i18n="cmLabel">Precio por sesión frente a la sesión suelta</span><strong class="cm-pct" id="cm-pct">0 %</strong></div>
+          <div class="cm-track"><span class="cm-fill" id="cm-fill"></span><span class="cm-save" id="cm-save"></span></div>
+          <div class="cm-dots" id="cm-dots"></div>
+        </div>
         <div class="calc-meta"><span id="calc-total"></span><span class="calc-save" id="calc-save"></span><span class="calc-cond" id="calc-cond"></span></div>
         <a class="btn btn-primary" href="#cita" id="calc-cta"><span data-i18n="calcCta">Reservar con este bono</span></a>
       </div>
@@ -401,12 +553,12 @@
   <div class="wrap reviews">
     <div class="score reveal">
       <svg class="score-ring" viewBox="0 0 160 160" aria-hidden="true"><circle cx="80" cy="80" r="70" fill="none" stroke="#DCE8E0" stroke-width="8"/><circle class="score-arc" cx="80" cy="80" r="70" fill="none" stroke="#3F6F5E" stroke-width="8" stroke-linecap="round" pathLength="100" transform="rotate(-90 80 80)"/></svg>
-      <p class="score-num"><span>4,7</span><small>/ 5</small></p>
+      <p class="score-num"><span id="score-n">4,7</span><small>/ 5</small></p>
     </div>
     <div class="reveal">
       <p class="eyebrow" data-i18n="rvEyebrow">Opiniones</p>
       <h2 id="op-title" class="h2" data-i18n-html="rvTitle">4,7 de 5 <em>en Google.</em></h2>
-      <p class="stars" aria-hidden="true">★★★★★</p>
+      <p class="stars" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></p>
       <p class="lead" data-i18n="rvLead">Puntuación media de 21 reseñas en Google Maps, consultada el 18 de noviembre de 2026.</p>
       <a class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=Fisioterapia%20Campanillas%20Calle%20Jacob%2018" target="_blank" rel="noopener"><span data-i18n="rvLink">Leer las reseñas en Google</span><span class="sr-only" data-i18n="newTab">(se abre en una pestaña nueva)</span></a>
     </div>
@@ -423,7 +575,7 @@
     </div>
 
     <form class="booking" id="booking" novalidate>
-      <ol class="bk-progress" aria-hidden="true">
+      <ol class="bk-progress" aria-hidden="true" data-step="1">
         <li class="is-on"><span>1</span><em data-i18n="bkS1">Qué</em></li>
         <li><span>2</span><em data-i18n="bkS2">Cuándo</em></li>
         <li><span>3</span><em data-i18n="bkS3">Tus datos</em></li>
@@ -499,7 +651,7 @@
       </div>
     </div>
     <div class="map reveal" id="map">
-      <div class="map-facade" id="map-facade">
+      <div class="map-facade anim-loop" id="map-facade">
         <svg viewBox="0 0 600 440" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
           <rect width="600" height="440" fill="#E9EFE9"/>
           <path d="M-20 300 C 120 260, 220 340, 360 290 S 560 220, 640 250" fill="none" stroke="#CFDCD2" stroke-width="26"/>

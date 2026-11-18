@@ -112,7 +112,7 @@
     var md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('desc'));
     store(LS_LANG, lang);
     syncMenuBtn();
-    if (!initial) { renderTabs(); renderMenu(); renderBoard(); renderDays(true); updateSummary(); renderPicks(); updateStatus(); }
+    if (!initial) { renderTabs(); renderMenu(); renderBelt(); renderBoard(); renderDays(true); updateSummary(); renderPicks(); updateStatus(); }
   }
   $$('.lang-btn').forEach(function (b) { b.addEventListener('click', function () { setLang(b.getAttribute('data-lang')); }); });
 
@@ -281,7 +281,7 @@
     new IntersectionObserver(function (en) { fabAway = !en[0].isIntersecting; fab.classList.toggle('away', fabAway); fab.tabIndex = fabAway ? -1 : 0; fab.setAttribute('aria-hidden', String(fabAway)); }, { rootMargin: '-20% 0px -20% 0px' }).observe($('menu'));
   } else { fab.classList.remove('away'); }
   $('picks-close').addEventListener('click', function () { dlg.close(); });
-  $('picks-clear').addEventListener('click', function () { Object.keys(picks).forEach(function (id) { delete picks[id]; }); savePicks(); renderMenu(); renderPicks(); dlg.close(); });
+  $('picks-clear').addEventListener('click', function () { Object.keys(picks).forEach(function (id) { delete picks[id]; }); savePicks(); renderMenu(); renderBelt(); renderPicks(); dlg.close(); });
   $('picks-book').addEventListener('click', function () { dlg.close(); });
   dlg.addEventListener('close', function () { if (!fab.hidden) fab.focus(); });
   dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
@@ -329,17 +329,19 @@
   function imgHTML(d) {
     return '<img src="img/' + d.img + '-400.webp" srcset="img/' + d.img + '-400.webp 400w, img/' + d.img + '-800.webp 800w" sizes="(min-width: 960px) 380px, (min-width: 600px) 45vw, 112px" width="400" height="300" loading="lazy" decoding="async" alt="' + esc(d.alt ? d.alt[lang] : '') + '">';
   }
-  function cardHTML(d) {
+  var HOT = ['teppan', 'tempura', 'rice', 'sets'];
+  function isHot(d) { return HOT.indexOf(d.c) > -1 || !!d.hot; }
+  function cardHTML(d, i) {
     var sub = dishSub(d), u = d.u && !Array.isArray(d.p) ? ' · ' + unitLabel(d.u) : '';
-    return '<article class="dish-card"><div class="dish-media">' + imgHTML(d) + '</div><div class="dish-body">' +
+    return '<article class="dish-card' + (isHot(d) ? ' hot' : '') + '" style="--i:' + (i || 0) + '"><div class="dish-media">' + imgHTML(d) + (isHot(d) ? '<span class="wisps" aria-hidden="true"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></span>' : '') + '</div><div class="dish-body">' +
       '<div class="dish-top"><h4 class="dish-name"><span class="dish-num">' + esc(d.n) + '</span>' + esc(d.t) + '</h4><p class="dish-price">' + priceHTML(d) + '</p></div>' +
       (sub || u ? '<p class="dish-sub">' + esc(sub) + (sub ? '' : '') + '<span>' + (sub ? u : u.replace(' · ', '')) + '</span></p>' : '') +
       '<div class="dish-meta"><div class="dish-icons">' + (iconsHTML(d) || '<span class="sr-only">' + t('alNone') + '</span>') + '</div>' + addBtnHTML(d) + '</div></div></article>';
   }
-  function rowHTML(d) {
+  function rowHTML(d, i) {
     var sub = dishSub(d), u = d.u && !Array.isArray(d.p) ? unitLabel(d.u) : '';
     var icons = iconsHTML(d);
-    return '<li class="dish-row"><div><div class="row-line"><h4 class="dish-name"><span class="dish-num">' + esc(d.n) + '</span>' + esc(d.t) + '</h4><span class="dots" aria-hidden="true"></span><span class="dish-price">' + priceHTML(d) + '</span></div>' +
+    return '<li class="dish-row" style="--i:' + (i || 0) + '"><div><div class="row-line"><h4 class="dish-name"><span class="dish-num">' + esc(d.n) + '</span>' + esc(d.t) + '</h4><span class="dots" aria-hidden="true"></span><span class="dish-price">' + priceHTML(d) + '</span></div>' +
       (sub || u ? '<p class="dish-sub">' + esc(sub) + (sub && u ? ' · ' : '') + u + '</p>' : '') +
       (icons ? '<div class="dish-icons">' + icons + '</div>' : '') + '</div>' + addBtnHTML(d) + '</li>';
   }
@@ -368,6 +370,7 @@
     if (!total) html = '<div class="empty"><p>' + t('emptyTitle') + '</p><button type="button" class="btn btn-outline-dark btn-sm" id="menu-reset">' + t('reset') + '</button></div>';
     body.innerHTML = html;
     resEl.textContent = T[lang].results(total, query);
+    document.dispatchEvent(new CustomEvent('ichiban:menu'));
     var r = $('menu-reset');
     if (r) r.addEventListener('click', function () { query = ''; searchEl.value = ''; filters = {}; $$('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); }); renderTabs(); renderMenu(); searchEl.focus(); });
   }
@@ -384,6 +387,21 @@
       renderMenu();
     });
   });
+
+  /* ================= Kaiten belt (a playful way to browse the sushi) ================= */
+  var BELT_CATS = ['nigiri', 'rolls', 'maki', 'sashimi'], RIMS = ['#b81f2b', '#d6b06a', '#3f6b3a', '#2d4f7c'];
+  function renderBelt() {
+    var tr = $('belt-track'); if (!tr || !beltBuilt) return;
+    var list = M.dishes.filter(function (d) { return d.img && BELT_CATS.indexOf(d.c) > -1; });
+    function item(d, i, clone) {
+      var btn = addBtnHTML(d); if (clone) btn = btn.replace('<button ', '<button tabindex="-1" ');
+      return '<li class="belt-item' + (clone ? ' clone' : '') + '" style="--rim:' + RIMS[i % RIMS.length] + '"' + (clone ? ' aria-hidden="true"' : '') + '>' +
+        '<div class="kp-plate"><img src="img/' + d.img + '-400.webp" width="400" height="300" loading="lazy" decoding="async" alt="' + (clone ? '' : esc(d.alt ? d.alt[lang] : '')) + '"></div>' +
+        '<p class="kp-name">' + esc(d.t) + '</p><p class="kp-price">' + priceHTML(d) + '</p>' + btn + '</li>';
+    }
+    tr.innerHTML = list.map(function (d, i) { return item(d, i, false); }).join('') + list.map(function (d, i) { return item(d, i, true); }).join('');
+    document.dispatchEvent(new CustomEvent('ichiban:belt'));
+  }
 
   /* ================= Teppan board in the show section ================= */
   function renderBoard() {
@@ -568,5 +586,12 @@
   function step() { var j = jobs.shift(); if (j) { j(); if (jobs.length) idle(step, { timeout: 1500 }); } }
   function build() { if (built) return; built = true; while (jobs.length) jobs.shift()(); }
   idle(function () { if (!built) { built = true; step(); } }, { timeout: 1500 });
+  // The sushi belt is built only when the menu gets close (it is decorative browsing, not needed for first paint)
+  var beltBuilt = false, kai = $('kaiten');
+  function buildBelt() { if (!beltBuilt) { beltBuilt = true; renderBelt(); } }
+  if (kai && 'IntersectionObserver' in window) {
+    var kio = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { kio.disconnect(); idle(buildBelt, { timeout: 300 }); } }, { rootMargin: '1200px 0px' });
+    kio.observe(kai);
+  } else buildBelt();
   if (location.hash) build();
 })();

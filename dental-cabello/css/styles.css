@@ -578,3 +578,58 @@ em{font-style:italic}
   .jv-svg .scanline,.jv-svg .ring{animation:none!important}
   .jstep{opacity:1;transform:none}
 }
+
+/* =========================================================
+   Premium layer · motion uses transform/opacity only; loops pause off-screen ([data-live]:not(.live))
+   ========================================================= */
+/* Scroll progress (CSS scroll-driven, no JS) */
+.scroll-prog{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--aqua),var(--accent));transform-origin:0 50%;transform:scaleX(0);opacity:0;pointer-events:none}
+@supports (animation-timeline:scroll()){.scroll-prog{opacity:1;animation:prog linear both;animation-timeline:scroll(root)}}
+@keyframes prog{to{transform:scaleX(1)}}
+
+/* Buttons: light sweep + press */
+.btn{position:relative;overflow:hidden;isolation:isolate}
+.btn-accent::after,.btn-wa::after,.btn-light::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--ease);pointer-events:none}
+.btn-light::after{background:linear-gradient(105deg,transparent 30%,rgba(143,224,211,.35) 50%,transparent 70%)}
+.btn-accent:hover::after,.btn-wa:hover::after,.btn-light:hover::after{transform:translateX(120%)}
+.chip:active,.seg-btn:active,.lang-btn:active,.tab:active,.zone-btn:active,.ab-btn:active,.soc:active{transform:scale(.94)}
+.chip[aria-pressed="true"],.zone-btn[aria-pressed="true"],.seg-btn[aria-pressed="true"],.lang-btn[aria-pressed="true"],.tab[aria-selected="true"]{animation:press .45s var(--ease-spring)}
+@keyframes press{0%{transform:scale(.9)}100%{transform:none}}
+.ab-btn{transition:transform .2s var(--ease)}
+.soc{transition:border-color .2s,transform .25s var(--ease)}
+.soc:hover{transform:translateY(-2px)}
+
+/* Generic staggered group reveal */
+.js .reveal-group>*{opacity:0;transform:translateY(16px)}
+.reveal-group.in>*{animation:cardIn .8s var(--ease) both}
+.reveal-group.in>:nth-child(2){animation-delay:.06s}.reveal-group.in>:nth-child(3){animation-delay:.12s}.reveal-group.in>:nth-child(4){animation-delay:.18s}
+.reveal-group.in>:nth-child(5){animation-delay:.24s}.reveal-group.in>:nth-child(6){animation-delay:.3s}.reveal-group.in>:nth-child(7){animation-delay:.36s}.reveal-group.in>:nth-child(8){animation-delay:.42s}
+.reveal-group.in>:nth-child(9){animation-delay:.48s}.reveal-group.in>:nth-child(10){animation-delay:.54s}.reveal-group.in>:nth-child(11){animation-delay:.6s}.reveal-group.in>:nth-child(12){animation-delay:.66s}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.treat-grid.in>.tcard.pop{animation:pop .45s var(--ease) both}
+
+/* Hero: luminous sweep, tilt, parallax */
+.hero-photo{transform-origin:50% 50%;will-change:transform}
+.hero-sheen{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;mix-blend-mode:overlay}
+.hero-sheen span{position:absolute;top:-25%;bottom:-25%;left:0;width:45%;background:linear-gradient(100deg,rgba(255,255,255,0) 18%,rgba(255,255,255,.25) 38%,rgba(255,252,244,.85) 50%,rgba(255,255,255,.25) 62%,rgba(255,255,255,0) 82%);transform:translate3d(-110%,0,0) skewX(-12deg);opacity:0}
+.hero.live:not(.track) .hero-sheen span{animation:sheen 8s var(--ease) 1.6s infinite}
+@keyframes sheen{0%{transform:translate3d(-110%,0,0) skewX(-12deg);opacity:0}4%{opacity:1}30%{transform:translate3d(240%,0,0) skewX(-12deg);opacity:1}34%,100%{transform:translate3d(240%,0,0) skewX(-12deg);opacity:0}}
+.hero.track .hero-sheen span{transition:opacity .6s var(--ease)}
+.hero.track:hover .hero-sheen span{opacity:1}
+.hero:not(.live) .hero-glow,.hero:not(.live) .float-card,[data-live]:not(.live) .pulse::after{animation-play-state:paused}
+.hero-photo .photo-tag{z-index:2}
+.facts strong{font-variant-numeric:tabular-nums}
+@supports (animation-timeline:view()){
+  .hero-photo picture{display:block;height:100%;animation:heroPar linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
+  .first-photo img,.map-facade img{animation:parY linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+}
+@keyframes heroPar{to{transform:translateY(5%) scale(1.12)}}
+@keyframes parY{from{transform:translateY(-4%) scale(1.1)}to{transform:translateY(4%) scale(1.1)}}
+
+.jv-progress span{width:100%;transform-origin:0 50%;transform:scaleX(.1666);transition:transform .7s var(--ease)}
+@media (prefers-reduced-motion:reduce){
+  .scroll-prog{animation:none!important;opacity:0}
+  .hero-sheen{display:none}
+  .hero-photo picture,.first-photo img,.map-facade img{animation:none!important;transform:none!important}
+  .js .reveal-group>*{opacity:1;transform:none;animation:none!important}
+}

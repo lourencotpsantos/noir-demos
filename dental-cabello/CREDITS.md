@@ -17,6 +17,7 @@ Notes
 - `coast-*`: the original also shows a beach club's logo on a glass screen and on a litter bin. The image was cropped to the right-hand side (sea, breakwater, palm trees, boardwalk) so that no business name or logo is visible. The location of the photo is not stated on Unsplash, so the page only says "Costa del Sol".
 - `visit-*`: a small manufacturer logo on the computer monitor in the background was painted out, so no brand is visible. The people are models, not the clinic's staff or patients, and the caption says so.
 - Before/after, tooth map and "smile journey" visuals are original SVG illustrations drawn for this concept. They are labelled "Ilustración orientativa · no es un paciente real".
+- The rotating 3D molar in the iTero section is an original wireframe drawn in code on a `<canvas>` (no 3D model files, no library). It is labelled "Ilustración orientativa · no es un escaneado real". The breathing orb in the "Sin prisas" section is pure CSS. No new photos were added in the premium pass.
 
 ## Fonts (self-hosted in `fonts/`)
 

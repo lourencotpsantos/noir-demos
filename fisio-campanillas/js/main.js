@@ -17,6 +17,7 @@
   function ui(k) { return D.ui[lang][k]; }
   function tx(o) { return o[lang]; }
   function fmt(s, o) { return s.replace(/\{(\w+)\}/g, function (_, k) { return o[k]; }); }
+  function bump(el) { el.classList.toggle("bump", false); void el.offsetWidth; el.classList.toggle("bump", true); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   /* ---------- i18n ---------- */
@@ -97,6 +98,17 @@
     revealEls.forEach(function (el) { el.classList.add("is-in"); });
   }
 
+  /* ---------- Score count-up ---------- */
+  var scoreEl = $(".score"), scoreN = $("#score-n");
+  if (scoreEl && !reduce.matches) inView(scoreEl, function () {
+    var t0 = performance.now();
+    (function step(now) {
+      var x = Math.min(1, (now - t0) / 1600), e = 1 - Math.pow(1 - x, 3);
+      scoreN.textContent = (4.7 * e).toFixed(1).replace(".", ",");
+      if (x < 1) requestAnimationFrame(step);
+    })(t0);
+  }, { threshold: 0.5 });
+
   /* ---------- Breathing control ---------- */
   var breath = $("#breath");
   function breathLabel() {
@@ -113,8 +125,71 @@
   langHooks.push(breathLabel);
   if (reduce.matches) breath.hidden = true;
 
+  /* ---------- Loops run only on screen ---------- */
+  function watchLive(els) {
+    if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("is-live"); }); return; }
+    var lio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { en.target.classList.toggle("is-live", en.isIntersecting); });
+    }, { rootMargin: "80px 0px" });
+    els.forEach(function (el) { lio.observe(el); });
+  }
+  watchLive($$(".anim-loop"));
+  function inView(el, cb, opts) {
+    if (!("IntersectionObserver" in window) || reduce.matches) { cb(); return; }
+    var o = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { o.disconnect(); cb(); } }, opts || { threshold: 0.35 });
+    o.observe(el);
+  }
+
+  /* ---------- Hero figure: echo trails + cursor tilt ---------- */
+  var fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+  (function heroStage() {
+    var figEl = $("#fig"), stage = $("#stage"), hero = $(".hero");
+    if (!figEl || reduce.matches) return;
+    [[".7s", "g2"], [".35s", "g1"]].forEach(function (g) {
+      var c = figEl.cloneNode(true);
+      c.removeAttribute("id");
+      c.setAttribute("class", "fig ghost " + g[1]);
+      c.style.setProperty("--lag", g[0]);
+      figEl.parentNode.insertBefore(c, figEl);
+    });
+    if (!fine.matches) return;
+    var light = $("#stage-light"), pose = $("#pose"), queued = false, px = 0, py = 0;
+    hero.addEventListener("pointermove", function (e) {
+      if (!stage.classList.contains("is-live")) return;
+      px = e.clientX / window.innerWidth - 0.5; py = e.clientY / window.innerHeight - 0.5;
+      if (queued) return; queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        stage.style.transform = "perspective(1100px) rotateY(" + (px * 7).toFixed(2) + "deg) rotateX(" + (-py * 5).toFixed(2) + "deg)";
+        light.style.transform = "translate(" + (px * 60).toFixed(1) + "px," + (py * 50).toFixed(1) + "px)";
+        pose.style.transform = "translate(" + (px * -14).toFixed(1) + "px," + (py * -8).toFixed(1) + "px)";
+      });
+    });
+    hero.addEventListener("pointerleave", function () { stage.style.transform = ""; light.style.transform = ""; pose.style.transform = ""; });
+  })();
+
+  /* Far sections skip layout until needed; an in-page jump lays them all out first so it lands exactly */
+  function fullLayout() { root.classList.add("cv-all"); }
+  doc.addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"]')) fullLayout(); }, true);
+
+  /* ---------- Ripple on every control ---------- */
+  var RIPPLE = ".btn, .pill, .chip, .pack, .day-btn, .calc-tab, .bm-view, .cls-book, .bk-date, .bk-time, .lang-btn";
+  doc.addEventListener("pointerdown", function (e) {
+    if (reduce.matches) return;
+    var el = e.target.closest && e.target.closest(RIPPLE);
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    var sp = doc.createElement("span");
+    sp.className = "rpl";
+    sp.style.left = (e.clientX - r.left) + "px";
+    sp.style.top = (e.clientY - r.top) + "px";
+    sp.style.setProperty("--rs", String(Math.ceil(Math.max(r.width, r.height) / 6)));
+    el.appendChild(sp);
+    setTimeout(function () { sp.remove(); }, 700);
+  }, { passive: true });
+
   /* Widgets below the fold start once the browser is idle, so the hero paints first */
-  function initRest() {
+  function* initRest() {
   /* ---------- Spine: vertebrae + scroll-drawn line ---------- */
   var spineLine = $("#spine-line");
   var vg = $("#vertebrae");
@@ -129,6 +204,8 @@
       var p2 = spineLine.getPointAtLength(Math.min(len, len * f + 2));
       var ang = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI - 90;
       var w = 30 + Math.sin(f * Math.PI) * 18 - (i > 13 ? (i - 13) * 6 : 0);
+      var g = doc.createElementNS(SVGNS, "g");
+      g.setAttribute("transform", "rotate(" + ang.toFixed(1) + " " + p.x.toFixed(1) + " " + p.y.toFixed(1) + ")");
       var r = doc.createElementNS(SVGNS, "rect");
       r.setAttribute("x", (p.x - w / 2).toFixed(1));
       r.setAttribute("y", (p.y - 9).toFixed(1));
@@ -136,23 +213,111 @@
       r.setAttribute("height", "18");
       r.setAttribute("rx", "8");
       r.setAttribute("class", "vertebra");
-      r.setAttribute("transform", "rotate(" + ang.toFixed(1) + " " + p.x.toFixed(1) + " " + p.y.toFixed(1) + ")");
+      // each vertebra starts a little out of line; scrolling brings it back (--m goes 1 -> 0)
+      var side = i % 2 ? 1 : -1;
+      var amp = 0.45 + 0.55 * Math.abs(Math.sin(i * 1.7));
+      r.style.setProperty("--dx", (side * 16 * amp).toFixed(1));
+      r.style.setProperty("--rt", (side * -13 * amp).toFixed(1));
       r.dataset.f = f;
-      vg.appendChild(r);
+      g.appendChild(r);
+      vg.appendChild(g);
       verts.push(r);
     }
   })();
-  function drawSpine() {
-    var r = spineFig.getBoundingClientRect();
-    var vh = window.innerHeight;
-    var prog = (vh * 0.85 - r.top) / (r.height + vh * 0.25);
-    prog = Math.max(0, Math.min(1, prog));
-    spineLine.style.setProperty("--draw", String(1 - prog));
-    verts.forEach(function (v) { v.classList.toggle("is-lit", parseFloat(v.dataset.f) <= prog + 0.02); });
+  yield;
+  var spineSvg = $("#spine-svg");
+  var apSec = $("#enfoque");
+  var apSteps = $$("#ap-steps li");
+  var pinMQ = window.matchMedia("(min-width: 1024px) and (min-height: 700px)");
+  var spineNear = true;
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (en) { spineNear = en[0].isIntersecting; if (spineNear) drawSpine(); }, { rootMargin: "200px 0px" }).observe(apSec);
   }
-  if (reduce.matches) { verts.forEach(function (v) { v.classList.add("is-lit"); }); spineLine.style.setProperty("--draw", "0"); }
+  var lastStep = -1, lastCalm = null, lastM = -1;
+  function drawSpine() {
+    if (!spineNear) return;
+    var vh = window.innerHeight, prog;
+    var pinned = pinMQ.matches;
+    apSec.classList.toggle("is-pinned", pinned);
+    if (pinned) {
+      var sr = apSec.getBoundingClientRect();
+      prog = -sr.top / Math.max(1, sr.height - vh);
+    } else {
+      var r = spineFig.getBoundingClientRect();
+      prog = (vh * 0.85 - r.top) / (r.height + vh * 0.25);
+    }
+    prog = Math.max(0, Math.min(1, prog));
+    var m = Math.max(0, 1 - prog / 0.8);
+    if (Math.abs(m - lastM) > 0.004) {
+      lastM = m;
+      spineSvg.style.setProperty("--m", m.toFixed(3));
+      spineLine.style.setProperty("--draw", String(1 - prog));
+      verts.forEach(function (v) { v.classList.toggle("is-lit", parseFloat(v.dataset.f) <= prog * 1.15 + 0.02); });
+    }
+    var calm = m < 0.35;
+    if (calm !== lastCalm) { lastCalm = calm; spineFig.classList.toggle("is-calm", calm); }
+    var st = pinned ? Math.min(2, Math.floor(prog * 3.2)) : -1;
+    if (st !== lastStep) { lastStep = st; apSteps.forEach(function (li, i) { li.classList.toggle("is-active", i === st); }); }
+  }
+  if (reduce.matches) { verts.forEach(function (v) { v.classList.add("is-lit"); }); spineLine.style.setProperty("--draw", "0"); spineSvg.style.setProperty("--m", "0"); spineFig.classList.add("is-calm"); }
   else { scrollFns.push(drawSpine); drawSpine(); }
 
+  yield;
+  /* ---------- Story: one figure straightens as you slide ---------- */
+  var cmpBox = $("#cmp"), cmpFrame = $("#cmp-frame"), cmpRange = $("#cmp-range"), chapters = $$("#chapters .chapter");
+  var lastCh = -1, hinting = false;
+  function setCmp(v, fromUser) {
+    var k = (v / 100).toFixed(3);
+    cmpFrame.style.setProperty("--k", k);
+    cmpRange.parentNode.style.setProperty("--k", k);
+    var ch = v < 34 ? 0 : v < 67 ? 1 : 2;
+    if (ch !== lastCh) { lastCh = ch; chapters.forEach(function (c, i) { c.classList.toggle("is-on", i === ch); }); }
+    if (fromUser !== false) cmpRange.setAttribute("aria-valuetext", fmt(ui("cmpText"), { p: v }) + " · " + ui("chNames")[ch]);
+  }
+  cmpRange.addEventListener("input", function () { hinting = false; setCmp(parseInt(cmpRange.value, 10)); });
+  cmpRange.addEventListener("pointerdown", function () { hinting = false; cmpBox.classList.add("is-drag"); });
+  ["pointerup", "pointercancel", "blur"].forEach(function (ev) { cmpRange.addEventListener(ev, function () { cmpBox.classList.remove("is-drag"); }); });
+  chapters.forEach(function (c, i) {
+    c.addEventListener("click", function () { hinting = false; var v = [12, 50, 92][i]; cmpRange.value = v; setCmp(v); });
+  });
+  setCmp(50);
+  langHooks.push(function () { setCmp(parseInt(cmpRange.value, 10)); });
+  // one gentle sweep when it first comes into view, to show it can be dragged
+  inView(cmpFrame, function () {
+    if (reduce.matches) return;
+    hinting = true;
+    var keys = [[0, 50], [900, 8], [2400, 96], [3400, 60]], t0 = performance.now();
+    function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+    (function step(now) {
+      if (!hinting) return;
+      var t = now - t0, k = 1;
+      while (k < keys.length - 1 && t > keys[k][0]) k++;
+      var a = keys[k - 1], b = keys[k];
+      var x = Math.max(0, Math.min(1, (t - a[0]) / (b[0] - a[0])));
+      var v = Math.round(a[1] + (b[1] - a[1]) * ease(x));
+      cmpRange.value = v; setCmp(v, false);
+      if (t < keys[keys.length - 1][0]) requestAnimationFrame(step); else { hinting = false; setCmp(v); }
+    })(t0);
+  }, { threshold: 0.6 });
+
+  yield;
+  /* ---------- Breath moment ---------- */
+  var bsStage = $("#bs-stage"), bsBtn = $("#bs-btn"), bsN = $("#bs-n"), bsCount = 0;
+  function bsLabel() { $("#bs-btn-t").textContent = ui(bsStage.classList.contains("is-stopped") ? "bsPlay" : "bsPause"); }
+  bsBtn.addEventListener("click", function () {
+    var stop = !bsStage.classList.contains("is-stopped");
+    bsStage.classList.toggle("is-stopped", stop);
+    bsBtn.setAttribute("aria-pressed", String(stop));
+    bsLabel();
+  });
+  $(".bs-core", bsStage).addEventListener("animationiteration", function () {
+    bsCount++;
+    bsN.textContent = String(bsCount > 3 ? ((bsCount - 1) % 3) + 1 : bsCount);
+    bump(bsN);
+  });
+  langHooks.push(bsLabel);
+
+  yield;
   /* ---------- Body map ---------- */
   var fig = $("#bm-figure");
   var spotsG = $("#bm-spots");
@@ -160,6 +325,19 @@
   var chipsBox = $("#bm-chips");
   var view = "front";
   var activeZone = null;
+  var flipT = 0;
+  fig.addEventListener("animationend", function (e) { if (e.animationName === "flip3d") fig.classList.remove("flip3d"); });
+  // the figure leans gently towards the pointer
+  var bmWrap = $("#bm-wrap"), bmQ = false;
+  if (fine.matches && !reduce.matches) {
+    bmWrap.parentNode.addEventListener("pointermove", function (e) {
+      if (bmQ) return; bmQ = true;
+      var r = bmWrap.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      requestAnimationFrame(function () { bmQ = false; bmWrap.style.transform = "perspective(1000px) rotateY(" + (x * 12).toFixed(1) + "deg) rotateX(" + (-y * 6).toFixed(1) + "deg)"; });
+    });
+    bmWrap.parentNode.addEventListener("pointerleave", function () { bmWrap.style.transform = ""; });
+  }
   fig.setAttribute("data-view", view);
   function zoneById(id) { for (var i = 0; i < D.zones.length; i++) if (D.zones[i].id === id) return D.zones[i]; return null; }
   function zonesForView(v) { return D.zones.filter(function (z) { return z.spots.some(function (s) { return s[0] === v; }); }); }
@@ -178,11 +356,12 @@
         g.setAttribute("tabindex", first ? "0" : "-1");
         g.setAttribute("aria-label", ui("spotAria") + tx(z));
         g.setAttribute("aria-pressed", String(activeZone === z.id));
-        g.innerHTML = '<circle class="sp-hit" cx="' + s[1] + '" cy="' + s[2] + '" r="16"/>' +
+        g.innerHTML = '<circle class="sp-halo" cx="' + s[1] + '" cy="' + s[2] + '" r="22" style="animation-delay:-' + ((idx * 0.7 + s[2] / 200) % 3).toFixed(2) + 's"/>' +
+          '<circle class="sp-hit" cx="' + s[1] + '" cy="' + s[2] + '" r="16"/>' +
           '<circle class="sp-ring" cx="' + s[1] + '" cy="' + s[2] + '" r="10" style="animation-delay:' + ((idx * 0.4 + s[2] / 300) % 3).toFixed(2) + 's"/>' +
           '<circle class="sp-focus" cx="' + s[1] + '" cy="' + s[2] + '" r="13"/>' +
           '<circle class="sp-dot" cx="' + s[1] + '" cy="' + s[2] + '" r="6.5"/>';
-        g.addEventListener("click", function () { selectZone(z.id, s); });
+        g.addEventListener("click", function () { ripple(s); selectZone(z.id, s); });
         g.addEventListener("keydown", function (e) {
           if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectZone(z.id, s); }
         });
@@ -201,6 +380,13 @@
       b.addEventListener("click", function () { selectZone(z.id); });
       chipsBox.appendChild(b);
     });
+  }
+  function ripple(s) {
+    if (reduce.matches) return;
+    var c = doc.createElementNS(SVGNS, "circle");
+    c.setAttribute("class", "sp-ripple"); c.setAttribute("cx", s[1]); c.setAttribute("cy", s[2]); c.setAttribute("r", "10");
+    fig.appendChild(c);
+    setTimeout(function () { c.remove(); }, 850);
   }
   function placeGlow(id, spot) {
     var z = zoneById(id);
@@ -243,12 +429,21 @@
       if (v === view) return;
       view = v;
       $$(".bm-view").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
-      fig.setAttribute("data-view", v);
-      if (!reduce.matches) { fig.classList.remove("flip"); void fig.getBoundingClientRect(); fig.classList.add("flip"); }
       if (activeZone && !zoneById(activeZone).spots.some(function (s) { return s[0] === v; })) activeZone = null;
-      renderSpots(); renderChips();
-      if (activeZone) placeGlow(activeZone); else placeGlow("cabeza", ["x", -100, -100]);
+      renderChips();
       renderPanel(false);
+      // 3D turn: the figure swaps sides while it is edge-on
+      function swap() {
+        fig.setAttribute("data-view", v);
+        renderSpots();
+        if (activeZone) placeGlow(activeZone); else placeGlow("cabeza", ["x", -100, -100]);
+      }
+      if (reduce.matches) swap();
+      else {
+        clearTimeout(flipT);
+        fig.classList.remove("flip3d"); void fig.getBoundingClientRect(); fig.classList.add("flip3d");
+        flipT = setTimeout(swap, 380);
+      }
     });
   });
   $("#bm-cta").addEventListener("click", function () {
@@ -261,11 +456,12 @@
     var target = $(a.getAttribute("href"));
     if (target) { target.classList.remove("is-flash"); void target.offsetWidth; target.classList.add("is-flash"); }
   });
-  renderSpots(); renderChips();
+  yield;
   // start with one area open so the panel never looks empty
   activeZone = "cuello"; renderSpots(); renderChips(); placeGlow("cuello"); renderPanel(false);
   langHooks.push(function () { renderSpots(); renderChips(); renderPanel(false); });
 
+  yield;
   /* ---------- Pilates timetable ---------- */
   var ttGrid = $("#tt-grid");
   var ttDays = $("#tt-days");
@@ -273,19 +469,27 @@
   var today = new Date().getDay(); // 0 Sun
   var curDay = today >= 1 && today <= 5 ? today - 1 : 0;
   function renderDays() {
-    ttDays.textContent = "";
+    var fresh = ttDays.children.length !== 5 || ttDays.getAttribute("data-lang") !== lang;
+    if (fresh) { ttDays.textContent = ""; ttDays.setAttribute("data-lang", lang); }
     ui("daysShort").forEach(function (d, i) {
-      var b = doc.createElement("button");
-      b.type = "button";
-      b.className = "day-btn";
-      b.setAttribute("aria-pressed", String(i === curDay));
       var n = D.classes.filter(function (c) { return c.day === i && (level === "all" || c.lv === level); }).length;
-      b.title = ui("days")[i];
-      b.innerHTML = "<span>" + d + "</span><small>" + n + '<span class="sr-only"> ' + ui("classesWord") + "</span></small>";
-      b.addEventListener("click", function () { curDay = i; renderDays(); renderTT(); });
-      ttDays.appendChild(b);
+      var b = fresh ? doc.createElement("button") : ttDays.children[i];
+      if (fresh) {
+        b.type = "button";
+        b.className = "day-btn";
+        b.title = ui("days")[i];
+        b.innerHTML = "<span>" + d + '</span><small><span class="dn">' + n + '</span><span class="sr-only"> ' + ui("classesWord") + "</span></small>";
+        b.addEventListener("click", function () { curDay = i; renderDays(); renderTT(); });
+        ttDays.appendChild(b);
+      } else {
+        var dn = $(".dn", b);
+        if (dn.textContent !== String(n)) { dn.textContent = n; bump($("small", b)); }
+      }
+      b.setAttribute("aria-pressed", String(i === curDay));
     });
   }
+  var FIGS = {};
+  $$(".tt-filters .pill").forEach(function (b) { var m = $(".mf", b); if (m) FIGS[b.getAttribute("data-level")] = m.outerHTML; });
   function renderTT() {
     ttGrid.textContent = "";
     var visibleToday = 0;
@@ -300,8 +504,9 @@
         var el = doc.createElement("div");
         el.className = "cls";
         el.setAttribute("data-level", c.lv);
+        el.style.animationDelay = (col.children.length * 0.06).toFixed(2) + "s";
         el.innerHTML = '<p class="cls-time">' + c.t + "<small>" + ui("min55") + "</small></p>" +
-          '<p class="cls-name">' + esc(tx(c)) + '<span class="cls-lv">' + ui("levels")[c.lv] + "</span></p>";
+          '<p class="cls-name">' + (FIGS[c.lv] || "") + "<span>" + esc(tx(c)) + '<span class="cls-lv">' + ui("levels")[c.lv] + "</span></span></p>";
         el.querySelectorAll("p").forEach(function (p) { p.style.margin = "0"; });
         var b = doc.createElement("button");
         b.type = "button";
@@ -325,34 +530,65 @@
       renderDays(); renderTT();
     });
   });
+  yield;
   renderDays(); renderTT();
   langHooks.push(function () { renderDays(); renderTT(); });
 
+  yield;
   /* ---------- Price calculator ---------- */
   var calcKind = "core";
   var calcIdx = 0;
+  var shownPer = 30, shownKey = "";
+  function money(v, dec) {
+    var r = Math.round(v * 100) / 100;
+    var t = dec && Math.abs(r - Math.round(r)) > 0.001 ? r.toFixed(2) : String(Math.round(v));
+    t = t.replace(".", lang === "en" ? "." : ",");
+    return lang === "en" ? "\u20ac" + t : t + " \u20ac";
+  }
+  function tweenPer(to) {
+    var el = $("#calc-per"), from = shownPer, t0 = performance.now(), dur = 700;
+    shownPer = to;
+    if (reduce.matches || from === to) { el.textContent = money(to, true); return; }
+    bump(el);
+    (function step(now) {
+      var x = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - x, 3);
+      el.textContent = money(x < 1 ? from + (to - from) * e : to, x >= 1);
+      if (x < 1) requestAnimationFrame(step);
+    })(t0);
+  }
   function renderCalc() {
     var packs = D.packs[calcKind];
     var box = $("#calc-packs");
-    box.textContent = "";
-    packs.forEach(function (p, i) {
-      var b = doc.createElement("button");
-      b.type = "button";
-      b.className = "pack";
-      b.setAttribute("aria-pressed", String(i === calcIdx));
-      b.innerHTML = "<strong>" + (lang === "en" ? "€" + p.total : p.total + " €") + "</strong><small>" + (p.n === 1 ? ui("session") : fmt(ui("pack"), { n: p.n })) + "</small>";
-      b.addEventListener("click", function () { calcIdx = i; renderCalc(); });
-      box.appendChild(b);
-    });
+    var key = calcKind + lang;
+    if (key !== shownKey) {
+      shownKey = key;
+      box.textContent = "";
+      packs.forEach(function (p, i) {
+        var b = doc.createElement("button");
+        b.type = "button";
+        b.className = "pack";
+        b.innerHTML = "<strong>" + (lang === "en" ? "\u20ac" + p.total : p.total + " \u20ac") + "</strong><small>" + (p.n === 1 ? ui("session") : fmt(ui("pack"), { n: p.n })) + "</small>";
+        b.addEventListener("click", function () { if (calcIdx !== i) { calcIdx = i; renderCalc(); } });
+        box.appendChild(b);
+      });
+    }
+    $$(".pack", box).forEach(function (b, i) { b.setAttribute("aria-pressed", String(i === calcIdx)); });
     var p = packs[calcIdx];
     var per = p.total / p.n;
     var base = packs[0].total;
-    var perTxt = (Math.round(per * 100) / 100).toString().replace(".", lang === "en" ? "." : ",");
-    $("#calc-per").textContent = lang === "en" ? "€" + perTxt : perTxt + " €";
+    tweenPer(per);
     $("#calc-total").textContent = fmt(ui("total"), { t: p.total });
     var save = base * p.n - p.total;
     $("#calc-save").textContent = save > 0 ? fmt(ui("save"), { s: save }) : "";
     $("#calc-cond").textContent = p.cond ? ui(p.cond) : "";
+    var ratio = per / base, pct = Math.round((1 - ratio) * 100);
+    $("#cm-fill").style.transform = "scaleX(" + ratio.toFixed(3) + ")";
+    $("#cm-save").style.transform = "scaleX(" + (1 - ratio).toFixed(3) + ")";
+    $("#cm-pct").textContent = pct > 0 ? fmt(ui("pctLess"), { p: pct }) : ui("pctSame");
+    var dots = $("#cm-dots");
+    dots.textContent = "";
+    for (var i = 0; i < p.n; i++) { var d = doc.createElement("span"); d.className = "cm-dot"; d.style.animationDelay = (i * 0.05).toFixed(2) + "s"; dots.appendChild(d); }
+    $("#calc-live").textContent = fmt(ui("calcLive"), { p: money(per, true), t: fmt(ui("total"), { t: p.total }), s: save > 0 ? fmt(ui("save"), { s: save }) : "" });
   }
   $$(".calc-tab").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -377,9 +613,11 @@
       $$("td", tr).forEach(function (td, i) { td.setAttribute("data-label", heads[i + 1] || ""); });
     });
   }
+  yield;
   tableLabels();
   langHooks.push(tableLabels);
 
+  yield;
   /* ---------- Booking ---------- */
   var form = $("#booking");
   var steps = $$(".bk-step", form);
@@ -497,6 +735,7 @@
       s.hidden = !on; s.classList.toggle("is-active", on);
     });
     prog.forEach(function (li, i) { li.classList.toggle("is-on", i < n); });
+    $(".bk-progress", form).setAttribute("data-step", String(n));
     if (n === 3) updateSend();
     if (focus !== false) {
       var lg = $(".bk-step.is-active .bk-legend", form);
@@ -577,6 +816,7 @@
   });
 
   function prefillBooking(o) {
+    fullLayout();
     state.type = o.type || "fisio";
     state.service = o.service || 0;
     $$('input[name="type"]', form).forEach(function (r) { r.checked = r.value === state.type; });
@@ -605,9 +845,11 @@
   $$("[data-prefill]").forEach(function (a) {
     a.addEventListener("click", function () { prefillBooking({ type: a.getAttribute("data-prefill") }); });
   });
+  yield;
   renderService(); renderDates(); renderTimes();
   langHooks.push(function () { renderService(); renderDates(); renderTimes(); if (state.step === 3) updateSend(); });
 
+  yield;
   /* ---------- Open now (Europe/Madrid, Google hours) ---------- */
   var HOURS = [[570, 810], [1020, 1260]]; // 9:30–13:30, 17:00–21:00, Mon–Fri
   var madridFmt = null;
@@ -643,10 +885,11 @@
     }
     $("#open-text").textContent = txt;
   }
-  renderOpen();
-  setInterval(renderOpen, 60000);
+  // the time-zone formatter is costly to build, so it waits until the contact block is close
+  inView($("#contacto"), function () { renderOpen(); setInterval(renderOpen, 60000); }, { rootMargin: "800px 0px" });
   langHooks.push(renderOpen);
 
+  yield;
   /* ---------- Map facade ---------- */
   $("#map-load").addEventListener("click", function () {
     var f = doc.createElement("iframe");
@@ -668,7 +911,12 @@
   try { stored = localStorage.getItem("fc-lang"); } catch (e) {}
   if (stored === "en") applyLang("en");
   var started = false;
-  function start() { if (started) return; started = true; initRest(); onScroll(); }
+  function start() {
+    if (started) return; started = true;
+    // run the widgets in short slices so no single task blocks input
+    var gen = initRest();
+    (function pump() { var t0 = performance.now(); var r; do { r = gen.next(); } while (!r.done && performance.now() - t0 < 8); if (r.done) onScroll(); else setTimeout(pump, 0); })();
+  }
   if ("requestIdleCallback" in window) requestIdleCallback(start, { timeout: 1500 });
   else setTimeout(start, 200);
   // anyone who scrolls or taps before idle gets the widgets immediately

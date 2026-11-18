@@ -28,6 +28,8 @@ Notes
 
 The paw prints, service icons, animal icons, logo mark and map illustration are original inline SVGs drawn for this concept.
 
+The interactive hero puppy, the sitting dog and cat characters, the sleeping cat, the "day at the clinic" scenes (door, exam table, lab, ward, home), clocks, ECG line and confetti are also original inline SVGs drawn for this concept. The "day at the clinic" story is marked as illustrative and only restates facilities listed on the clinic's current website. No new photos were added in the premium pass.
+
 ## Fonts (self-hosted in `fonts/`)
 
 - **Young Serif** (headings), © The Young Serif Project Authors. SIL Open Font License 1.1, see `fonts/LICENSE-young-serif.txt`.

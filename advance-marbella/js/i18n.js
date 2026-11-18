@@ -167,7 +167,29 @@ window.ADV_I18N = {
     footerPh: 'Text in square brackets marks details still to be confirmed.',
     r48: '4.8',
     badge: 'Noir Digital concept · not the official website',
-    mbarLabel: 'Quick actions', mCall: 'Call', mEnrol: 'Enrol'
+    mbarLabel: 'Quick actions', mCall: 'Call', mEnrol: 'Enrol',
+    bubbleHint: 'Drag or pop the bubbles',
+    routeEyebrow: 'Your path at Advance', routeTitle: 'A passport with a stamp for every step.',
+    routeLead: 'This is a student’s path, from the first test to the official exam. Scroll down and stamp your passport.',
+    routeStamps: 'stamps', routePassport: 'Language passport',
+    stamp1r: 'Online · 2 min', stamp1t: 'Guide test', stamp1d: 'Take the test on this page and find out your approximate level.',
+    stamp2r: 'At the school', stamp2t: 'Written and spoken test', stamp2d: 'Always the first step: it confirms your real level.',
+    stamp3r: 'Made for you', stamp3t: 'Group and timetable', stamp3d: 'Based on your level and availability, we confirm your group and timetable.',
+    stamp4t: 'Classes that count', stamp4d: 'A communicative method with native, qualified teachers.',
+    stamp5t: 'Cambridge exam', stamp5d: 'Computer-based, at the school itself.',
+    stamp6r: 'Next level', stamp6t: 'On to the next one!', stamp6d: 'Each CEFR level is one more step towards C2.',
+    trailLabel: 'Your answers',
+    wordEyebrow: 'Word of the day', wordTitle: 'One word, seven languages.',
+    wordLead: 'Tap a language to translate it. Then test yourself: type it and win your stamp.',
+    wordTranslate: 'Translate into', wordCheck: 'Check', wordHint: 'Hint', wordNext: 'Another word',
+    boardLabel: 'Next exam session', bcDays: 'days', bcHours: 'hours', bcMins: 'min',
+    boardNote: 'Countdown ready for when the school publishes the dates:',
+    ej1t: 'Registration', ej1d: 'About two weeks before', ej2t: 'Exam', ej2d: 'Computer-based, at Advance', ej3t: 'Results', ej3d: 'About two weeks after',
+    sceneEyebrow: 'A day in Marbella',
+    sceneC1t: 'The school', sceneC1d: '75-minute classes with 9 students at most. You speak Spanish from day one.',
+    sceneC2d: 'Right next to the school: private bathroom, air conditioning and WiFi.',
+    sceneC3d: '200 metres from the residence, to practise what you’ve learnt in the sun.',
+    sceneC4d: 'White streets and squares a five-minute walk away: the classroom carries on outside.'
   },
 
   DYN: {
@@ -198,7 +220,16 @@ window.ADV_I18N = {
       examPrefix: 'Quiero examinarme de',
       frFrom: 'desde',
       frPricesFine: 'Precios publicados en su web (2022–2023), pendientes de actualizar.',
-      frPriceTbc: 'Precio:'
+      frPriceTbc: 'Precio:',
+      trailEdit: 'Cambiar respuesta',
+      bubblesDone: '¡Has saludado en 7 idiomas!',
+      langFull: { en: 'inglés', es: 'español', fr: 'francés', de: 'alemán', ru: 'ruso', zh: 'chino', ar: 'árabe' },
+      wordAsk: function (w) { return '¿Cómo se dice «' + w + '» en inglés?'; },
+      wordOk: function (w) { return '¡Exacto! «' + w + '». Sello conseguido.'; },
+      wordNo: 'Casi… revisa las letras en rojo.', wordEmpty: 'Escribe la palabra para comprobarla.',
+      wordHintTxt: function (w) { return 'Empieza por «' + w.charAt(0) + '» y tiene ' + Array.from(w).length + ' letras.'; },
+      wordScore: function (n) { return n + (n === 1 ? ' sello' : ' sellos'); },
+      wordDay: 'Hoy'
     },
     en: {
       menuClose: 'Close menu',
@@ -227,7 +258,16 @@ window.ADV_I18N = {
       examPrefix: 'I’d like to sit',
       frFrom: 'from',
       frPricesFine: 'Prices published on their website (2022–2023), to be updated.',
-      frPriceTbc: 'Price:'
+      frPriceTbc: 'Price:',
+      trailEdit: 'Change answer',
+      bubblesDone: 'You said hello in 7 languages!',
+      langFull: { en: 'English', es: 'Spanish', fr: 'French', de: 'German', ru: 'Russian', zh: 'Chinese', ar: 'Arabic' },
+      wordAsk: function (w) { return 'How do you say “' + w + '” in Spanish?'; },
+      wordOk: function (w) { return 'Spot on! “' + w + '”. Stamp earned.'; },
+      wordNo: 'Almost… check the letters in red.', wordEmpty: 'Type the word to check it.',
+      wordHintTxt: function (w) { return 'It starts with “' + w.charAt(0) + '” and has ' + Array.from(w).length + ' letters.'; },
+      wordScore: function (n) { return n + (n === 1 ? ' stamp' : ' stamps'); },
+      wordDay: 'Today'
     }
   }
 };

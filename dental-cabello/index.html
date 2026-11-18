@@ -13,6 +13,8 @@
 <link rel="preload" as="image" href="img/hero-m-1400.webp" media="(max-width: 959px)" fetchpriority="high">
 <link rel="preload" as="image" href="img/hero-1200.webp" imagesrcset="img/hero-1200.webp 1200w, img/hero-2400.webp 2400w" imagesizes="50vw" media="(min-width: 960px)" fetchpriority="high">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/fx.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="css/fx.css"></noscript>
 <script>document.documentElement.classList.add('js');try{var l=localStorage.getItem('cabello-lang');if(l==='en'||l==='fr')document.documentElement.lang=l}catch(e){}</script>
 </head>
 <body>
@@ -68,6 +70,7 @@
       </button>
     </div>
   </div>
+  <span class="scroll-prog" aria-hidden="true"></span>
   <div class="mobile-menu" id="mobile-menu" hidden>
     <nav aria-label="Menú móvil" data-i18n-attr="aria-label:navMobile">
       <ul>
@@ -90,7 +93,7 @@
 <main id="main">
 
 <!-- HERO -->
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" aria-labelledby="hero-title" data-live>
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="wrap hero-grid">
     <div class="hero-copy">
@@ -115,6 +118,7 @@
           <source media="(min-width: 960px)" srcset="img/hero-1200.webp 1200w, img/hero-2400.webp 2400w" sizes="50vw">
           <img src="img/hero-m-1400.webp" width="1400" height="1050" alt="Primer plano de una mujer sonriendo (foto ilustrativa de archivo)" data-i18n-attr="alt:altHero" fetchpriority="high" decoding="async">
         </picture>
+        <span class="hero-sheen" aria-hidden="true"><span></span></span>
         <figcaption class="photo-tag" data-i18n="photoTag">Foto ilustrativa</figcaption>
       </figure>
       <div class="float-card fc-1" aria-hidden="true">
@@ -129,8 +133,8 @@
   </div>
   <div class="wrap">
     <ul class="facts rise" aria-label="Datos de la clínica" data-i18n-attr="aria-label:factsLabel">
-      <li><strong>2015</strong><span data-i18n="fact1">Abrió en febrero de 2015</span></li>
-      <li><strong>12</strong><span data-i18n="fact2">áreas de tratamiento</span></li>
+      <li><strong data-count="2015" data-from="1995">2015</strong><span data-i18n="fact1">Abrió en febrero de 2015</span></li>
+      <li><strong data-count="12">12</strong><span data-i18n="fact2">áreas de tratamiento</span></li>
       <li><strong>3D</strong><span data-i18n="fact3">panorámico y radiología digital de baja radiación</span></li>
       <li><strong data-i18n="fact4y">L–S</strong><span data-i18n="fact4">abierto hasta las 21:00 entre semana</span></li>
     </ul>
@@ -153,13 +157,13 @@
       <button type="button" class="chip" data-filter="ninos" aria-pressed="false" data-i18n="fKids">Niños</button>
     </div>
     <p class="sr" aria-live="polite" id="filter-status"></p>
-    <ul class="treat-grid" id="treat-grid"></ul>
+    <ul class="treat-grid reveal-group" id="treat-grid"></ul>
     <p class="note" data-i18n="priceNote">Precios: <span class="ph">[precio]</span> · la clínica no publica tarifas; se confirman tras la valoración.</p>
   </div>
 </section>
 
 <!-- TOOTH MAP -->
-<section class="section section-tint" id="mapa" aria-labelledby="map-title">
+<section class="section section-tint" id="mapa" aria-labelledby="map-title" data-live>
   <div class="wrap map-grid">
     <div class="section-head left">
       <p class="kicker" data-i18n="mapKicker">Mapa dental interactivo</p>
@@ -192,7 +196,7 @@
   </div>
   <div class="wrap journey" id="journey">
     <div class="journey-visual" aria-hidden="true">
-      <div class="jv-card">
+      <div class="jv-card"><span class="jv-aura" aria-hidden="true"></span>
         <div class="jv-progress"><span id="jv-bar"></span></div>
         <p class="jv-step" id="jv-label">01 / 06</p>
         <!-- Implant illustration -->
@@ -229,8 +233,10 @@
           <!-- implant screw -->
           <g class="st st-implant">
             <path d="M136 196h28l-3 92c0 8-5 14-11 14s-11-6-11-14z" fill="url(#g-metal)" stroke="#7a8c92" stroke-width="1.5"/>
-            <g stroke="#7a8c92" stroke-width="2" stroke-linecap="round"><path d="M134 212h32M135 228h30M136 244h28M137 260h26M139 276h22"/></g>
+            <clipPath id="c-screw"><path d="M136 196h28l-3 92c0 8-5 14-11 14s-11-6-11-14z"/></clipPath>
+            <g clip-path="url(#c-screw)"><g class="threads" stroke="#7a8c92" stroke-width="2" stroke-linecap="round"><path d="M130 200l40 -4M130 216l40 -4M130 232l40 -4M130 248l40 -4M130 264l40 -4M130 280l40 -4M130 296l40 -4M130 312l40 -4"/></g></g>
           </g>
+          <ellipse class="impact" cx="150" cy="198" rx="40" ry="8" fill="none" stroke="#2bb5a5" stroke-width="2.5"/>
           <!-- integration rings -->
           <g class="st st-integrate" fill="none" stroke="#2bb5a5" stroke-width="2">
             <ellipse class="ring r1" cx="150" cy="250" rx="34" ry="60" opacity=".6"/>
@@ -247,7 +253,11 @@
             <circle cx="238" cy="44" r="22" fill="#0e7c72"/>
             <path d="m228 44 7 7 13-14" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
             <path class="sp" d="M70 40c1 7 4 10 10 12-6 2-9 5-10 12-1-7-4-10-10-12 6-2 9-5 10-12z" fill="#2bb5a5"/>
+            <path class="sp sp2" d="M262 112c.7 5 2.8 7 7 8.4-4.2 1.4-6.3 3.4-7 8.4-.7-5-2.8-7-7-8.4 4.2-1.4 6.3-3.4 7-8.4z" fill="#8fe0d3"/>
           </g>
+          <g class="st st-shine"><clipPath id="c-crown"><path d="M118 104c0-16 12-26 32-26s32 10 32 26l-2 52c0 10-8 16-18 16h-24c-10 0-18-6-18-16z"/></clipPath>
+            <g clip-path="url(#c-crown)"><g transform="rotate(18 150 125)"><rect class="shine-band" x="60" y="40" width="26" height="180" fill="#fff" opacity=".85"/></g></g></g>
+          <ellipse class="seat" cx="150" cy="170" rx="44" ry="9" fill="none" stroke="#8fe0d3" stroke-width="3"/>
         </svg>
         <!-- Aligner illustration -->
         <svg class="jv-svg jv-ali" id="jv-ali" viewBox="0 0 300 330" data-step="1" hidden>
@@ -258,6 +268,8 @@
           <path d="M30 120c40-30 200-30 240 0v40H30z" fill="#f2a6ad"/>
           <g id="ali-teeth"></g>
           <path class="tray" d="M38 132c44-24 180-24 224 0l-6 70c-2 12-10 18-22 18H66c-12 0-20-6-22-18z" fill="#bfeee6" fill-opacity=".35" stroke="#2bb5a5" stroke-width="2.5"/>
+          <g class="click-burst" stroke="#0e7c72" stroke-width="3" stroke-linecap="round" fill="none"><path d="M22 150l-10-6M20 168h-12M22 186l-10 6M278 150l10-6M280 168h12M278 186l10 6"/></g>
+          <g class="st st-shine2"><clipPath id="c-ali"><rect x="20" y="126" width="260" height="96" rx="20"/></clipPath><g clip-path="url(#c-ali)"><g transform="rotate(18 150 175)"><rect class="shine-band sb2" x="-40" y="60" width="30" height="230" fill="#fff" opacity=".75"/></g></g></g>
           <g class="st st-scan2"><rect class="scanline" x="34" y="110" width="232" height="4" rx="2" fill="#2bb5a5"/></g>
           <g class="st st-plan" fill="none" stroke="#0e7c72" stroke-width="1.6" stroke-dasharray="4 5">
             <path d="M40 150h220M40 200h220"/>
@@ -292,7 +304,7 @@
 </section>
 
 <!-- BEFORE / AFTER -->
-<section class="section section-tint" id="antes-despues" aria-labelledby="ba-title">
+<section class="section section-tint" id="antes-despues" aria-labelledby="ba-title" data-live>
   <div class="wrap ba-grid">
     <div class="section-head left">
       <p class="kicker" data-i18n="baKicker">Antes y después</p>
@@ -307,10 +319,10 @@
     <div class="ba">
       <div class="ba-frame" id="ba-frame" style="--pos:50%">
         <div class="ba-layer ba-before" id="ba-before"></div>
-        <div class="ba-layer ba-after" id="ba-after"></div>
+        <div class="ba-after-wrap"><div class="ba-layer ba-after" id="ba-after"></div><span class="ba-shimmer" aria-hidden="true"></span></div>
         <span class="ba-tag ba-tag-l" data-i18n="baBefore">Antes</span>
         <span class="ba-tag ba-tag-r" data-i18n="baAfter">Después</span>
-        <span class="ba-handle" aria-hidden="true"><span><svg><use href="#i-back"/></svg><svg><use href="#i-arrow"/></svg></span></span>
+        <span class="ba-handle" aria-hidden="true"><span><svg><use href="#i-back"/></svg><svg><use href="#i-arrow"/></svg></span><em class="ba-hint" data-i18n="baDrag">Desliza</em></span>
         <label class="sr" for="ba-range" data-i18n="baRange">Comparar antes y después</label>
         <input type="range" id="ba-range" min="0" max="100" value="50" class="ba-range">
       </div>
@@ -320,7 +332,7 @@
 </section>
 
 <!-- FIRST VISIT -->
-<section class="section" id="primera-visita" aria-labelledby="first-title">
+<section class="section" id="primera-visita" aria-labelledby="first-title" data-live>
   <div class="wrap first-grid">
     <figure class="first-photo reveal">
       <img src="img/visit-800.webp" srcset="img/visit-800.webp 800w, img/visit-1600.webp 1600w" sizes="(min-width: 960px) 46vw, 92vw" width="800" height="600" loading="lazy" decoding="async" alt="Un dentista conversa con una paciente sentada en el sillón (foto ilustrativa de archivo, no es el equipo de la clínica)" data-i18n-attr="alt:altVisit">
@@ -329,13 +341,13 @@
     <div>
       <p class="kicker" data-i18n="firstKicker">Tu primera visita</p>
       <h2 id="first-title" class="h2" data-i18n="firstTitle">Sales sabiendo <em>exactamente</em> qué necesitas</h2>
-      <ol class="first-steps">
+      <ol class="first-steps reveal-group">
         <li><span class="fs-n">1</span><div><h3 data-i18n="fs1t">Exploración meticulosa</h3><p data-i18n="fs1p">Revisamos tu boca con calma y te escuchamos.</p></div></li>
         <li><span class="fs-n">2</span><div><h3 data-i18n="fs2t">Radiografías, si hacen falta</h3><p data-i18n="fs2p">Radiología digital de baja radiación y panorámico 3D.</p></div></li>
         <li><span class="fs-n">3</span><div><h3 data-i18n="fs3t">Diagnóstico y plan</h3><p data-i18n="fs3p">Un plan de tratamiento según tus necesidades.</p></div></li>
         <li><span class="fs-n">4</span><div><h3 data-i18n="fs4t">Todo por escrito</h3><p data-i18n="fs4p">Te lo entregamos por escrito. Tú decides cuándo empiezas.</p></div></li>
       </ol>
-      <div class="offer">
+      <div class="offer reveal">
         <svg aria-hidden="true"><use href="#i-spark"/></svg>
         <p data-i18n="offer">Oferta de primera visita: <span class="ph">[por confirmar con la clínica]</span></p>
       </div>
@@ -345,20 +357,44 @@
 </section>
 
 <!-- CLINIC & TECH -->
-<section class="section section-dark" id="clinica" aria-labelledby="clinic-title">
+<section class="section section-dark" id="clinica" aria-labelledby="clinic-title" data-live>
   <div class="wrap">
     <div class="section-head">
       <p class="kicker" data-i18n="clinicKicker">La clínica</p>
       <h2 id="clinic-title" class="h2" data-i18n="clinicTitle">Tecnología actual, <em>trato de siempre</em></h2>
       <p class="sub" data-i18n="clinicSub">Abrimos en febrero de 2015 con una idea: ser un referente de la salud bucodental en San Pedro. Un ambiente relajado y acogedor, con los avances que de verdad marcan la diferencia.</p>
     </div>
+    <div class="scan-stage reveal">
+      <div class="scan-view" id="scan-view">
+        <span class="scan-grid" aria-hidden="true"></span>
+        <canvas id="scan-canvas" role="img" aria-label="Ilustración: modelo 3D de una muela que gira mientras una línea de escaneo la recorre" data-i18n-attr="aria-label:scanAlt"></canvas>
+        <div class="scan-hud" aria-hidden="true"><span class="scan-rec"><i></i>iTero · 3D</span><span class="scan-pct"><span id="scan-state">Escaneando</span> <b id="scan-pct">0%</b></span></div>
+        <p class="scan-hint" aria-hidden="true"><svg><use href="#i-back"/></svg><span data-i18n="scanHint">Arrastra para girar</span><svg><use href="#i-arrow"/></svg></p>
+      </div>
+      <div class="scan-copy">
+        <p class="kicker" data-i18n="scanKicker">Escáner intraoral iTero</p>
+        <h3 class="scan-title" data-i18n="scanTitle">Tu boca en 3D, <em>sin moldes de pasta</em></h3>
+        <p class="scan-text" data-i18n="scanText">Con el escáner intraoral iTero tomamos una imagen 3D de tus dientes en minutos. Es la base para planificar tu tratamiento en pantalla.</p>
+        <ul class="scan-points reveal-group">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="scanP1">Sin pastas incómodas</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="scanP2">Imagen 3D en minutos</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="scanP3">Ves tu plan en pantalla</span></li>
+        </ul>
+        <div class="scan-ctrl" role="group" aria-label="Controles del modelo 3D" data-i18n-attr="aria-label:scanCtrl">
+          <button type="button" class="ctrl-btn" data-rot="-1" aria-label="Girar a la izquierda" data-i18n-attr="aria-label:scanLeft"><svg aria-hidden="true"><use href="#i-back"/></svg></button>
+          <button type="button" class="ctrl-btn ctrl-play" id="scan-toggle" aria-pressed="false" aria-label="Pausar la animación" data-i18n-attr="aria-label:animPause"><i aria-hidden="true"></i></button>
+          <button type="button" class="ctrl-btn" data-rot="1" aria-label="Girar a la derecha" data-i18n-attr="aria-label:scanRight"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </div>
+        <p class="scan-cap"><svg aria-hidden="true"><use href="#i-spark"/></svg><span data-i18n="scanCap">Ilustración orientativa · no es un escaneado real</span></p>
+      </div>
+    </div>
     <ul class="tech-grid">
-      <li class="tech reveal"><span class="tech-ico"><svg aria-hidden="true"><use href="#i-scan"/></svg></span><h3 data-i18n="t1t">Escáner intraoral iTero</h3><p data-i18n="t1p">Impresiones digitales en 3D, sin pastas incómodas.</p></li>
-      <li class="tech reveal"><span class="tech-ico"><svg aria-hidden="true"><use href="#i-tooth"/></svg></span><h3 data-i18n="t2t">Panorámico 3D</h3><p data-i18n="t2p">Radiología digital de baja radiación para diagnósticos precisos.</p></li>
-      <li class="tech reveal"><span class="tech-ico"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><h3 data-i18n="t3t">Implantes Straumann</h3><p data-i18n="t3p">Gama alta, superficie Roxolid SLActive.</p></li>
-      <li class="tech reveal"><span class="tech-ico"><svg aria-hidden="true"><use href="#i-spark"/></svg></span><h3 data-i18n="t4t">Laboratorio y esterilización</h3><p data-i18n="t4p">Gabinetes luminosos, amplia sala de espera, laboratorio y sala de esterilización.</p></li>
+      <li class="tech reveal" data-tilt><span class="tech-ico"><svg aria-hidden="true"><use href="#i-scan"/></svg></span><h3 data-i18n="t1t">Escáner intraoral iTero</h3><p data-i18n="t1p">Impresiones digitales en 3D, sin pastas incómodas.</p></li>
+      <li class="tech reveal" data-tilt><span class="tech-ico"><svg aria-hidden="true"><use href="#i-tooth"/></svg></span><h3 data-i18n="t2t">Panorámico 3D</h3><p data-i18n="t2p">Radiología digital de baja radiación para diagnósticos precisos.</p></li>
+      <li class="tech reveal" data-tilt><span class="tech-ico"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><h3 data-i18n="t3t">Implantes Straumann</h3><p data-i18n="t3p">Gama alta, superficie Roxolid SLActive.</p></li>
+      <li class="tech reveal" data-tilt><span class="tech-ico"><svg aria-hidden="true"><use href="#i-spark"/></svg></span><h3 data-i18n="t4t">Laboratorio y esterilización</h3><p data-i18n="t4p">Gabinetes luminosos, amplia sala de espera, laboratorio y sala de esterilización.</p></li>
     </ul>
-    <ol class="timeline reveal">
+    <ol class="timeline reveal-group">
       <li><strong data-i18n="tl1y">Feb. 2015</strong><span data-i18n="tl1">El Dr. Francisco Javier Cabello Gómez abre la clínica en San Pedro Alcántara.</span></li>
       <li><strong data-i18n="tl2y">Hoy</strong><span data-i18n="tl2">Más de once años cuidando sonrisas sampedreñas, de los más pequeños a los mayores.</span></li>
     </ol>
@@ -374,7 +410,7 @@
       <p class="sub" data-i18n="teamSub">Actividad clínica y formación constante para ofrecerte tratamientos personalizados.</p>
     </div>
     <ul class="team-grid">
-      <li class="member reveal">
+      <li class="member reveal" data-tilt>
         <div class="avatar" aria-hidden="true">FJ</div>
         <div class="member-body">
           <h3><span data-i18n="drM">Dr.</span> Francisco Javier Cabello Gómez</h3>
@@ -388,7 +424,7 @@
           </ul>
         </div>
       </li>
-      <li class="member reveal">
+      <li class="member reveal" data-tilt>
         <div class="avatar a2" aria-hidden="true">CJ</div>
         <div class="member-body">
           <h3><span data-i18n="drF">Dra.</span> Cañosanto Jiménez Fernández</h3>
@@ -400,14 +436,14 @@
           </ul>
         </div>
       </li>
-      <li class="member reveal">
+      <li class="member reveal" data-tilt>
         <div class="avatar a3" aria-hidden="true">AC</div>
         <div class="member-body">
           <h3>Alberto Cabello Gómez</h3>
           <p class="role" data-i18n="m3r">Protésico dental · Recepción y administración</p>
         </div>
       </li>
-      <li class="member reveal">
+      <li class="member reveal" data-tilt>
         <div class="avatar a4" aria-hidden="true">MP</div>
         <div class="member-body">
           <h3>Melissa Palermo Godina</h3>
@@ -423,13 +459,37 @@
 <section class="section section-tint reviews" aria-labelledby="rev-title">
   <div class="wrap rev-in">
     <div class="rev-score">
-      <p class="rev-num"><span data-i18n="ratingNum">4,6</span><small>/5</small></p>
-      <span class="stars big" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg class="half"><use href="#i-star"/></svg></span>
+      <p class="rev-num"><span data-i18n="ratingNum" data-count-dec="4.6">4,6</span><small>/5</small></p>
+      <span class="stars big reveal-group" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg class="half"><use href="#i-star"/></svg></span>
     </div>
     <div>
       <h2 id="rev-title" class="h2 sm" data-i18n="revTitle">4,6 de 5 en Google, con 97 reseñas</h2>
       <p class="sub" data-i18n="revSub">Puntuación y número de reseñas según la ficha de Google Maps de la clínica (consultada el 18 de noviembre de 2026).</p>
       <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Cl%C3%ADnica+Dental+Cabello+San+Pedro+Alc%C3%A1ntara" target="_blank" rel="noopener"><span data-i18n="revCta">Leer las reseñas en Google</span><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg><span class="sr" data-i18n="newTab">(se abre en una pestaña nueva)</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- CALM -->
+<section class="section calm" id="calma" aria-labelledby="calm-title" data-live>
+  <div class="wrap calm-in">
+    <div class="calm-visual">
+      <div class="orb" aria-hidden="true">
+        <span class="orb-ring o1"></span><span class="orb-ring o2"></span><span class="orb-ring o3"></span>
+        <span class="orb-core"></span>
+        <span class="orb-word w-in" data-i18n="calmIn">Inspira</span><span class="orb-word w-out" data-i18n="calmOut">Espira</span>
+      </div>
+      <button type="button" class="ctrl-btn ctrl-play orb-toggle" id="orb-toggle" aria-pressed="false" aria-label="Pausar la animación" data-i18n-attr="aria-label:animPause"><i aria-hidden="true"></i></button>
+    </div>
+    <div class="calm-copy">
+      <p class="kicker" data-i18n="calmKicker">Sin prisas</p>
+      <h2 id="calm-title" class="h2" data-i18n="calmTitle">¿Nervios? <em>Respira.</em> Vamos a tu ritmo.</h2>
+      <p class="sub" data-i18n="calmSub">Un ambiente relajado y acogedor. En la primera visita revisamos tu boca con calma, te escuchamos y te damos el plan por escrito.</p>
+      <ul class="calm-list reveal-group">
+        <li><span class="calm-ico" aria-hidden="true"><svg><use href="#i-clock"/></svg></span><span data-i18n="calm1">Revisamos con calma y te escuchamos</span></li>
+        <li><span class="calm-ico" aria-hidden="true"><svg><use href="#i-shield"/></svg></span><span data-i18n="calm2">Diagnóstico y plan por escrito, sin sorpresas</span></li>
+        <li><span class="calm-ico" aria-hidden="true"><svg><use href="#i-check"/></svg></span><span data-i18n="calm3">Tú decides cuándo empezar</span></li>
+      </ul>
     </div>
   </div>
 </section>
@@ -561,7 +621,7 @@
 </section>
 
 <!-- VISIT -->
-<section class="section" id="visitanos" aria-labelledby="visit-title">
+<section class="section" id="visitanos" aria-labelledby="visit-title" data-live>
   <div class="wrap visit-grid">
     <div class="visit-info">
       <p class="kicker" data-i18n="visitKicker">Visítanos</p>
@@ -583,7 +643,7 @@
         <a href="https://www.facebook.com/clinicadentalcabello" target="_blank" rel="noopener" class="soc"><svg aria-hidden="true"><use href="#i-fb"/></svg><span>Facebook</span><span class="sr" data-i18n="newTab">(se abre en una pestaña nueva)</span></a>
       </div>
     </div>
-    <div class="map-card">
+    <div class="map-card reveal">
       <div class="map-facade" id="map-facade">
         <picture>
           <source media="(min-width: 960px)" srcset="img/coast-1200.webp">

@@ -102,7 +102,16 @@
     sosDTitle: 'Veterinary emergency',
     sosDText: 'Stay calm and call us. If your pet isn’t breathing, is bleeding heavily, has swallowed something toxic or can’t get up, come as quickly as you can.',
     sosWa: 'Message on WhatsApp', mbarAria: 'Quick actions',
-    badge: 'Noir Digital concept · not the official website'
+    badge: 'Noir Digital concept · not the official website',
+    pupAria: 'Say hello to the puppy', sinceRing: 'SINCE 2015 · ESTEPONA · WITH CARE ·',
+    dsKicker: 'A day at the clinic', dsTitle: 'From 11:00 to 18:00, in good hands.', dsLead: 'Scroll slowly and spend a day with us.',
+    ds1w: '11:00 · Arrival', ds1t: 'We open the doors', ds1: 'Parking in front of the clinic and a team that can help you in Spanish, English or Polish.',
+    ds2w: 'Consultation', ds2t: 'A calm, careful exam', ds2: 'Two equipped consulting rooms for dogs, cats, small mammals and rodents.',
+    ds3w: 'Laboratory', ds3t: 'Results in minutes', ds3: 'Our in-house lab tests blood, urine and more, without sending samples to another city.',
+    ds4w: 'Surgery and hospital care', ds4t: 'Care when it’s needed', ds4: 'A full operating theatre with a prep room, and a climate-controlled, video-monitored ward with 20 places and a cats-only area.',
+    ds5w: '18:00 · Home', ds5t: 'Back home', ds5: 'We close at 18:00. Emergency hours outside normal opening: [to be confirmed with the clinic].',
+    dsNote: 'Illustrative tour, based on the facilities described on the clinic’s current website.',
+    grBirth: 'Birth', grYear: '1 year'
   };
 
   /* dynamic strings */
@@ -285,6 +294,7 @@
     else if (n.d >= 1 && n.d <= 4) txt = t('closedOpensTomorrow');
     else if (n.d === 0) txt = t('closedOpensTomorrow');
     else txt = t('closedOpensMon');
+    nowMin = n.m; if (clockOn) setClock();
     var s1 = $('[data-open-status]'); if (s1) s1.textContent = txt;
     var s2 = $('[data-open-status2]'); if (s2) s2.textContent = txt;
     var dot = $('[data-open-dot]'); if (dot) dot.classList.toggle('is-open', open);
@@ -312,6 +322,8 @@
         if (!e.isIntersecting) return;
         e.target.classList.add('is-visible');
         var c = $('[data-count]', e.target); if (c) countUp(c);
+        if (e.target.classList.contains('hours-card')) { clockOn = true; setClock(); }
+        var sc = $('[data-score]', e.target); if (sc) scoreUp(sc);
         io.unobserve(e.target);
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
@@ -372,18 +384,15 @@
     tr.prints.forEach(function (p, i) { p.classList.toggle('on', i < n); });
     tr.shown = n;
   }
-  function updateTrails() {
-    var vh = window.innerHeight;
-    trails.forEach(function (tr) {
-      if (tr.auto) return;
-      var r = tr.svg.getBoundingClientRect();
-      var prog = (vh * 0.92 - r.top) / (r.height + vh * 0.45);
-      prog = Math.max(0, Math.min(1, prog));
-      setTrail(tr, Math.round(prog * tr.prints.length));
-    });
-  }
+  /* trails are only measured while near the viewport */
+  var trailIO = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    var y = window.scrollY;
+    es.forEach(function (e) { trails.forEach(function (tr) { if (tr.svg === e.target) { tr.near = e.isIntersecting; tr.top = e.boundingClientRect.top + y; tr.h = e.boundingClientRect.height; } }); });
+    scrollDirty = true; schedule();
+  }, { rootMargin: '40% 0px' }) : null;
+  function updateTrails() { scrollDirty = true; schedule(); }
   function initTrails() {
-    $$('[data-trail]').forEach(function (svg) { trails.push(buildTrail(svg)); });
+    $$('[data-trail]').forEach(function (svg) { var tr = buildTrail(svg); tr.near = !trailIO; trails.push(tr); if (trailIO) trailIO.observe(svg); });
     if (reduced) { trails.forEach(function (tr) { setTrail(tr, tr.prints.length); }); return; }
     var heroTr = trails.filter(function (tr) { return tr.svg.classList.contains('trail-hero'); })[0];
     if (heroTr) {
@@ -397,15 +406,7 @@
   if (document.readyState === 'complete') setTimeout(initTrails, 300);
   else window.addEventListener('load', function () { setTimeout(initTrails, 300); });
 
-  var ticking = false;
-  window.addEventListener('scroll', function () {
-    if (ticking) return; ticking = true;
-    requestAnimationFrame(function () {
-      header.classList.toggle('scrolled', window.scrollY > 8);
-      if (!reduced) updateTrails();
-      ticking = false;
-    });
-  }, { passive: true });
+  window.addEventListener('scroll', function () { scrollDirty = true; schedule(); }, { passive: true });
 
   /* ------------------------------------------------------------------ services sheet */
   var sheet = $('#service-sheet');
@@ -416,7 +417,7 @@
     $('.sheet-ic use', sheet).setAttribute('href', '#' + s.ic);
     $('.sheet-lead', sheet).textContent = d[0];
     var ul = $('.sheet-list', sheet); ul.innerHTML = '';
-    d[1].forEach(function (li) { var el = document.createElement('li'); el.textContent = li; ul.appendChild(el); });
+    d[1].forEach(function (li, i) { var el = document.createElement('li'); el.textContent = li; el.style.setProperty('--i', i); ul.appendChild(el); });
   }
   function openDialog(dlg) {
     if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
@@ -464,6 +465,7 @@
         });
       });
       updateTeamCount();
+      setHellos();
     });
   });
 
@@ -524,9 +526,17 @@
     });
     $('#plan-result').hidden = false;
     var items = $$('.tl-item', ol);
+    var gp = $('#grow-pet'), gf = $('#grow-fill'), pos = Math.min(1, ageDays / 365);
+    $('use', gp).setAttribute('href', sp === 'cat' ? '#sit-cat' : '#sit-dog');
+    gp.classList.remove('hop'); gf.style.transform = 'scaleX(0)'; gp.style.transform = 'translateX(26px) scale(.5)';
     requestAnimationFrame(function () {
       var target = lastDone >= 0 ? items[Math.min(items.length - 1, lastDone + (planNext ? 1 : 0))] : null;
-      fill.style.height = target ? (target.offsetTop + 10) + 'px' : '0px';
+      var full = ol.offsetHeight - 12;
+      fill.style.transform = 'scaleY(' + (target && full > 0 ? Math.min(1, (target.offsetTop + 4) / full) : 0) + ')';
+      var w = gp.parentNode.offsetWidth;
+      gf.style.transform = 'scaleX(' + pos + ')';
+      gp.style.transform = 'translateX(' + Math.round(26 + pos * (w - 52)) + 'px) scale(' + (0.5 + 0.5 * pos).toFixed(3) + ')';
+      if (!reduced) gp.classList.add('hop');
     });
     if (!silent && !reduced) $('#plan-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
@@ -547,7 +557,7 @@
 
   /* ------------------------------------------------------------------ booking flow */
   var form = $('#book-form');
-  var curStep = 1;
+  var curStep = 1, lastStep = 0;
   var selDay = null, selSlot = null;
   var dayList = [];
   function nextOpenDay(d) { var x = new Date(d.getTime()); while (x.getDay() === 0 || x.getDay() === 6) x = new Date(x.getTime() + DAY); return x; }
@@ -672,8 +682,13 @@
   syncPlang();
   function updateStepUI() {
     var pct = Math.min(1, (curStep - 1) / 4);
-    $('#steps-fill').style.width = (pct * 100) + '%';
-    $('#steps-paw').style.left = (pct * 100) + '%';
+    $('#steps-fill').style.transform = 'scaleX(' + pct + ')';
+    $('#steps-run').style.transform = 'translateX(' + (pct * 100) + '%)';
+    if (curStep !== lastStep) {
+      var sp = $('#steps-paw');
+      if (lastStep && !reduced && sp.animate) sp.animate([{ translate: '0 0' }, { translate: '0 -10px' }, { translate: '0 0' }], { duration: 480, easing: 'ease-out' });
+      lastStep = curStep;
+    }
     $('#step-count').textContent = curStep <= 4 ? fmt(t('step'), curStep) : t('done');
     $('#step-back').hidden = curStep === 1;
     $('#step-nav').hidden = curStep === 5;
@@ -683,7 +698,7 @@
     $$('.step', form).forEach(function (s) { s.hidden = parseInt(s.dataset.step, 10) !== n; });
     updateStepUI();
     if (n === 3) renderDays();
-    if (n === 5) buildSummary();
+    if (n === 5) { buildSummary(); burst(); }
     var target = $('.step[data-step="' + n + '"]', form);
     var first = n === 5 ? target : $('input:not([type=hidden]), button.day, textarea', target);
     if (scroll) $('#cita').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
@@ -745,6 +760,184 @@
   var TXT = 'input[type=text], input[type=tel], input[type=email], input[type=date], textarea';
   document.addEventListener('focusin', function (e) { if (e.target.matches(TXT)) mbar.classList.add('hide'); });
   document.addEventListener('focusout', function (e) { if (e.target.matches(TXT)) mbar.classList.remove('hide'); });
+
+  /* ================================================================== premium motion layer
+     One rAF scheduler for everything scroll/pointer driven: all reads first, then all writes.
+     Nothing loops while idle; IntersectionObserver switches work on and off. */
+  var IOK = 'IntersectionObserver' in window;
+  var rafId = 0, scrollDirty = true;
+  function schedule() { if (!rafId) rafId = requestAnimationFrame(frame); }
+
+  /* pause looping CSS animations of sections that are off-screen */
+  if (IOK) {
+    var offIO = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle('off', !e.isIntersecting); }); }, { rootMargin: '80px 0px' });
+    $$('main > section, .site-footer').forEach(function (s) { offIO.observe(s); });
+  }
+
+  /* scroll progress fallback where CSS scroll timelines are missing */
+  var sdOK = window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()');
+  var spBar = $('.sp-bar'), spRun = $('.sp-run');
+
+  /* hero: pointer parallax, scroll parallax, eyes that follow you */
+  var heroEl = $('.hero'), heroVis = true, pup = $('.hero-pup');
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var layers = [[$('.hero-photo'), -7, 0.05], [$('.rating-card'), 12, -0.04], [$('.lang-card'), 16, -0.07], [$('.hero-squiggle'), -12, 0.09], [pup, 16, -0.1]];
+  var eyes = $$('.hp-blink > circle', pup), pupils = $$('.hp-pupil', pup);
+  var ptr = { x: 0, y: 0, tx: 0, ty: 0, cx: -1, cy: -1, active: false };
+  var trackT = 0;
+  if (IOK) new IntersectionObserver(function (es) { heroVis = es[0].isIntersecting; if (heroVis) { scrollDirty = true; schedule(); } }).observe(heroEl);
+  function track(cx, cy, hold) {
+    ptr.cx = cx; ptr.cy = cy; ptr.active = true;
+    ptr.tx = Math.max(-1, Math.min(1, (cx / window.innerWidth - 0.5) * 2));
+    ptr.ty = Math.max(-1, Math.min(1, (cy / window.innerHeight - 0.5) * 2));
+    pup.classList.add('tracking');
+    clearTimeout(trackT);
+    if (hold) trackT = setTimeout(function () { ptr.active = false; ptr.tx = 0; ptr.ty = 0; pup.classList.remove('tracking'); pupils.forEach(function (p) { p.style.transform = ''; }); schedule(); }, hold);
+    schedule();
+  }
+  if (!reduced) {
+    if (fine) window.addEventListener('pointermove', function (e) { if (heroVis && e.pointerType === 'mouse') track(e.clientX, e.clientY, 4000); }, { passive: true });
+    heroEl.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') track(e.clientX, e.clientY, 2200); }, { passive: true });
+  }
+  var happyT = 0;
+  pup.addEventListener('click', function () {
+    pup.classList.remove('happy'); void pup.offsetWidth; pup.classList.add('happy');
+    clearTimeout(happyT); happyT = setTimeout(function () { pup.classList.remove('happy'); }, 1150);
+  });
+
+  /* a day at the clinic: pinned, scroll-told */
+  var dsTrack = $('.ds-track'), dsStage = $('.ds-stage'), dsArt = $('.ds-art'), dsOn = false, dsScene = 0, dsTimeTxt = '';
+  var dsItems = $$('.ds-scenes li'), dsDots = $$('.ds-dots span');
+  var dsH = $('.ds-ck-h'), dsM = $('.ds-ck-m'), dsSun = $('.ds-sunarm'), dsTime = $('.ds-time');
+  var stageH = 0, headH = 64, dsTop = 0, dsHt = 1, docH = 0;
+  /* layout is read only here (on enter / resize / load), never inside the scroll frame */
+  function measure() {
+    var y = window.scrollY;
+    stageH = dsStage.offsetHeight; headH = header.offsetHeight;
+    var r = dsTrack.getBoundingClientRect(); dsTop = r.top + y; dsHt = r.height;
+    trails.forEach(function (tr) { if (tr.near) { var q = tr.svg.getBoundingClientRect(); tr.top = q.top + y; tr.h = q.height; } });
+    docH = document.documentElement.scrollHeight;
+    scrollDirty = true; schedule();
+  }
+  if (IOK && !reduced) new IntersectionObserver(function (es) { dsOn = es[0].isIntersecting; if (dsOn) measure(); }).observe(dsTrack);
+  var rsT = 0;
+  window.addEventListener('resize', function () { clearTimeout(rsT); rsT = setTimeout(measure, 120); }, { passive: true });
+  window.addEventListener('load', function () { setTimeout(measure, 400); });
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  function frame() {
+    rafId = 0;
+    var again = false;
+    /* ---- reads ---- */
+    var sy = window.scrollY, vh = window.innerHeight;
+    var eyeR = (heroVis && ptr.active && !reduced) ? eyes.map(function (e) { return e.getBoundingClientRect(); }) : null;
+    /* ---- writes ---- */
+    if (scrollDirty) {
+      header.classList.toggle('scrolled', sy > 8);
+      if (!sdOK && docH) { var pr = Math.max(0, Math.min(1, sy / Math.max(1, docH - vh))); spBar.style.transform = 'scaleX(' + pr.toFixed(4) + ')'; spRun.style.transform = 'translateX(' + (pr * 100).toFixed(2) + '%)'; spRun.style.opacity = pr > 0.01 ? '1' : '0'; }
+      if (!reduced) trails.forEach(function (tr) {
+        if (!tr.near || tr.auto || tr.top == null) return;
+        var prog = Math.max(0, Math.min(1, (vh * 0.92 - (tr.top - sy)) / (tr.h + vh * 0.45)));
+        setTrail(tr, Math.round(prog * tr.prints.length));
+      });
+      if (dsOn) {
+        var span = Math.max(1, dsHt - stageH);
+        var p = Math.max(0, Math.min(1, (headH - (dsTop - sy)) / span));
+        var sc = Math.min(dsItems.length - 1, Math.floor(p * dsItems.length));
+        var mins = 660 + Math.min(1, p * 1.25) * 420; /* reaches 18:00 as the last scene starts */
+        dsH.style.transform = 'rotate(' + (mins / 2).toFixed(1) + 'deg)';
+        dsM.style.transform = 'rotate(' + (mins * 6).toFixed(1) + 'deg)';
+        dsSun.style.transform = 'rotate(' + (-70 + Math.min(1, p * 1.25) * 140).toFixed(1) + 'deg)';
+        var tm = Math.floor(mins / 10) * 10, txt = pad(Math.floor(tm / 60)) + ':' + pad(tm % 60);
+        if (txt !== dsTimeTxt) { dsTime.textContent = txt; dsTimeTxt = txt; }
+        if (sc !== dsScene) {
+          dsScene = sc; dsArt.setAttribute('data-scene', sc);
+          dsItems.forEach(function (li, i) { li.classList.toggle('on', i === sc); });
+          dsDots.forEach(function (d, i) { d.classList.toggle('on', i === sc); });
+        }
+      }
+    }
+    if (heroVis && !reduced) {
+      ptr.x += (ptr.tx - ptr.x) * 0.12; ptr.y += (ptr.ty - ptr.y) * 0.12;
+      if (Math.abs(ptr.tx - ptr.x) > 0.002 || Math.abs(ptr.ty - ptr.y) > 0.002) again = true;
+      var syc = Math.min(sy, 900);
+      layers.forEach(function (l) { if (l[0]) l[0].style.translate = (ptr.x * l[1]).toFixed(2) + 'px ' + (ptr.y * l[1] * 0.6 + syc * l[2]).toFixed(2) + 'px'; });
+      if (eyeR) eyeR.forEach(function (r, i) {
+        var dx = ptr.cx - (r.left + r.width / 2), dy = ptr.cy - (r.top + r.height / 2), d = Math.sqrt(dx * dx + dy * dy) || 1;
+        var k = Math.min(1, d / 160) * 3.9;
+        pupils[i].style.transform = 'translate(' + (dx / d * k).toFixed(2) + 'px,' + (dy / d * k).toFixed(2) + 'px)';
+      });
+    }
+    scrollDirty = false;
+    if (again) schedule();
+  }
+
+  /* services: tilt + glare on fine pointers */
+  if (fine && !reduced) $$('.serv-card').forEach(function (c) {
+    var r = null, ev = null, busy = false;
+    c.addEventListener('pointerenter', function () { r = c.getBoundingClientRect(); c.classList.add('tilting'); });
+    c.addEventListener('pointermove', function (e) {
+      ev = e; if (busy || !r) return; busy = true;
+      requestAnimationFrame(function () {
+        busy = false; if (!r) return;
+        var fx = (ev.clientX - r.left) / r.width, fy = (ev.clientY - r.top) / r.height;
+        c.style.setProperty('--ry', ((fx - 0.5) * 9).toFixed(2) + 'deg');
+        c.style.setProperty('--rx', ((0.5 - fy) * 7).toFixed(2) + 'deg');
+        c.style.setProperty('--gx', (fx * 100).toFixed(1) + '%');
+        c.style.setProperty('--gy', (fy * 100).toFixed(1) + '%');
+      });
+    }, { passive: true });
+    c.addEventListener('pointerleave', function () { r = null; c.classList.remove('tilting'); ['--rx', '--ry', '--gx', '--gy'].forEach(function (k) { c.style.removeProperty(k); }); });
+  });
+
+  /* team: hello bubbles in each member's languages */
+  var HELLO = { es: '¡Hola!', en: 'Hi!', pl: 'Cześć!', de: 'Hallo!', it: 'Ciao!', ru: 'Привет!', uk: 'Привіт!' };
+  $$('.member').forEach(function (m) {
+    var b = document.createElement('span'); b.className = 'hello'; b.setAttribute('aria-hidden', 'true'); m.appendChild(b);
+  });
+  function setHellos() {
+    $$('.member').forEach(function (m) {
+      var ls = $$('.member-langs li', m).map(function (li) { return li.getAttribute('lang'); }), out;
+      if (teamFilter !== 'all' && m.classList.contains('match')) out = ls.filter(function (l) { return l === teamFilter || (teamFilter === 'ru' && l === 'uk'); });
+      else out = ls.slice(0, 3);
+      $('.hello', m).textContent = out.map(function (l) { return HELLO[l]; }).join(' · ');
+    });
+  }
+  setHellos();
+
+  /* hours: a clock showing Madrid time */
+  var clockOn = reduced || !IOK, nowMin = madridNow().m;
+  function setClock() {
+    var h = $('.hc-h'), m = $('.hc-m'); if (!h) return;
+    var hh = (nowMin / 60) % 12, mm = nowMin % 60;
+    h.style.transform = 'rotate(' + (hh * 30).toFixed(1) + 'deg)';
+    m.style.transform = 'rotate(' + (360 + mm * 6) + 'deg)';
+  }
+
+  /* reviews: score counts up once */
+  function scoreUp(el) {
+    var end = 4.8; if (reduced) return;
+    var t0 = null;
+    (function st(ts) { if (!t0) t0 = ts; var q = Math.min(1, (ts - t0) / 1200), v = end * (1 - Math.pow(1 - q, 3)); el.textContent = v.toFixed(1).replace('.', ','); if (q < 1) requestAnimationFrame(st); else el.textContent = el.dataset.score; })(performance.now());
+  }
+
+  /* booking: a little burst of paws and hearts when the request is ready */
+  function burst() {
+    var box = $('#confetti'); if (!box || reduced) return;
+    box.innerHTML = '';
+    var cols = ['#e8835a', '#f3c165', '#2b6a60', '#cfe4dc'];
+    for (var k = 0; k < 16; k++) {
+      var i = document.createElement('i');
+      i.style.setProperty('--a', Math.round(k * 22.5 + (k % 2 ? 8 : -8)) + 'deg');
+      i.style.setProperty('--d', 58 + (k % 3) * 22);
+      i.style.setProperty('--k', k);
+      i.style.color = cols[k % 4];
+      i.innerHTML = '<svg fill="currentColor"><use href="#' + (k % 3 ? 'paw' : 'i-heart') + '"/></svg>';
+      box.appendChild(i);
+    }
+  }
+
+  if (!sdOK || !reduced) { scrollDirty = true; schedule(); }
 
   /* init */
   if (lang === 'en') applyLang('en'); else updateOpen();

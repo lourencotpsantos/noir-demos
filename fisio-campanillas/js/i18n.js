@@ -30,7 +30,37 @@ window.FC_I18N = {
     breathIn: "Breathe in",
     breathOut: "Breathe out",
     breathPause: "Pause breathing",
-    breathHint: "Breathing animation: 4 seconds in, 6 seconds out.",
+    breathHint: "Breathing animation: 4 seconds in, 6 seconds out. This button also pauses the page's animations.",
+    stageTag: "Small-group pilates",
+
+    spTense: "Tension",
+    spCalm: "Balance",
+    spCap: "Illustration: scroll and watch the spine line up.",
+
+    stEyebrow: "From pain to movement",
+    stTitle: "From tension <em>to movement.</em>",
+    stLead: "Slide to see the path we usually take with you, from the first twinge to moving more freely.",
+    ch1T: "Tension and pain",
+    ch1: "You come in with a niggle that holds you back: a loaded back, a stiff neck or an injury that won't quite heal.",
+    ch2T: "Assessment and manual therapy",
+    ch2: "We look for the cause and treat it with our hands, session by session, checking how you're progressing.",
+    ch3T: "Movement and independence",
+    ch3: "Therapeutic exercise and pilates so you move with confidence again and know how to look after yourself at home.",
+    cmpBefore: "Before",
+    cmpAfter: "After",
+    cmpLabel: "From pain to movement: slide right to see the change",
+    cmpPain: "Pain",
+    cmpMove: "Movement",
+    cmpNote: "Illustration only, not a real case. Every process is different and starts with an assessment.",
+
+    bsEyebrow: "A pause",
+    bsTitle: "Breathe with us. <em>Ten seconds for you.</em>",
+    bsLead: "Breathe in as the circle grows and let the air go as it shrinks: 4 seconds in, 6 out. Repeat three times before you carry on.",
+    bsPause: "Pause",
+    bsCount: "Breaths",
+    bsIn4: "In 4 s",
+    bsOut6: "Out 6 s",
+    cmLabel: "Price per session compared with a single session",
 
     apEyebrow: "How we work",
     apTitle: "Expert hands, <em>not a machine.</em>",
@@ -257,7 +287,12 @@ window.FC_I18N = {
       bmCtaZone: "Valoración: ",
       packMsg: "Bono: ",
       typeNames: { fisio: "Sesión de fisioterapia u osteopatía", pilates: "Clase de pilates", otro: "Otro servicio" },
-      kickerFront: "Por delante", kickerBack: "Por detrás"
+      kickerFront: "Por delante", kickerBack: "Por detrás",
+      bsPause: "Pausar", bsPlay: "Reanudar",
+      calcLive: "{p} por sesión. {t}. {s}",
+      pctSame: "Precio base", pctLess: "−{p} % por sesión",
+      cmpText: "{p} % del camino hacia el movimiento",
+      chNames: ["Tensión y dolor", "Valoración y terapia manual", "Movimiento y autonomía"]
     },
     en: {
       menuOpen: "Open menu", menuClose: "Close menu",
@@ -284,7 +319,12 @@ window.FC_I18N = {
       bmCtaZone: "Assessment: ",
       packMsg: "Pack: ",
       typeNames: { fisio: "Physiotherapy or osteopathy session", pilates: "Pilates class", otro: "Another service" },
-      kickerFront: "Front", kickerBack: "Back"
+      kickerFront: "Front", kickerBack: "Back",
+      bsPause: "Pause", bsPlay: "Resume",
+      calcLive: "{p} per session. {t}. {s}",
+      pctSame: "Base price", pctLess: "−{p}% per session",
+      cmpText: "{p}% of the way to movement",
+      chNames: ["Tension and pain", "Assessment and manual therapy", "Movement and independence"]
     }
   },
 

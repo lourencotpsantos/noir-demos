@@ -129,7 +129,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 .lang-card{display:none;right:10px;top:44px;flex-direction:column;align-items:flex-start;gap:0;max-width:200px;font-size:.78rem;font-weight:700;color:var(--muted);line-height:1.3;animation-delay:-3s}
 .lc-hi{font-family:var(--serif);font-size:1rem;color:var(--coral);font-weight:400}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-.hero-squiggle{position:absolute;right:-6px;bottom:-30px;width:90px;color:var(--honey);z-index:-1}
+.hero-squiggle{position:absolute;left:-14px;top:-22px;width:90px;color:var(--honey);z-index:-1}
 .hero-copy{padding-top:14px}
 .eyebrow{display:flex;align-items:center;gap:10px;font-weight:800;font-size:.9rem;color:var(--teal);margin-bottom:12px}
 .dot-live{width:10px;height:10px;border-radius:50%;background:#9aa5a2;flex:none;position:relative}
@@ -333,7 +333,7 @@ dialog::backdrop{background:rgba(20,40,36,.55);backdrop-filter:blur(3px)}
 .booking{padding:76px 0;background:var(--sand);border-radius:40px 40px 0 0;position:relative}
 .book-grid{display:grid;gap:26px}
 .book-photo{display:none;border-radius:28px;margin-top:22px;box-shadow:var(--shadow-lg);aspect-ratio:3/2;object-fit:cover}
-.book-card{background:#fff;border-radius:28px;padding:22px 18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.book-card{background:#fff;border-radius:28px;padding:22px 18px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;overflow:clip;min-width:0}
 .steps{position:relative;height:30px;margin:0 14px 4px}
 .steps-track{position:absolute;left:0;right:0;top:14px;height:4px;border-radius:4px;background:var(--sand)}
 .steps-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:4px;background:var(--teal);transition:width .6s var(--ease)}
@@ -444,7 +444,7 @@ dialog::backdrop{background:rgba(20,40,36,.55);backdrop-filter:blur(3px)}
 .demo-badge{position:fixed;right:10px;top:calc(var(--header-h) + 8px);z-index:55;max-width:calc(100vw - 20px);margin:0;font-size:.68rem;font-weight:800;line-height:1.3;color:#fff;background:rgba(29,43,41,.86);border:1px solid rgba(243,193,101,.6);padding:5px 10px;border-radius:999px;pointer-events:none}
 
 /* render below-the-fold sections lazily */
-.about,.services,.planner,.team,.hours-reviews,.booking,.faq,.contact,.site-footer{content-visibility:auto;contain-intrinsic-size:auto 1000px}
+.about,.services,.planner,.team,.hours-reviews,.booking,.faq,.contact{content-visibility:auto;contain-intrinsic-size:auto 1000px}
 
 /* reveal */
 .js .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
@@ -548,3 +548,305 @@ dialog::backdrop{background:rgba(20,40,36,.55);backdrop-filter:blur(3px)}
   .btn .pulse{display:none}
   .trail .print{opacity:.5}
 }
+
+/* =====================================================================
+   Premium motion layer · transform/opacity only · paused off-screen
+   ===================================================================== */
+/* anything that loops stops while its section is off-screen */
+.off *,.off *::before,.off *::after{animation-play-state:paused!important}
+
+/* scroll progress paw under the header */
+.scroll-prog{position:absolute;left:0;right:0;bottom:-3px;height:3px;pointer-events:none;overflow-x:clip;overflow-y:visible}
+.sp-bar{position:absolute;inset:0;background:linear-gradient(90deg,var(--honey),var(--coral-soft));transform-origin:left;transform:scaleX(0);border-radius:0 3px 3px 0}
+.sp-run{position:absolute;inset:0;transform:translateX(0);opacity:0}
+.sp-paw{position:absolute;left:-9px;top:-7px;width:16px;height:16px;fill:var(--coral);transform:rotate(90deg)}
+@supports (animation-timeline:scroll()){
+  .sp-bar{animation:spBar linear both;animation-timeline:scroll(root block)}
+  .sp-run{animation:spRun linear both;animation-timeline:scroll(root block)}
+}
+@keyframes spBar{to{transform:scaleX(1)}}
+@keyframes spRun{0%{opacity:0;transform:translateX(0)}3%{opacity:1}100%{opacity:1;transform:translateX(100%)}}
+
+/* hero: parallax layers + interactive pup */
+.display em::after{animation:hlIn .9s .55s var(--ease) both}
+@keyframes hlIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero-facts li{animation:fadeUp .6s var(--ease) both}
+.hero-facts li:nth-child(1){animation-delay:.35s}.hero-facts li:nth-child(2){animation-delay:.45s}.hero-facts li:nth-child(3){animation-delay:.55s}
+.hero-pup{position:absolute;right:8px;bottom:-14px;width:112px;padding:0;border:0;background:none;cursor:pointer;z-index:3;-webkit-tap-highlight-color:transparent;animation:pupIn .9s .5s var(--spring) both;border-radius:40px}
+.hero-pup svg{width:100%;height:auto;overflow:visible}
+@keyframes pupIn{from{opacity:0;transform:translateY(40px) scale(.8)}to{opacity:1;transform:none}}
+.hp-tail{transform-origin:126px 114px;animation:wag .42s ease-in-out infinite alternate}
+@keyframes wag{from{transform:rotate(-10deg)}to{transform:rotate(16deg)}}
+.hp-head{transform-origin:80px 100px;transition:transform .5s var(--spring)}
+.hp-ear-l{transform-origin:40px 44px}
+.hp-ear-r{transform-origin:120px 44px}
+.hero-pup:hover .hp-ear-l,.hero-pup.happy .hp-ear-l{animation:earL .9s ease-in-out}
+.hero-pup:hover .hp-ear-r,.hero-pup.happy .hp-ear-r{animation:earR .9s ease-in-out}
+@keyframes earL{0%,100%{transform:none}40%{transform:rotate(9deg)}70%{transform:rotate(-3deg)}}
+@keyframes earR{0%,100%{transform:none}40%{transform:rotate(-9deg)}70%{transform:rotate(3deg)}}
+.hp-blink,.blink{transform-box:fill-box;transform-origin:center;animation:blink 5.2s infinite}
+.hp-blink+.hp-blink{animation-delay:.04s}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.hp-pupil{transition:transform .18s ease-out;animation:look 9s ease-in-out infinite}
+.hero-pup.tracking .hp-pupil{animation:none}
+@keyframes look{0%,18%,100%{transform:translate(0,0)}24%,40%{transform:translate(-3.5px,1px)}48%,64%{transform:translate(3.5px,2px)}72%,86%{transform:translate(0,-2.5px)}}
+.hp-tongue{transform-box:fill-box;transform-origin:top;transform:scaleY(.8)}
+.hero-pup:hover .hp-tongue,.hero-pup.happy .hp-tongue{animation:pant .5s ease-in-out 3}
+@keyframes pant{0%,100%{transform:scaleY(.75)}50%{transform:scaleY(1.1)}}
+.hp-brows{transition:transform .3s var(--spring)}
+.hp-heart{transform-box:fill-box;transform-origin:center bottom;opacity:0;transform:translateY(10px) scale(.4)}
+.hero-pup:hover .hp-head{transform:rotate(-6deg)}
+.hero-pup:hover .hp-brows{transform:translateY(-3px)}
+.hero-pup.happy .hp-head{animation:tilt .9s var(--ease)}
+.hero-pup.happy .hp-tail{animation-duration:.16s}
+.hero-pup.happy .hp-heart{animation:heartUp 1.1s var(--ease)}
+@keyframes tilt{0%{transform:none}25%{transform:rotate(-12deg)}55%{transform:rotate(9deg)}80%{transform:rotate(-4deg)}100%{transform:none}}
+@keyframes heartUp{0%{opacity:0;transform:translateY(10px) scale(.4)}25%{opacity:1;transform:translateY(-4px) scale(1.15)}100%{opacity:0;transform:translateY(-34px) scale(.9)}}
+.hero-pup:focus-visible{outline-offset:-2px}
+
+/* calm heartbeat on every emergency control */
+.btn .pulse{animation:calmPulse 2.4s ease-out infinite}
+@keyframes calmPulse{0%{transform:scale(1);opacity:.75}16%{transform:scale(1.04,1.14);opacity:.5}30%{transform:scale(1.02,1.08);opacity:.55}46%{transform:scale(1.08,1.32);opacity:.25}70%,100%{transform:scale(1.14,1.5);opacity:0}}
+.btn-sos .ic,.mbar-sos .ic{animation:beat 2.4s ease-in-out infinite}
+.sos-band{overflow:hidden}
+.ecg{position:absolute;left:0;top:50%;width:200%;height:60px;margin-top:-30px;opacity:.16;pointer-events:none;animation:ecgRun 9s linear infinite}
+.ecg svg{width:100%;height:100%}
+.ecg path{fill:none;stroke:#fff;stroke-width:2.2;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+@keyframes ecgRun{to{transform:translateX(-50%)}}
+.sos-inner{position:relative}
+.sos-heart::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--sos);animation:halo 2.4s ease-out infinite;z-index:-1}
+.sos-heart{z-index:0}
+@keyframes halo{0%{transform:scale(1);opacity:.6}45%,100%{transform:scale(1.7);opacity:0}}
+
+/* about: masked parallax photo + rotating badge + springy facts */
+.am-frame{display:block;border-radius:200px 200px 26px 26px;overflow:hidden;box-shadow:var(--shadow-lg)}
+.about-media .am-frame img{border-radius:0;box-shadow:none;transform:scale(1.1)}
+.since-badge{position:absolute;right:4px;top:18px;width:104px;height:104px;border-radius:50%;background:var(--honey);display:grid;place-items:center;box-shadow:var(--shadow)}
+.sb-ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 22s linear infinite}
+.sb-ring text{font:800 10.4px/1 var(--sans);letter-spacing:.16em;fill:var(--teal-dark)}
+.sb-paw{width:30px;height:30px;fill:var(--coral);animation:beat 2.6s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(1turn)}}
+.facts li{transition:transform .35s var(--spring),box-shadow .3s}
+.facts li:hover{transform:translateY(-4px) rotate(-1deg);box-shadow:var(--shadow-lg)}
+.js .facts li.reveal{transform:translateY(26px) scale(.92)}
+.js .facts li.reveal.is-visible{transform:none}
+
+/* a day at the clinic */
+.daystory{padding:72px 0 0;position:relative;background:var(--cream)}
+.daystory .section-head{margin-bottom:10px}
+.ds-track{position:relative;height:calc(100vh + 5 * 62vh)}
+.ds-stage{position:sticky;top:var(--header-h);height:calc(100vh - var(--header-h));height:calc(100svh - var(--header-h));display:flex;align-items:center;overflow:hidden}
+.ds-inner{display:flex;flex-direction:column;gap:14px;padding-bottom:84px}
+.ds-art{position:relative;width:100%;max-height:44svh;aspect-ratio:4/3;margin:0 auto;border-radius:26px;box-shadow:var(--shadow-lg);background:#fbe3bf}
+.ds-art svg{width:100%;height:100%}
+.ds-art .sky{opacity:0;transition:opacity .9s var(--ease)}
+.ds-art[data-scene="1"] .sky-mid,.ds-art[data-scene="2"] .sky-mid{opacity:1}
+.ds-art[data-scene="3"] .sky-pm{opacity:1}
+.ds-art[data-scene="4"] .sky-night{opacity:1}
+.ds-sunarm{transform-origin:200px 262px;transform:rotate(-70deg)}
+.ds-sunarm circle{transition:opacity .9s var(--ease)}
+.ds-art[data-scene="4"] .ds-sunarm circle{opacity:0}
+.ds-moon,.ds-stars{opacity:0;transition:opacity .9s var(--ease)}
+.ds-art[data-scene="4"] .ds-moon,.ds-art[data-scene="4"] .ds-stars{opacity:1}
+.ds-art[data-scene="4"] .ds-stars circle{animation:twinkle 2.4s ease-in-out infinite}
+.ds-stars circle:nth-child(2n){animation-delay:-1.2s}
+@keyframes twinkle{50%{opacity:.3}}
+.ds-prop{opacity:0;transform:translateY(16px);transition:opacity .55s var(--ease),transform .7s var(--spring)}
+.ds-art[data-scene="0"] .ds-prop[data-s="0"],.ds-art[data-scene="1"] .ds-prop[data-s="1"],.ds-art[data-scene="2"] .ds-prop[data-s="2"],.ds-art[data-scene="3"] .ds-prop[data-s="3"],.ds-art[data-scene="4"] .ds-prop[data-s="4"]{opacity:1;transform:none}
+.ds-dog{transition:transform .9s var(--spring)}
+.ds-art[data-scene="1"] .ds-dog{transform:translate(56px,-56px)}
+.ds-art[data-scene="2"] .ds-dog{transform:translate(92px,0)}
+.ds-art[data-scene="3"] .ds-dog{transform:translate(0,4px)}
+.ds-art[data-scene="4"] .ds-dog{transform:translate(62px,0)}
+.ds-dog .wag,.foot-pup .wag,.grow-pet .wag{transform-origin:86px 122px;animation:wag .45s ease-in-out infinite alternate}
+.swish{transform-origin:84px 128px;animation:swish 3s ease-in-out infinite}
+@keyframes swish{0%,100%{transform:rotate(0)}50%{transform:rotate(-14deg)}}
+.ds-beat{transform-box:fill-box;transform-origin:center;animation:beat 1.6s ease-in-out infinite}
+.ds-ecg{animation:ecgMon 1.6s linear infinite}
+@keyframes ecgMon{to{transform:translateX(-74px)}}
+.ds-result{transform-box:fill-box;transform-origin:center;transform:scale(.4) rotate(-8deg);opacity:0;transition:transform .6s .25s var(--spring),opacity .3s .25s}
+.ds-art[data-scene="2"] .ds-result{transform:none;opacity:1}
+@keyframes bubble{50%{transform:scaleY(.9)}}
+.ds-copy{position:relative}
+.ds-clock{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ds-clock svg{width:46px;height:46px;flex:none}
+.ds-ck-h,.ds-ck-m,.hc-h,.hc-m{transform-origin:32px 32px}
+.ds-time{font-family:var(--serif);font-size:1.6rem;line-height:1;color:var(--teal-dark);font-variant-numeric:tabular-nums}
+.ds-scenes{display:grid}
+.ds-scenes li{grid-area:1/1;opacity:0;transform:translateY(18px);transition:opacity .45s var(--ease),transform .6s var(--ease);pointer-events:none}
+.ds-scenes li.on{opacity:1;transform:none;pointer-events:auto}
+.ds-when{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin:0 0 4px}
+.ds-h{font-family:var(--serif);font-size:1.45rem;line-height:1.15;color:var(--teal-dark);margin:0 0 6px}
+.ds-scenes li p:last-child{margin:0;color:var(--muted);font-size:.98rem;line-height:1.5}
+.ds-dots{display:flex;gap:6px;margin-top:14px}
+.ds-dots span{width:22px;height:5px;border-radius:5px;background:var(--sand-2);transform-origin:left;transition:transform .4s var(--spring),background-color .3s}
+.ds-dots span.on{background:var(--teal);transform:scaleX(1.6);margin-right:13px}
+.ds-note{font-size:.76rem;color:var(--muted);margin:10px 0 0;font-weight:700}
+@media (max-height:640px) and (max-width:899px){.ds-art{max-height:38svh}.ds-clock svg{width:36px;height:36px}.ds-time{font-size:1.3rem}.ds-h{font-size:1.25rem}.ds-scenes li p:last-child{font-size:.9rem}.ds-note{display:none}}
+
+/* services: flip-in entrance, tilt with soft glare, icon gestures */
+.js .serv-grid>li.reveal{transform:perspective(1100px) rotateX(-38deg) translateY(36px);transform-origin:50% 0;opacity:0}
+.js .serv-grid>li.reveal.is-visible{transform:none;opacity:1}
+.serv-card{transition:transform .5s var(--spring),box-shadow .3s}
+.serv-card:hover{transform:translateY(-5px)}
+.serv-card.tilting{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-5px)}
+.serv-card.tilting{transition:transform .12s linear,box-shadow .3s}
+.serv-card::after{content:"";position:absolute;left:-50%;top:-50%;width:100%;height:100%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.55),rgba(255,255,255,0));opacity:0;transform:translate(var(--gx,50%),var(--gy,50%));transition:opacity .3s;pointer-events:none;z-index:1}
+.serv-card:hover::after{opacity:1}
+.serv-feature::after{background:radial-gradient(closest-side,rgba(255,255,255,.22),rgba(255,255,255,0))}
+.serv-card:hover .serv-ic{animation:icWiggle .7s var(--ease)}
+@keyframes icWiggle{0%{transform:none}30%{transform:rotate(-14deg) scale(1.15)}60%{transform:rotate(8deg) scale(1.08)}100%{transform:rotate(-10deg) scale(1.1)}}
+.serv-card:active{transform:scale(.98)}
+.sheet[open] .sheet-ic{animation:pop .6s var(--spring)}
+.sheet[open] .sheet-list li{animation:fadeUp .45s var(--ease) both;animation-delay:calc(.12s + var(--i,0) * 45ms)}
+
+/* planner: growing pet + scaleY timeline */
+.grow{position:relative;margin:14px 0 6px;padding-top:96px}
+.grow-track{position:relative;height:8px;border-radius:8px;background:var(--sand)}
+.grow-fill{position:absolute;inset:0;border-radius:8px;background:linear-gradient(90deg,var(--mint),var(--teal));transform-origin:left;transform:scaleX(0);transition:transform 1.4s var(--ease)}
+.grow-tick{position:absolute;top:-3px;left:calc(var(--t) * 100%);width:3px;height:14px;border-radius:3px;background:#fff;opacity:.9}
+.grow-pet{position:absolute;left:0;bottom:22px;width:78px;height:91px;margin-left:-39px;transform-origin:50% 100%;transform:translateX(0) scale(.5);transition:transform 1.4s var(--ease)}
+.grow-pet svg{width:100%;height:100%;overflow:visible}
+.grow-pet.hop svg{animation:hop .35s ease-in-out 4}
+@keyframes hop{50%{transform:translateY(-7px)}}
+.grow-labels{display:flex;justify-content:space-between;font-size:.76rem;font-weight:800;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.08em}
+.timeline .fill{height:auto;bottom:6px;transform-origin:top;transform:scaleY(0);transition:transform 1.4s var(--ease)}
+.tl-item .tl-dot{transition:transform .4s var(--spring)}
+.tl-item.done .tl-dot,.tl-item.next .tl-dot{animation:pop .5s var(--spring) both;animation-delay:calc(.25s + var(--i) * 110ms)}
+.tl-item.next .tl-dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--coral-soft);animation:ring 2.2s ease-out infinite}
+.seg-opt input:checked+span svg{animation:icWiggle .6s var(--ease)}
+
+/* team: hello bubbles, tilting avatars */
+.member{position:relative;transition:opacity .4s var(--ease),transform .4s var(--spring),filter .4s,box-shadow .3s}
+.member:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.member.dim:hover{transform:scale(.97)}
+.avatar{transition:transform .5s var(--spring)}
+.avatar svg{transition:transform .5s var(--spring)}
+.member:hover .avatar{transform:rotate(-8deg) scale(1.06)}
+.member:hover .avatar svg{transform:rotate(-20deg) scale(1.25)}
+.hello{position:absolute;left:-6px;top:-34px;white-space:nowrap;background:var(--teal-dark);color:#fff;font-family:var(--serif);font-size:.95rem;line-height:1;padding:8px 12px;border-radius:14px 14px 14px 4px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px) scale(.7);transform-origin:12px 100%;transition:opacity .25s,transform .45s var(--spring);pointer-events:none;z-index:3}
+.avatar{z-index:2}
+.member:hover .hello,.member.match .hello{opacity:1;transform:none}
+.member.is-visible .hello{animation:helloOnce 2.8s .5s var(--ease) both}
+.member:hover .hello,.member.match .hello{animation:none}
+@keyframes helloOnce{0%{opacity:0;transform:translateY(8px) scale(.7)}14%,78%{opacity:1;transform:none}100%{opacity:0;transform:translateY(4px) scale(.9)}}
+.chip{transition:background-color .25s,border-color .25s,color .25s,transform .35s var(--spring)}
+.chip:active{transform:scale(.94)}
+.chip[aria-pressed="true"]{animation:chipPop .45s var(--spring)}
+@keyframes chipPop{40%{transform:scale(1.08)}}
+
+/* hours + reviews */
+.hours-card{position:relative}
+.hclock{position:absolute;right:20px;top:20px;width:62px;height:62px}
+.hclock svg{width:100%;height:100%}
+.hc-h,.hc-m{transform:rotate(0);transition:transform 1.6s var(--spring)}
+.js .hours-card.reveal .hours-table tr{opacity:0;transform:translateX(-14px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.js .hours-card.reveal.is-visible .hours-table tr{opacity:1;transform:none}
+.hours-table tr:nth-child(2){transition-delay:.05s!important}.hours-table tr:nth-child(3){transition-delay:.1s!important}.hours-table tr:nth-child(4){transition-delay:.15s!important}.hours-table tr:nth-child(5){transition-delay:.2s!important}.hours-table tr:nth-child(6){transition-delay:.25s!important}.hours-table tr:nth-child(7){transition-delay:.3s!important}
+.reviews-bg{transform:scale(1.12)}
+.rev-topics li{transition:transform .35s var(--spring),background-color .2s}
+.rev-topics li:hover{transform:translateY(-3px) rotate(-2deg);background:rgba(255,255,255,.24)}
+
+/* booking: transform-only progress, paw hop, confetti */
+.steps-fill{width:100%;transform-origin:left;transform:scaleX(0);transition:transform .6s var(--ease)}
+.steps-run{position:absolute;inset:0;transition:transform .6s var(--spring)}
+.steps-paw{left:0}
+.tile input:checked+span svg{animation:icWiggle .6s var(--ease)}
+.tile>span,.day,.slot{transition:background-color .25s,border-color .25s,color .25s,transform .3s var(--spring)}
+.tile:active>span,.day:active,.slot:active{transform:scale(.96)}
+.day[aria-checked="true"],.slot[aria-checked="true"]{animation:chipPop .4s var(--spring)}
+.done-wrap{position:relative;width:72px;margin:0 auto}
+.confetti{position:absolute;left:50%;top:42px;width:0;height:0}
+.confetti i{position:absolute;left:-8px;top:-8px;width:16px;height:16px;opacity:0;animation:burst 1.2s var(--ease) forwards;animation-delay:calc(var(--k) * 18ms)}
+.confetti i svg{width:100%;height:100%}
+@keyframes burst{0%{opacity:1;transform:rotate(var(--a)) translateY(0) scale(.3)}70%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateY(calc(var(--d) * -1px)) rotate(120deg) scale(1)}}
+
+/* faq: sleeping cat */
+.faq-cat{width:170px;margin:4px auto 0}
+.faq-cat svg{width:100%;height:auto;overflow:visible}
+.fc-breathe{transform-origin:86px 88px;animation:breathe 3.6s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.025,1.05)}}
+.fc-z text{animation:zz 3.6s ease-in-out infinite;opacity:0}
+.fc-z text:nth-child(2){animation-delay:.6s}.fc-z text:nth-child(3){animation-delay:1.2s}
+@keyframes zz{0%{opacity:0;transform:translate(-4px,6px)}30%,60%{opacity:1}100%{opacity:0;transform:translate(6px,-10px)}}
+.faq details{transition:box-shadow .3s,transform .35s var(--spring)}
+.faq details:hover{transform:translateX(4px)}
+.faq details[open]{box-shadow:var(--shadow-lg)}
+.trail-faq{left:0;top:10px;width:max(100%,900px);height:auto}
+.trail-left{left:-50px;top:120px;width:220px;height:auto;opacity:.8}
+.team{position:relative;overflow:hidden}
+.faq{position:relative;overflow:hidden}
+.faq-grid{position:relative;z-index:2}
+
+/* contact: pin drop, walking paws */
+.map-drop{transform:translateY(-60px);opacity:0}
+.map.is-visible .map-drop,.reduced .map-drop{animation:pinDrop .9s .3s var(--spring) forwards}
+@keyframes pinDrop{to{transform:none;opacity:1}}
+.map-trail use{opacity:0}
+.map.is-visible .map-trail use{animation:pawIn .4s ease-out forwards}
+.map-trail use:nth-child(2){animation-delay:.25s!important}.map-trail use:nth-child(3){animation-delay:.5s!important}.map-trail use:nth-child(4){animation-delay:.75s!important}
+@keyframes pawIn{to{opacity:1}}
+.contact-list li{transition:transform .3s var(--spring)}
+.contact-list li:hover{transform:translateX(4px)}
+
+/* footer pup */
+.site-footer{content-visibility:visible;position:relative}
+.footer-inner{position:relative}
+.foot-pup{position:absolute;right:20px;top:-74px;width:66px;height:77px;overflow:visible}
+
+@media (min-width:600px){
+  .ds-art{max-height:48svh}
+}
+@media (min-width:900px){
+  .hero-pup{width:168px;right:-16px;bottom:-26px}
+  .since-badge{width:124px;height:124px;right:-30px;top:30px}
+  .sb-ring text{font-size:10.6px}
+  .daystory{padding-top:110px}
+  .ds-track{height:calc(100vh + 5 * 70vh)}
+  .ds-inner{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;padding-bottom:0}
+  .ds-art{max-height:min(70vh,560px);width:100%}
+  .ds-clock svg{width:64px;height:64px}
+  .ds-time{font-size:2.4rem}
+  .ds-h{font-size:2rem}
+  .ds-scenes li p:last-child{font-size:1.06rem}
+  .faq-cat{margin:10px 0 0;width:200px}
+  .hclock{width:76px;height:76px;right:30px;top:30px}
+  .foot-pup{width:80px;height:93px;top:-90px}
+}
+
+/* calm static version: everything visible, nothing pinned */
+html:not(.js) .ds-track,.reduced .ds-track{height:auto}
+html:not(.js) .ds-stage,.reduced .ds-stage{position:static;height:auto;display:block;overflow:visible}
+html:not(.js) .ds-inner,.reduced .ds-inner{padding-bottom:0}
+html:not(.js) .ds-scenes,.reduced .ds-scenes{gap:18px}
+html:not(.js) .ds-scenes li,.reduced .ds-scenes li{grid-area:auto;opacity:1;transform:none;pointer-events:auto}
+html:not(.js) .ds-dots,.reduced .ds-dots,html:not(.js) .ds-clock,.reduced .ds-clock{display:none}
+html:not(.js) .scroll-prog,.reduced .scroll-prog{display:none}
+.reduced .ds-art{margin-bottom:8px}
+@media (prefers-reduced-motion:reduce){
+  .ds-track{height:auto}
+  .ds-stage{position:static;height:auto;display:block}
+  .ds-scenes li{grid-area:auto;opacity:1;transform:none}
+  .scroll-prog,.ecg{display:none}
+  .hero-pup,.map-drop{opacity:1;transform:none}
+  .map-trail use{opacity:1}
+  .js .serv-grid>li.reveal,.js .facts li.reveal{opacity:1;transform:none}
+  .js .hours-card.reveal .hours-table tr{opacity:1;transform:none}
+  .hello{display:none}
+  .member.match .hello{display:block;opacity:1;transform:none}
+  .trail .print{transform:none}
+  .grow-pet,.grow-fill,.timeline .fill{transition:none}
+}
+
+/* scroll-driven parallax where the browser supports it (no JS) */
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    .about-media .am-frame img{animation:parY linear both;animation-timeline:view();animation-range:cover}
+    .reviews-bg{animation:parY linear both;animation-timeline:view();animation-range:cover}
+    .ds-art{animation:artIn linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  }
+}
+@keyframes parY{from{transform:translateY(-5%) scale(1.12)}to{transform:translateY(5%) scale(1.12)}}
+@keyframes artIn{from{opacity:.3;transform:scale(.92)}to{opacity:1;transform:none}}
+.trail-faq{top:auto;bottom:-10px}
+.member:nth-child(2) .hello{animation-delay:.8s}.member:nth-child(3) .hello{animation-delay:1.1s}.member:nth-child(4) .hello{animation-delay:1.4s}.member:nth-child(5) .hello{animation-delay:1.7s}

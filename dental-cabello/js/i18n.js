@@ -137,7 +137,19 @@ window.I18N = {
     footContact: 'Contact', footDemo: 'About this demo',
     footDemoText: 'A design proposal created by Noir Digital (Marbella). This is not the clinic’s official website. Free-licence stock photos (Unsplash), used for illustration only. Text in square brackets is information still to be confirmed.',
     footConcept: 'Website concept by Noir Digital',
-    actionBar: 'Quick actions', abCall: 'Call', close: 'Close'
+    actionBar: 'Quick actions', abCall: 'Call', close: 'Close',
+    baDrag: 'Drag',
+    scanAlt: 'Illustration: a 3D model of a molar turning while a scan line passes over it',
+    scanHint: 'Drag to turn', scanKicker: 'iTero intraoral scanner',
+    scanTitle: 'Your mouth in 3D, <em>no messy moulds</em>',
+    scanText: 'With the iTero intraoral scanner we take a 3D image of your teeth in minutes. It is the basis for planning your treatment on screen.',
+    scanP1: 'No uncomfortable paste', scanP2: 'A 3D image in minutes', scanP3: 'You see your plan on screen',
+    scanCtrl: '3D model controls', scanLeft: 'Turn left', scanRight: 'Turn right', animPause: 'Pause the animation',
+    scanCap: 'Illustration only · not a real scan',
+    calmIn: 'Breathe in', calmOut: 'Breathe out', calmKicker: 'No rush',
+    calmTitle: 'Nervous? <em>Breathe.</em> We go at your pace.',
+    calmSub: 'A relaxed, welcoming setting. At your first visit we check your mouth calmly, listen to you and give you the plan in writing.',
+    calm1: 'A calm check-up, and we listen', calm2: 'Diagnosis and plan in writing, no surprises', calm3: 'You decide when to start'
   },
 
   fr: {
@@ -270,7 +282,19 @@ window.I18N = {
     footContact: 'Contact', footDemo: 'À propos de cette démo',
     footDemoText: 'Proposition de design créée par Noir Digital (Marbella). Ce n’est pas le site officiel de la clinique. Photos d’illustration libres de droits (Unsplash). Les textes entre crochets sont des informations à confirmer.',
     footConcept: 'Concept web de Noir Digital',
-    actionBar: 'Actions rapides', abCall: 'Appeler', close: 'Fermer'
+    actionBar: 'Actions rapides', abCall: 'Appeler', close: 'Fermer',
+    baDrag: 'Glissez',
+    scanAlt: 'Illustration : modèle 3D d’une molaire qui tourne pendant qu’une ligne de scan la parcourt',
+    scanHint: 'Glissez pour tourner', scanKicker: 'Scanner intra-oral iTero',
+    scanTitle: 'Votre bouche en 3D, <em>sans pâte à empreinte</em>',
+    scanText: 'Avec le scanner intra-oral iTero, nous prenons une image 3D de vos dents en quelques minutes. C’est la base pour planifier votre traitement à l’écran.',
+    scanP1: 'Sans pâte désagréable', scanP2: 'Une image 3D en quelques minutes', scanP3: 'Vous voyez votre plan à l’écran',
+    scanCtrl: 'Commandes du modèle 3D', scanLeft: 'Tourner à gauche', scanRight: 'Tourner à droite', animPause: 'Mettre l’animation en pause',
+    scanCap: 'Illustration indicative · pas un vrai scan',
+    calmIn: 'Inspirez', calmOut: 'Expirez', calmKicker: 'Sans précipitation',
+    calmTitle: 'Un peu stressé ? <em>Respirez.</em> Nous suivons votre rythme.',
+    calmSub: 'Un cadre détendu et accueillant. Lors de la première visite, nous examinons votre bouche au calme, nous vous écoutons et nous vous remettons le plan par écrit.',
+    calm1: 'Un examen au calme, à votre écoute', calm2: 'Diagnostic et plan par écrit, sans surprise', calm3: 'Vous décidez quand commencer'
   },
 
   /* Strings used by JavaScript */
@@ -294,7 +318,8 @@ window.I18N = {
       baDescAlign: 'La ortodoncia, con brackets o alineadores transparentes, coloca cada diente en su sitio y mejora también la mordida.',
       baSvgBefore: 'Ilustración: dientes antes del tratamiento', baSvgAfter: 'Ilustración: dientes después del tratamiento',
       mapTitle: 'Mapa de Google: Clínica Dental Cabello', other: 'No lo sé / otra consulta', revision: 'Revisión o primera visita', urgent: 'Dolor o urgencia',
-      featTag: 'Tratamiento destacado'
+      featTag: 'Tratamiento destacado',
+      scanning: 'Escaneando', scanDone: 'Escaneado completo'
     },
     en: {
       openNow: 'Open now · closes at {t}', closedNow: 'Closed · opens {d} at {t}', today: 'today', tomorrow: 'tomorrow',
@@ -315,7 +340,8 @@ window.I18N = {
       baDescAlign: 'Orthodontics, with braces or clear aligners, moves each tooth into place and also improves the bite.',
       baSvgBefore: 'Illustration: teeth before treatment', baSvgAfter: 'Illustration: teeth after treatment',
       mapTitle: 'Google map: Clínica Dental Cabello', other: 'Not sure / other', revision: 'Check-up or first visit', urgent: 'Pain or emergency',
-      featTag: 'Featured treatment'
+      featTag: 'Featured treatment',
+      scanning: 'Scanning', scanDone: 'Scan complete'
     },
     fr: {
       openNow: 'Ouvert · ferme à {t}', closedNow: 'Fermé · ouvre {d} à {t}', today: 'aujourd’hui', tomorrow: 'demain',
@@ -336,7 +362,8 @@ window.I18N = {
       baDescAlign: 'L’orthodontie, avec bagues ou aligneurs transparents, remet chaque dent à sa place et améliore aussi l’occlusion.',
       baSvgBefore: 'Illustration : dents avant le traitement', baSvgAfter: 'Illustration : dents après le traitement',
       mapTitle: 'Carte Google : Clínica Dental Cabello', other: 'Je ne sais pas / autre', revision: 'Contrôle ou première visite', urgent: 'Douleur ou urgence',
-      featTag: 'Soin phare'
+      featTag: 'Soin phare',
+      scanning: 'Scan en cours', scanDone: 'Scan terminé'
     }
   },
 
