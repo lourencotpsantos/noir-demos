@@ -29,6 +29,6 @@ Originals were downloaded through each photo's free download link (images.unspla
 
 ## Other assets
 
-- `fonts/`: Bodoni Moda (variable, regular and italic) and Hanken Grotesk (variable), latin subset, self-hosted from the Fontsource npm packages. Both use the SIL Open Font License 1.1; the licence texts are in `fonts/LICENSE-bodoni-moda.txt` and `fonts/LICENSE-hanken-grotesk.txt`.
+- `fonts/`: Bodoni Moda (400, 500 and 400 italic) and Hanken Grotesk (400, 600, 700), latin subset, self-hosted. Static instances were cut from the Fontsource variable files with fontTools (varLib.instancer) to keep text layout fast on phones. Both use the SIL Open Font License 1.1; the licence texts are in `fonts/LICENSE-bodoni-moda.txt` and `fonts/LICENSE-hanken-grotesk.txt`.
 - The following are original inline SVG/CSS drawn for this concept: the logo mark, the layered hills and olive-grove silhouettes in the hero, the sun arc, light washes and clock in «Un día en el club», the route profiles in the ride finder, the livery plan, the 60×20 m dressage arena with its letters, the location sketch and the icons. The arena letters follow the standard dressage arena layout.
 - There are no third-party requests. "Abrir en Google Maps" and the WhatsApp buttons are plain links that open only when the visitor taps them.

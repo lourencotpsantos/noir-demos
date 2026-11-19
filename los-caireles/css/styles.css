@@ -2,7 +2,9 @@
 @font-face { font-family: "Bodoni Moda"; src: url(../fonts/bodoni-moda-normal-400.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Bodoni Moda"; src: url(../fonts/bodoni-moda-normal-500.woff2) format("woff2"); font-weight: 500 900; font-style: normal; font-display: swap; }
 @font-face { font-family: "Bodoni Moda"; src: url(../fonts/bodoni-moda-italic-400.woff2) format("woff2"); font-weight: 400 900; font-style: italic; font-display: swap; }
-@font-face { font-family: "Hanken Grotesk"; src: url(../fonts/hanken-grotesk-latin-wght-normal.woff2) format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Hanken Grotesk"; src: url(../fonts/hanken-grotesk-400.woff2) format("woff2"); font-weight: 100 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Hanken Grotesk"; src: url(../fonts/hanken-grotesk-600.woff2) format("woff2"); font-weight: 501 650; font-style: normal; font-display: swap; }
+@font-face { font-family: "Hanken Grotesk"; src: url(../fonts/hanken-grotesk-700.woff2) format("woff2"); font-weight: 651 900; font-style: normal; font-display: swap; }
 
 :root {
   --paper: #F4EFE6; --paper-2: #EBE3D5; --sand: #DCCBAF; --sand-2: #CDB794;
@@ -518,7 +520,8 @@ button { cursor: pointer; }
   .arena-fig svg { width: auto; height: calc(100svh - var(--header-h) - 110px); max-height: 640px; }
   .arena-steps { gap: 0; }
   .arena-steps li { grid-area: auto; font-size: 1rem; padding: 10px 0; grid-template-columns: 120px 1fr; }
-  .arena-steps li:not(.is-on) { opacity: .74 !important; }
+  .arena-steps li:not(.is-on) { opacity: .86 !important; }
+  .arena-steps li:not(.is-on) span { color: rgba(244,239,230,.62); }
   .arena-steps li { position: relative; }
   .arena-steps li::before { content: ""; position: absolute; left: -16px; top: 12px; bottom: 12px; width: 2px; background: var(--brass); transform: scaleY(0); transition: transform .4s var(--ease-out); }
   .arena-steps li.is-on::before { transform: none; }
