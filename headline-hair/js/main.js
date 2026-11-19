@@ -1,6 +1,7 @@
 /* Headline Hairdresser — concept by Noir Digital. Vanilla JS, no build step. */
 (() => {
   'use strict';
+  const boot = () => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,9 +37,20 @@
     lang = l;
     try { localStorage.setItem('hh-lang', l); } catch (e) { /* private mode */ }
     applyLang();
-    const n = $('.en-nudge'); if (n) n.hidden = true;
+    document.documentElement.classList.remove('nudge');
   }
   $$('.lang-btn, .en-nudge-btn').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+  /* ---------- smooth in-page links (JS, so tools that scroll elements into view are not slowed) ---------- */
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || a.getAttribute('href').length < 2) return;
+    const t = document.getElementById(a.getAttribute('href').slice(1));
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+    if (t.id !== 'top') history.replaceState(null, '', '#' + t.id);
+  });
 
   /* ---------- toast ---------- */
   const toastEl = $('.toast');
@@ -107,15 +119,13 @@
   hdrCheck();
 
   // English nudge for visitors whose browser isn't Spanish
-  try {
-    const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
-    if (lang === 'es' && !langs.some(l => /^es\b/i.test(l))) $('.en-nudge').hidden = false;
-  } catch (e) { /* ignore */ }
+  /* (shown before first paint by the inline head script: html.nudge) */
 
   /* ---------- reveal on scroll ---------- */
   const rvIO = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); rvIO.unobserve(e.target); }
   }), { rootMargin: '0px 0px -10% 0px' });
+  $$('main section:not(.hero) .kicker, main section:not(.hero) .h2, main section:not(.hero) .lede').forEach(el => el.classList.add('rv'));
   $$('.rv').forEach(el => rvIO.observe(el));
 
   /* ---------- roving radio groups ---------- */
@@ -212,6 +222,51 @@
   }
   let b_svcClick = false;
 
+  /* ---------- ritual (pinned scroll) ---------- */
+  const rit = $('.ritual');
+  if (rit && !RM) {
+    const track = $('.rit-track', rit), stage = $('.rit-stage', rit);
+    const rImgs = $$('.rit-img', rit), rSteps = $$('.rit-step', rit), rTicks = $$('.rit-ticks li', rit);
+    const fill = $('.rit-fill', rit), sc = $('.rit-sc', rit), rail = $('.rit-rail', rit), cur = $('.rit-cur', rit);
+    const b1 = $('.b1', rit), b2 = $('.b2', rit);
+    const N = rImgs.length;
+    let stTop = 0, span = 1, railW = 0, idx = -1, ritOn = false, rRaf = 0;
+    rTicks.forEach((li, i) => { li.style.left = (i / (N - 1) * 100) + '%'; });
+    const measure = () => {
+      const r = track.getBoundingClientRect();
+      stTop = parseFloat(getComputedStyle(stage).top) || 0; void r;
+      span = Math.max(1, track.offsetHeight - stage.offsetHeight);
+      railW = rail.offsetWidth;
+    };
+    const setIdx = i => {
+      if (i === idx) return;
+      idx = i;
+      rImgs.forEach((im, j) => im.classList.toggle('on', j === i));
+      rSteps.forEach((st, j) => st.classList.toggle('on', j === i));
+      rTicks.forEach((t, j) => t.classList.toggle('on', j <= i));
+      cur.textContent = '0' + (i + 1);
+    };
+    const tick = () => {
+      rRaf = 0;
+      if (!ritOn) return;
+      const p = Math.min(1, Math.max(0, (stTop - track.getBoundingClientRect().top) / span));
+      const i = Math.min(N - 1, Math.floor(p * N * 0.9999));
+      setIdx(i);
+      const local = p * N - i;
+      rImgs[i].style.transform = `scale(${(1.08 - local * 0.08).toFixed(4)})`;
+      fill.style.transform = `scaleX(${p.toFixed(4)})`;
+      sc.style.transform = `translate3d(${(p * railW).toFixed(1)}px,0,0)`;
+      const snip = Math.abs(Math.sin(p * Math.PI * N * 2)) * 16;
+      b1.style.transform = `rotate(${(-snip).toFixed(1)}deg)`;
+      b2.style.transform = `rotate(${snip.toFixed(1)}deg)`;
+    };
+    const rk = () => { if (!rRaf) rRaf = requestAnimationFrame(tick); };
+    new IntersectionObserver(es => { ritOn = es[0].isIntersecting; if (ritOn) { measure(); rk(); } }).observe(track);
+    window.addEventListener('scroll', () => { if (ritOn) rk(); }, { passive: true });
+    window.addEventListener('resize', () => { measure(); rk(); }, { passive: true });
+    measure(); setIdx(0);
+  }
+
   /* ---------- before / after ---------- */
   const ba = $('.ba');
   const BA = {
@@ -302,9 +357,27 @@
   const nameEl = $('.look-name'), nameTxt = $('.look-name-txt');
   function setTone(t) {
     LK.tone = t;
-    $$('.tint', look).forEach(el => el.classList.toggle('on', el.classList.contains('t-' + t)));
+    sweepTone(t);
     nameEl.classList.add('flip');
     setTimeout(() => { nameTxt.textContent = L(TONES[t].n); nameEl.classList.remove('flip'); }, RM ? 0 : 260);
+  }
+  const tones = $$('.tone', look);
+  let topZ = 1;
+  function sweepTone(t) {
+    const nxt = tones.find(x => x.dataset.t === t);
+    const prev = tones.filter(x => x !== nxt && x.classList.contains('on'));
+    if (!nxt) { prev.forEach(x => { x.classList.add('fade'); setTimeout(() => { x.classList.remove('on', 'go', 'fade'); }, RM ? 0 : 900); }); return; }
+    nxt.classList.remove('fade', 'go');
+    nxt.style.zIndex = ++topZ;
+    void nxt.offsetWidth;
+    nxt.classList.add('on');
+    if (RM) { prev.forEach(x => x.classList.remove('on')); return; }
+    nxt.classList.add('go');
+    nxt.addEventListener('animationend', function done(ev) {
+      if (ev.target !== nxt) return;
+      nxt.removeEventListener('animationend', done);
+      prev.forEach(x => { if (x.dataset.t !== LK.tone) x.classList.remove('on', 'go'); });
+    });
   }
   radioGroup($('.swatches', look), '.sw', b => setTone(b.dataset.tone));
   radioGroup($('.q2 .opts', look), '.opt', b => { LK.len = b.dataset.len; navState(); });
@@ -362,19 +435,20 @@
     { c: '#f3eee6', n: { es: 'Perla', en: 'Pearl' } },
     { c: '#221a1f', n: { es: 'Noche', en: 'Midnight' } }
   ];
-  const fan = $('.fan');
+  const fan = $('.fan'), row = $('.nail-row');
   let shadeIdx = 3, dropFlip = 0;
   function renderFan() {
     const n = SHADES.length, spread = DESK.matches ? 100 : 96;
     fan.innerHTML = SHADES.map((s, i) => {
       const r = -spread / 2 + (spread / (n - 1)) * i;
-      return `<button type="button" class="chip" role="radio" aria-checked="${i === shadeIdx}" tabindex="${i === shadeIdx ? 0 : -1}" style="--c:${s.c};--r:${r.toFixed(1)}deg;transition-delay:${(i * 0.05).toFixed(2)}s;z-index:${i === shadeIdx ? 20 : i}" data-i="${i}" aria-label="${L(s.n)}"><span aria-hidden="true">${L(s.n)}</span></button>`;
+      return `<button type="button" class="chip" tabindex="-1" aria-checked="${i === shadeIdx}" style="--c:${s.c};--r:${r.toFixed(1)}deg;transition-delay:${(i * 0.05).toFixed(2)}s;z-index:${i === shadeIdx ? 20 : i}" data-i="${i}"></button>`;
     }).join('');
+    row.innerHTML = SHADES.map((s, i) => `<button type="button" class="nr" role="radio" aria-checked="${i === shadeIdx}" tabindex="${i === shadeIdx ? 0 : -1}" style="--c:${s.c}" data-i="${i}" aria-label="${L(s.n)}"></button>`).join('');
   }
   renderFan();
   function pickShade(i) {
     shadeIdx = i;
-    $$('.chip', fan).forEach((c, j) => { c.style.zIndex = j === i ? 20 : j; c.style.transitionDelay = '0s'; });
+    $$('.chip', fan).forEach((c, j) => { c.style.zIndex = j === i ? 20 : j; c.style.transitionDelay = '0s'; c.setAttribute('aria-checked', String(j === i)); });
     const drops = $$('.drop-c'); dropFlip ^= 1;
     drops[dropFlip].style.setProperty('--c', SHADES[i].c);
     drops[dropFlip].style.opacity = 1; drops[dropFlip ^ 1].style.opacity = 0;
@@ -382,7 +456,8 @@
     $('.lq-name').textContent = L(SHADES[i].n);
     shade = i;
   }
-  const fanRG = radioGroup(fan, '.chip', b => pickShade(+b.dataset.i));
+  const fanRG = radioGroup(row, '.nr', b => pickShade(+b.dataset.i));
+  fan.addEventListener('click', e => { const c = e.target.closest('.chip'); if (c) fanRG.pick($$('.nr', row)[+c.dataset.i]); });
   onLang.push(() => { renderFan(); fanRG.sync(); fan.classList.add('open'); $('.lq-name').textContent = L(SHADES[shadeIdx].n); });
   if (RM) fan.classList.add('open');
   else {
@@ -432,7 +507,7 @@
   const fmtDay = i => DAYS[i].toLocaleDateString(lang === 'en' ? 'en-GB' : 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
   const SLOT = { m: { es: 'Mañana (desde las 10:00)', en: 'Morning (from 10:00)' }, a: { es: 'Tarde', en: 'Afternoon' }, x: { es: 'Cuando os venga bien', en: 'Whenever suits' } };
   const tSvc = $('#t-svc'), tSty = $('#t-sty'), tDay = $('#t-day'), tTime = $('#t-time'), tMsg = $('#t-msg');
-  const fName = $('#f-name'), fNote = $('#f-note');
+  const fName = $('#f-name'), fNote = $('#f-note'), ticket = $('.ticket');
   function svcLabel() {
     const names = [...picked].map(id => {
       let n = L(BYID[id].n);
@@ -462,10 +537,11 @@
     tDay.textContent = BK.day === null ? T('Elige un día', 'Pick a day') : fmtDay(BK.day);
     tTime.textContent = L(SLOT[BK.slot]);
     tMsg.textContent = buildMsg();
+    ticket.classList.remove('sent');
     const map = { svc: tSvc, sty: tSty, day: tDay, time: tTime };
     if (map[which]) bump(map[which]);
   }
-  [fName, fNote].forEach(f => f.addEventListener('input', () => { tMsg.textContent = buildMsg(); }));
+  [fName, fNote].forEach(f => f.addEventListener('input', () => { tMsg.textContent = buildMsg(); ticket.classList.remove('sent'); }));
   onLang.push(() => updateTicket());
   updateTicket();
 
@@ -479,6 +555,12 @@
     }
   }
   const status = $('.t-status');
+  $('.t-confirm').addEventListener('click', async () => {
+    ticket.style.setProperty('--tw', ticket.clientWidth + 'px');
+    ticket.classList.remove('sent'); void ticket.offsetWidth; ticket.classList.add('sent');
+    const ok = await copyMsg();
+    status.textContent = T('Solicitud preparada', 'Request ready') + (ok ? T(' y copiada', ' and copied') : '') + T('. Para confirmarla, llama al salón al 952 44 26 24.', '. To confirm it, call the salon on 952 44 26 24.');
+  });
   $('.t-copy').addEventListener('click', async () => {
     const ok = await copyMsg();
     status.textContent = ok ? T('Mensaje copiado. Pégalo donde quieras o léelo al llamar.', 'Message copied. Paste it anywhere or read it out when you call.') : T('No se pudo copiar: selecciona el texto del mensaje.', 'Could not copy: please select the message text.');
@@ -493,4 +575,7 @@
   void PHONE;
 
   if (lang === 'en') applyLang();
+  };
+  /* run after the first paint so the hero image paints first */
+  requestAnimationFrame(() => setTimeout(boot, 0));
 })();

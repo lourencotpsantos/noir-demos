@@ -12,8 +12,9 @@
 <link rel="preload" as="image" type="image/webp" href="img/hero-1280.webp" imagesrcset="img/hero-1280.webp 1280w, img/hero-1920.webp 1920w" imagesizes="100vw" media="(min-width: 900px)" fetchpriority="high">
 <link rel="preload" as="font" type="font/woff2" href="fonts/bodoni-moda-latin-wght-normal.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/jost-latin-wght-normal.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/bodoni-moda-latin-wght-italic.woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
-<script>document.documentElement.classList.add('js');try{if(localStorage.getItem('hh-lang')==='en'){document.documentElement.lang='en';document.documentElement.classList.add('pre-en');}}catch(e){}</script>
+<script>(function(d){d.classList.add('js');try{if(localStorage.getItem('hh-lang')==='en'){d.lang='en';d.classList.add('pre-en');}else{var l=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];if(!l.some(function(x){return /^es\b/i.test(x);}))d.classList.add('nudge');}}catch(e){}})(document.documentElement);</script>
 <script defer src="js/main.js"></script>
 </head>
 <body>
@@ -38,11 +39,12 @@
 
 <header class="hdr" id="top">
   <div class="hdr-in">
-    <a class="brand" href="#top" aria-label="Headline Hairdresser, inicio" data-en-aria="Headline Hairdresser, home">
+    <a class="brand" href="#top">
       <span class="brand-word">Headline</span>
       <span class="brand-sub"><span data-en="Hair &amp; Nails">Peluquería &amp; Uñas</span><span class="bs-2"> · Arroyo de la Miel</span></span>
     </a>
     <nav class="nav" aria-label="Principal" data-en-aria="Main">
+      <a href="#ritual" data-en="The ritual">El ritual</a>
       <a href="#reveal" data-en="The reveal">Transformación</a>
       <a href="#carta" data-en="Menu">Carta</a>
       <a href="#look" data-en="Find your look">Tu look</a>
@@ -89,7 +91,7 @@
       <span class="stars" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
       <span><b>4,9</b> <span data-en="from 39 Google reviews">de 39 reseñas en Google</span></span>
     </a>
-    <p class="en-nudge" hidden><button type="button" class="en-nudge-btn" data-lang="en">Prefer English? <span>View the site in English</span> <svg class="ic"><use href="#i-arrow"/></svg></button></p>
+    <p class="en-nudge"><button type="button" class="en-nudge-btn" data-lang="en"><b class="n1">Prefer English?</b> <span>View the site in English</span> <svg class="ic"><use href="#i-arrow"/></svg></button></p>
   </div>
   <div class="hero-foot" aria-hidden="true">
     <div class="greet"><span class="greet-track"><span>Bienvenido</span><span>Welcome</span><span>Willkommen</span><span>Velkommen</span><span>Bienvenue</span><span>Welkom</span><span>Benvenuto</span><span>Bienvenido</span></span></div>
@@ -114,11 +116,27 @@
   </div>
 </section>
 
+<!-- RITUAL -->
+<section class="ritual" id="ritual" aria-labelledby="ritual-title">
+  <div class="rit-track">
+    <div class="rit-stage">
+      <div class="rit-head">
+        <p class="kicker" data-en="Signature · 01">Firma · 01</p>
+        <h2 id="ritual-title" class="h2" data-en-html="The salon <em>ritual</em>">El ritual del <em>salón</em></h2>
+      </div>
+      <div class="rit-frame"><img class="rit-img on" src="img/rit-1-640.webp" srcset="img/rit-1-640.webp 640w, img/rit-1-1000.webp 1000w" sizes="(min-width: 900px) 44vw, 92vw" alt="Dos estilistas atienden a una clienta" data-en-alt="Two stylists attending a client" width="1000" height="1250" loading="lazy" decoding="async"><img class="rit-img" src="img/rit-2-640.webp" srcset="img/rit-2-640.webp 640w, img/rit-2-1000.webp 1000w" sizes="(min-width: 900px) 44vw, 92vw" alt="Clienta en el lavacabezas" data-en-alt="Client at the basin" width="1000" height="1250" loading="lazy" decoding="async"><img class="rit-img" src="img/rit-3-640.webp" srcset="img/rit-3-640.webp 640w, img/rit-3-1000.webp 1000w" sizes="(min-width: 900px) 44vw, 92vw" alt="Corte con tijera" data-en-alt="Cutting with scissors" width="1000" height="1250" loading="lazy" decoding="async"><img class="rit-img" src="img/rit-4-640.webp" srcset="img/rit-4-640.webp 640w, img/rit-4-1000.webp 1000w" sizes="(min-width: 900px) 44vw, 92vw" alt="Aplicación de color con papel de aluminio" data-en-alt="Colour applied with foils" width="1000" height="1250" loading="lazy" decoding="async"><img class="rit-img" src="img/rit-5-640.webp" srcset="img/rit-5-640.webp 640w, img/rit-5-1000.webp 1000w" sizes="(min-width: 900px) 44vw, 92vw" alt="Secado con cepillo redondo" data-en-alt="Blow-dry with a round brush" width="1000" height="1250" loading="lazy" decoding="async"><img class="rit-img" src="img/rit-6-640.webp" srcset="img/rit-6-640.webp 640w, img/rit-6-1000.webp 1000w" sizes="(min-width: 900px) 44vw, 92vw" alt="Mujer sonriente con melena larga" data-en-alt="Smiling woman with long hair" width="1000" height="1250" loading="lazy" decoding="async"><span class="rit-count" aria-hidden="true"><b class="rit-cur">01</b> / 06</span></div>
+      <ol class="rit-steps"><li class="rit-step on"><span class="rit-n">01</span><h3 data-en="Consultation">Consulta</h3><p data-en="We talk about what you want and how you wear your hair day to day.">Hablamos de lo que quieres y de cómo llevas el pelo en tu día a día.</p></li><li class="rit-step"><span class="rit-n">02</span><h3 data-en="Wash">Lavado</h3><p data-en="An unhurried wash to start from scratch.">Un lavado tranquilo para empezar de cero.</p></li><li class="rit-step"><span class="rit-n">03</span><h3 data-en="Cut">Corte</h3><p data-en="The shape, made to measure, with scissors and patience.">La forma, a medida, con tijera y paciencia.</p></li><li class="rit-step"><span class="rit-n">04</span><h3 data-en="Colour">Color</h3><p data-en="Highlights, balayage or all-over colour, as agreed.">Mechas, balayage o tono completo, según lo hablado.</p></li><li class="rit-step"><span class="rit-n">05</span><h3 data-en="Blow-dry">Secado</h3><p data-en="Blow-dry and finish, so you leave looking just as you do in the mirror.">Brushing y acabado para salir a la calle tal como te ves en el espejo.</p></li><li class="rit-step"><span class="rit-n">06</span><h3 data-en="The reveal">Resultado</h3><p data-en="The mirror moment.">El momento del espejo.</p></li></ol>
+      <div class="rit-line" aria-hidden="true"><span class="rit-rail"><span class="rit-fill"></span></span><span class="rit-sc"><svg class="sc" viewBox="0 0 40 40" aria-hidden="true"><g class="blade b1"><path d="M20 20 L38 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="25" r="5.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 23 L20 20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></g><g class="blade b2"><path d="M20 20 L38 26" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="15" r="5.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 17 L20 20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></g><circle cx="20" cy="20" r="1.6" fill="currentColor"/></svg></span><ol class="rit-ticks"><li><span data-en="Consultation">Consulta</span></li><li><span data-en="Wash">Lavado</span></li><li><span data-en="Cut">Corte</span></li><li><span data-en="Colour">Color</span></li><li><span data-en="Blow-dry">Secado</span></li><li><span data-en="The reveal">Resultado</span></li></ol></div>
+      <p class="fine rit-note" data-en="Indicative steps; illustrative images, not the salon.">Pasos orientativos; imágenes ilustrativas, no son del salón.</p>
+    </div>
+  </div>
+</section>
+
 <!-- BEFORE / AFTER -->
 <section class="reveal" id="reveal" aria-labelledby="reveal-title">
   <div class="wrap reveal-grid">
     <div class="reveal-copy">
-      <p class="kicker" data-en="Signature · 01">Firma · 01</p>
+      <p class="kicker" data-en="Signature · 02">Firma · 02</p>
       <h2 id="reveal-title" class="h2" data-en-html="The <em>reveal</em>">La <em>transformación</em></h2>
       <p class="lede" data-en="Drag sideways to compare. Choose a service to see what changes.">Arrastra hacia los lados para comparar. Elige un servicio para ver qué cambia.</p>
       <div class="tabs" role="tablist" aria-label="Transformación" data-en-aria="Transformation">
@@ -159,12 +177,12 @@
       <div class="carta-list" id="carta-list"></div>
       <div class="carta-peek" aria-hidden="true">
         <div class="peek-frame">
-          <img src="img/cut-800.webp" data-k="cut" alt="" width="800" height="533" loading="lazy" decoding="async" class="on">
-          <img src="img/blow-800.webp" data-k="blow" alt="" width="800" height="534" loading="lazy" decoding="async">
-          <img src="img/curl-800.webp" data-k="curl" alt="" width="800" height="533" loading="lazy" decoding="async">
-          <img src="img/wash-800.webp" data-k="wash" alt="" width="800" height="533" loading="lazy" decoding="async">
-          <img src="img/men-640.webp" data-k="men" alt="" width="640" height="800" loading="lazy" decoding="async">
-          <img src="img/nails-800.webp" data-k="nails" alt="" width="800" height="533" loading="lazy" decoding="async">
+          <img src="img/cut-800.webp" srcset="img/cut-800.webp 800w, img/cut-1400.webp 1400w" sizes="38vw" data-k="cut" alt="" width="800" height="533" loading="lazy" decoding="async" class="on">
+          <img src="img/blow-800.webp" srcset="img/blow-800.webp 800w, img/blow-1400.webp 1400w" sizes="38vw" data-k="blow" alt="" width="800" height="534" loading="lazy" decoding="async">
+          <img src="img/curl-800.webp" srcset="img/curl-800.webp 800w, img/curl-1400.webp 1400w" sizes="38vw" data-k="curl" alt="" width="800" height="533" loading="lazy" decoding="async">
+          <img src="img/wash-800.webp" srcset="img/wash-800.webp 800w, img/wash-1400.webp 1400w" sizes="38vw" data-k="wash" alt="" width="800" height="533" loading="lazy" decoding="async">
+          <img src="img/men-640.webp" srcset="img/men-640.webp 640w, img/men-1100.webp 1100w" sizes="38vw" data-k="men" alt="" width="640" height="800" loading="lazy" decoding="async">
+          <img src="img/nails-800.webp" srcset="img/nails-800.webp 800w, img/nails-1400.webp 1400w" sizes="38vw" data-k="nails" alt="" width="800" height="533" loading="lazy" decoding="async">
         </div>
         <p class="peek-cap"><span class="peek-name">Corte</span><span class="fine" data-en="Illustrative image">Imagen ilustrativa</span></p>
       </div>
@@ -177,12 +195,13 @@
 <section class="look" id="look" aria-labelledby="look-title">
   <div class="wrap look-grid">
     <div class="look-stage" aria-hidden="true">
-      <img class="look-photo" src="img/fly-640.webp" srcset="img/fly-640.webp 640w, img/fly-1100.webp 1100w" sizes="(min-width: 900px) 40vw, 92vw" alt="" width="1100" height="1650" loading="lazy" decoding="async">
-      <span class="tint t-miel"></span><span class="tint t-cobre"></span><span class="tint t-choco"></span><span class="tint t-ceniza"></span><span class="tint t-rosa"></span>
+      <img class="look-photo" src="img/look-640.webp" srcset="img/look-640.webp 640w, img/look-1000.webp 1000w" sizes="(min-width: 900px) 44vw, 92vw" alt="" width="1000" height="1250" loading="lazy" decoding="async">
+      <span class="tone" data-t="miel"><span class="tone-in"></span></span><span class="tone" data-t="cobre"><span class="tone-in"></span></span><span class="tone" data-t="choco"><span class="tone-in"></span></span><span class="tone" data-t="ceniza"><span class="tone-in"></span></span><span class="tone" data-t="rosa"><span class="tone-in"></span></span>
+      <span class="look-cap fine" data-en="Illustrative image · hair-only colour preview">Imagen ilustrativa · color solo en el pelo</span>
       <span class="look-name"><em class="look-name-txt" data-en="Natural">Natural</em></span>
     </div>
     <div class="look-panel">
-      <p class="kicker" data-en="Signature · 02">Firma · 02</p>
+      <p class="kicker" data-en="Signature · 03">Firma · 03</p>
       <h2 id="look-title" class="h2" data-en-html="Find your <em>look</em>">Encuentra tu <em>look</em></h2>
       <ol class="steps" aria-label="Pasos" data-en-aria="Steps"><li class="on">1</li><li>2</li><li>3</li></ol>
       <div class="q q1 on" data-q="1">
@@ -235,7 +254,7 @@
 <section class="unas" id="unas" aria-labelledby="unas-title">
   <div class="wrap unas-grid">
     <div class="unas-copy">
-      <p class="kicker" data-en="Signature · 03">Firma · 03</p>
+      <p class="kicker" data-en="Signature · 04">Firma · 04</p>
       <h2 id="unas-title" class="h2" data-en-html="The <em>colour</em> fan">El abanico de <em>color</em></h2>
       <p class="lede" data-en="Fan through the shades and choose one for your manicure. We note it on your appointment.">Abre el abanico y elige el tono de tu manicura. Lo anotamos en tu cita.</p>
       <div class="lacquer">
@@ -249,7 +268,7 @@
       <p class="fine" data-en="Shade names written for this concept. Colours and brands [to be confirmed] with the salon.">Nombres de tonos creados para este concepto. Colores y marcas [por confirmar] con el salón.</p>
     </div>
     <div class="fan-wrap">
-      <div class="fan" role="radiogroup" aria-label="Tonos de esmalte" data-en-aria="Polish shades"></div>
+      <div class="fan-col"><div class="fan" aria-hidden="true"></div><div class="nail-row" role="radiogroup" aria-label="Tonos de esmalte" data-en-aria="Polish shades"></div></div>
       <figure class="unas-photo">
         <img src="img/red-640.webp" srcset="img/red-640.webp 640w, img/red-1100.webp 1100w" sizes="(min-width: 900px) 260px, 46vw" alt="Manos con manicura roja" data-en-alt="Hands with a red manicure" width="1100" height="1650" loading="lazy" decoding="async">
         <figcaption class="fine" data-en="Illustrative image">Imagen ilustrativa</figcaption>
@@ -315,11 +334,15 @@
         <p class="t-msg-l" data-en="Your message">Tu mensaje</p>
         <pre class="t-msg" id="t-msg"></pre>
         <div class="t-actions">
-          <a class="btn btn-gold t-call" href="tel:+34952442624"><svg class="ic"><use href="#i-phone"/></svg><span data-en="Call 952 44 26 24">Llamar 952 44 26 24</span></a>
+          <button type="button" class="btn btn-gold t-confirm"><svg class="ic"><use href="#i-check"/></svg><span data-en="Confirm request">Confirmar solicitud</span></button>
+          <a class="btn btn-line t-call" href="tel:+34952442624"><svg class="ic"><use href="#i-phone"/></svg><span data-en="Call 952 44 26 24">Llamar 952 44 26 24</span></a>
           <button type="button" class="btn btn-line t-copy"><svg class="ic"><use href="#i-copy"/></svg><span data-en="Copy message">Copiar mensaje</span></button>
           <button type="button" class="btn btn-wa t-wa" aria-disabled="true"><svg class="ic"><use href="#i-wa"/></svg><span data-en="WhatsApp [number to be confirmed]">WhatsApp [número por confirmar]</span></button>
         </div>
         <p class="t-status fine" role="status"></p>
+        <div class="t-comb" aria-hidden="true"><svg viewBox="0 0 60 400" preserveAspectRatio="none"><defs><linearGradient id="cg" x1="0" x2="1"><stop offset="0" stop-color="#e8cc9e"/><stop offset="1" stop-color="#a5814f"/></linearGradient></defs><rect x="34" y="0" width="22" height="400" rx="6" fill="url(#cg)"/><g fill="url(#cg)"><rect x="4" y="8" width="32" height="6" rx="3"/><rect x="4" y="21" width="32" height="6" rx="3"/><rect x="4" y="34" width="32" height="6" rx="3"/><rect x="4" y="47" width="32" height="6" rx="3"/><rect x="4" y="60" width="32" height="6" rx="3"/><rect x="4" y="73" width="32" height="6" rx="3"/><rect x="4" y="86" width="32" height="6" rx="3"/><rect x="4" y="99" width="32" height="6" rx="3"/><rect x="4" y="112" width="32" height="6" rx="3"/><rect x="4" y="125" width="32" height="6" rx="3"/><rect x="4" y="138" width="32" height="6" rx="3"/><rect x="4" y="151" width="32" height="6" rx="3"/><rect x="4" y="164" width="32" height="6" rx="3"/><rect x="4" y="177" width="32" height="6" rx="3"/><rect x="4" y="190" width="32" height="6" rx="3"/><rect x="4" y="203" width="32" height="6" rx="3"/><rect x="4" y="216" width="32" height="6" rx="3"/><rect x="4" y="229" width="32" height="6" rx="3"/><rect x="4" y="242" width="32" height="6" rx="3"/><rect x="4" y="255" width="32" height="6" rx="3"/><rect x="4" y="268" width="32" height="6" rx="3"/><rect x="4" y="281" width="32" height="6" rx="3"/><rect x="4" y="294" width="32" height="6" rx="3"/><rect x="4" y="307" width="32" height="6" rx="3"/><rect x="4" y="320" width="32" height="6" rx="3"/><rect x="4" y="333" width="32" height="6" rx="3"/><rect x="4" y="346" width="32" height="6" rx="3"/><rect x="4" y="359" width="32" height="6" rx="3"/><rect x="4" y="372" width="32" height="6" rx="3"/><rect x="4" y="385" width="32" height="6" rx="3"/></g></svg></div>
+        <div class="t-sheen" aria-hidden="true"></div>
+        <p class="t-stamp" aria-hidden="true"><span data-en="Appointment">Cita</span><b data-en="requested">solicitada</b></p>
       </div>
     </aside>
   </div>
