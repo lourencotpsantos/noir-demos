@@ -38,6 +38,7 @@
     <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3.2l2.6 5.5 6 .7-4.4 4.1 1.2 5.9L12 16.5l-5.4 2.9 1.2-5.9-4.4-4.1 6-.7z"/></symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></symbol>
     <symbol id="i-ext" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.3s-7.6-4.6-9-9.6C2 7.2 4.3 4.5 7.3 4.5c2 0 3.5 1.1 4.7 2.8 1.2-1.7 2.7-2.8 4.7-2.8 3 0 5.3 2.7 4.3 6.2-1.4 5-9 9.6-9 9.6z"/></symbol>
   </defs>
 </svg>
 
@@ -73,22 +74,25 @@
 <section class="hero" id="inicio" aria-labelledby="hero-title">
   <div class="sky" aria-hidden="true">
     <div class="sky-scale">
-      <picture>
-        <source media="(max-width: 820px) and (orientation: portrait)" type="image/webp" srcset="img/hero-m-800.webp 800w, img/hero-m-1400.webp 1400w" sizes="100vw">
-        <img class="sky-day" src="img/hero-1600.webp" srcset="img/hero-1600.webp 1600w, img/hero-2400.webp 2400w" sizes="100vw" width="2400" height="1201" alt="" fetchpriority="high" decoding="async">
-      </picture>
-      <picture class="sky-dusk-wrap">
-        <source media="(max-width: 820px) and (orientation: portrait)" type="image/webp" data-srcset="img/dusk-m-1000.webp">
-        <img class="sky-dusk" data-src="img/dusk-1600.webp" data-srcset="img/dusk-1600.webp 1600w, img/dusk-2400.webp 2400w" sizes="100vw" width="2400" height="1201" alt="" decoding="async">
-      </picture>
+      <div class="sky-push">
+        <picture>
+          <source media="(max-width: 820px) and (orientation: portrait)" type="image/webp" srcset="img/hero-m-800.webp 800w, img/hero-m-1400.webp 1400w" sizes="100vw">
+          <img class="sky-day" src="img/hero-1600.webp" srcset="img/hero-1600.webp 1600w, img/hero-2400.webp 2400w" sizes="100vw" width="2400" height="1581" alt="" fetchpriority="high" decoding="async">
+        </picture>
+        <picture class="sky-dusk-wrap">
+          <source media="(max-width: 820px) and (orientation: portrait)" type="image/webp" data-srcset="img/dusk-m-1000.webp">
+          <img class="sky-dusk" data-src="img/dusk-1600.webp" data-srcset="img/dusk-1600.webp 1600w, img/dusk-2400.webp 2400w" sizes="100vw" width="2400" height="1581" alt="" decoding="async">
+        </picture>
+      </div>
     </div>
     <div class="light"><span class="light-sun"></span><span class="light-beam"></span></div>
     <div class="sky-shade"></div>
+    <div class="sky-grain"></div>
   </div>
 
   <div class="wrap hero-inner">
     <p class="kicker hero-kicker"><span data-i18n="heroKicker">Inmobiliaria independiente en Málaga</span> <span class="kicker-rule" aria-hidden="true"></span> <span data-i18n="heroSince">desde 2015</span></p>
-    <h1 id="hero-title" class="display hero-title"><span class="ln"><span data-i18n="heroL1">Su casa en Málaga,</span></span> <span class="ln"><em data-i18n="heroL2">bajo la mejor luz.</em></span></h1>
+    <h1 id="hero-title" class="display hero-title"><span class="ln" data-i18n="heroL1" data-split><span class="w"><span style="--i:0">Su</span></span> <span class="w"><span style="--i:1">casa</span></span> <span class="w"><span style="--i:2">en</span></span> <span class="w"><span style="--i:3">Málaga,</span></span></span> <em class="ln" data-i18n="heroL2" data-split><span class="w"><span style="--i:4">bajo</span></span> <span class="w"><span style="--i:5">la</span></span> <span class="w"><span style="--i:6">mejor</span></span> <span class="w"><span style="--i:7">luz.</span></span></em></h1>
     <p class="lede hero-lede" data-i18n="heroLede">Pisos, casas y terrenos en Málaga y la Costa del Sol. Busque en el mapa, pida una valoración gratuita o venda con un método claro, paso a paso.</p>
 
     <form class="hero-search" id="hero-search" role="search" aria-label="Buscar inmuebles" data-i18n-attr="aria-label:searchLabel">
@@ -116,125 +120,121 @@
     </div>
     <button type="button" class="en-path" data-goto-en><span lang="en">Buying from abroad? <strong>Read in English</strong></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
   </div>
-  <p class="hero-cap" data-i18n="heroCap">Vista desde Gibralfaro · imagen ilustrativa</p>
+  <a class="scroll-cue" href="#buscar" aria-label="Ir al buscador" data-i18n-attr="aria-label:scrollCue"><span></span></a>
+  <p class="hero-cap" data-i18n="heroCap">El puerto y La Malagueta desde Gibralfaro · imagen ilustrativa</p>
 </section>
 
 <!-- ========== SEARCH ========== -->
 <section class="search" id="buscar" aria-labelledby="search-title">
   <div class="wrap">
-    <div class="sec-head">
-      <p class="eyebrow" data-i18n="searchEyebrow">Cartera actual</p>
-      <h2 id="search-title" class="display" data-i18n="searchTitle">Elija el barrio en el mapa.</h2>
-      <p class="lede" data-i18n="searchLede">Los inmuebles publicados hoy en su web, ordenados por barrio. Toque una zona: el color indica el precio medio por metro cuadrado de lo que hay en venta.</p>
-    </div>
-
-    <div class="search-grid">
-      <div class="map-card">
-        <div class="map-top">
-          <p class="map-title" data-i18n="mapTitle">Málaga y la Costa Este</p>
-          <button type="button" class="link-btn" id="map-clear" data-i18n="mapClear">Ver todas</button>
-        </div>
-        <div class="map-scroll" id="map-scroll">
-        <svg class="map" id="map" viewBox="0 0 800 600" role="group" aria-label="Mapa de zonas" data-i18n-attr="aria-label:mapLabel">
-          <defs>
-            <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="7" height="7" fill="#efe8da"/><path d="M0 0v7" stroke="#d9cdb4" stroke-width="2"/></pattern>
-            <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe6e6"/><stop offset="1" stop-color="#cdd9db"/></linearGradient>
-          </defs>
-          <!-- sea -->
-          <rect x="0" y="0" width="800" height="600" fill="url(#seaG)"/>
-          <!-- land: Málaga city -->
-          <path class="land" d="M0 0H800V318C760 312 728 326 690 322C650 318 628 300 600 304C566 309 548 326 512 330C490 332 476 316 452 318C428 320 404 338 370 336C330 334 300 318 262 322C220 326 190 344 146 340C100 336 60 322 0 326Z"/>
-          <!-- port piers -->
-          <path class="pier" d="M500 330V372H560M520 330V352M452 318l-6 44h34"/>
-          <!-- river -->
-          <path class="river" d="M452 318C456 270 440 230 448 188C456 146 438 104 446 40"/>
-          <text class="map-note" x="458" y="96" transform="rotate(-82 458 96)">Guadalmedina</text>
-          <!-- roads hint -->
-          <path class="road" d="M40 150C200 140 330 170 452 180C560 190 660 170 790 160"/>
-          <!-- zones -->
-          <g class="zone" data-zone="teatinos" tabindex="0" role="button" aria-pressed="false"><path d="M70 70C120 40 230 44 290 66C320 80 318 140 300 170C268 200 190 206 130 196C86 190 60 160 56 124C54 100 58 80 70 70Z"/><text x="180" y="120">Teatinos</text><text class="z-n" x="180" y="146"></text></g>
-          <g class="zone" data-zone="guindos" tabindex="0" role="button" aria-pressed="false"><path d="M30 238C70 222 130 222 168 232C182 262 180 300 172 336C130 344 90 334 46 328C34 300 26 266 30 238Z"/><text x="102" y="276">Los Guindos</text><text class="z-n" x="102" y="302"></text></g>
-          <g class="zone" data-zone="huelin" tabindex="0" role="button" aria-pressed="false"><path d="M184 228C230 216 290 218 320 228C332 258 334 296 326 324C292 318 262 320 226 326C206 330 190 334 184 334C178 300 176 262 184 228Z"/><text x="256" y="268">Huelin</text><text class="z-s" x="256" y="288">La Princesa</text><text class="z-n" x="256" y="310"></text></g>
-          <g class="zone" data-zone="perchel" tabindex="0" role="button" aria-pressed="false"><path d="M336 214C372 200 412 200 440 208C446 246 446 286 444 316C420 320 400 330 370 334C352 334 342 332 336 330C330 292 330 252 336 214Z"/><text x="390" y="252">Perchel</text><text class="z-s" x="390" y="272">Vialia</text><text class="z-n" x="390" y="296"></text></g>
-          <g class="zone" data-zone="centro" tabindex="0" role="button" aria-pressed="false"><path d="M462 168C510 150 570 156 600 176C612 214 606 262 598 300C570 308 548 324 514 328C490 330 474 318 460 316C454 266 452 214 462 168Z"/><text x="530" y="226">Centro</text><text class="z-s" x="530" y="246">La Victoria</text><text class="z-n" x="530" y="270"></text></g>
-          <g class="zone" data-zone="palo" tabindex="0" role="button" aria-pressed="false"><path d="M672 222C710 210 760 212 790 222V318C760 312 730 324 694 322C680 320 672 318 666 316C662 284 662 252 672 222Z"/><text x="728" y="260">El Palo</text><text class="z-n" x="728" y="286"></text></g>
-          <!-- landmarks -->
-          <g class="lm" aria-hidden="true"><circle cx="404" cy="232" r="4"/><text x="404" y="222">María Zambrano</text></g>
-          <g class="lm lm-office" aria-hidden="true"><path d="M396 196l8-7 8 7v9h-16z"/><text x="404" y="184" data-i18n="mapOffice">Profesión Casa</text></g>
-          <text class="map-sea" x="300" y="420">Mar Mediterráneo</text>
-          <!-- east coast inset -->
-          <g class="inset">
-            <rect x="16" y="452" width="768" height="132" rx="16" class="inset-bg"/>
-            <text class="inset-t" x="36" y="478" data-i18n="mapEast">Costa Este · fuera de escala</text>
-            <path class="land" d="M30 490H770V552C720 546 690 560 640 556C590 552 560 540 510 546C470 550 440 562 400 558C350 554 320 540 270 546C220 552 180 564 130 558C90 554 60 548 30 552Z"/>
-            <path class="gap" d="M200 520h80M520 520h80"/>
-            <text class="map-note" x="240" y="512">≈ 12 km</text>
-            <text class="map-note" x="560" y="512">≈ 18 km</text>
-            <text class="map-note" x="100" y="530" data-i18n="mapFromMlg">← Málaga</text>
-            <g class="zone" data-zone="rincon" tabindex="0" role="button" aria-pressed="false"><path d="M300 492C350 486 450 486 500 494V546C460 552 430 560 398 558C350 556 320 546 300 546Z"/><text x="400" y="516">Rincón de la Victoria</text><text class="z-n" x="400" y="538"></text></g>
-            <g class="zone" data-zone="torre" tabindex="0" role="button" aria-pressed="false"><path d="M620 492C670 486 730 488 764 494V550C730 548 700 556 660 556C640 556 626 554 620 552Z"/><text x="692" y="516">Torre del Mar</text><text class="z-n" x="692" y="538"></text></g>
-          </g>
-        </svg>
-        </div>
-        <p class="map-hint" data-i18n="mapHint">Deslice el mapa para ver toda la costa</p>
-        <div class="map-legend">
-          <span class="lg-bar" aria-hidden="true"></span>
-          <span class="lg-l"><span id="lg-min">—</span> <span data-i18n="lgUnit">€/m²</span></span>
-          <span class="lg-r"><span id="lg-max">—</span> <span data-i18n="lgUnit">€/m²</span></span>
-          <span class="lg-h"><span class="lg-sw" aria-hidden="true"></span><span data-i18n="lgRent">solo alquiler</span></span>
-        </div>
-        <p class="note" data-i18n="mapNote">Mapa esquemático. Precio medio por m² construido de los inmuebles en venta de esta cartera, no del mercado.</p>
-        <div class="zone-chips" id="zone-chips" role="group" aria-label="Zonas" data-i18n-attr="aria-label:zonesLabel"></div>
+    <div class="sec-head sec-head-row">
+      <div>
+        <p class="eyebrow" data-i18n="searchEyebrow">Cartera actual</p>
+        <h2 id="search-title" class="display" data-i18n="searchTitle" data-split>Elija el barrio en el mapa.</h2>
       </div>
+      <p class="lede" data-i18n="searchLede">Los inmuebles publicados hoy en su web, sobre el mapa de Málaga. Toque un barrio: se eleva según su precio medio por metro cuadrado y caen sus inmuebles.</p>
+    </div>
+  </div>
 
-      <div class="results">
-        <div class="filters" role="group" aria-label="Filtros" data-i18n-attr="aria-label:filtersLabel">
-          <div class="seg" id="f-op" role="group" aria-label="Operación" data-i18n-attr="aria-label:opLabel">
-            <button type="button" data-v="all" aria-pressed="true" data-i18n="opAll">Todo</button>
-            <button type="button" data-v="venta" aria-pressed="false" data-i18n="opBuy">Comprar</button>
-            <button type="button" data-v="alquiler" aria-pressed="false" data-i18n="opRent">Alquilar</button>
-          </div>
-          <label class="sel"><span class="f-l" data-i18n="fType">Tipo</span>
-            <select id="f-type">
-              <option value="" data-i18n="tAll">Todos</option>
-              <option value="piso" data-i18n="tPiso">Piso</option>
-              <option value="casa" data-i18n="tCasa">Casa</option>
-              <option value="estudio" data-i18n="tEstudio">Estudio</option>
-              <option value="habitacion" data-i18n="tHab">Habitación</option>
-              <option value="garaje" data-i18n="tGaraje">Garaje</option>
-            </select>
-          </label>
-          <div class="beds" role="group" aria-label="Dormitorios" data-i18n-attr="aria-label:fBeds">
-            <span class="f-l" data-i18n="fBeds">Dormitorios</span>
-            <div class="seg seg-s" id="f-beds">
-              <button type="button" data-v="0" aria-pressed="true" data-i18n="any">Todos</button>
-              <button type="button" data-v="2" aria-pressed="false">2+</button>
-              <button type="button" data-v="3" aria-pressed="false">3+</button>
-              <button type="button" data-v="4" aria-pressed="false">4+</button>
-            </div>
-          </div>
-          <label class="range"><span class="f-l"><span data-i18n="fMax">Precio máx. (venta)</span> <output id="f-max-o" for="f-max">—</output></span>
-            <input type="range" id="f-max" min="150000" max="800000" step="10000" value="800000">
-          </label>
-          <label class="sel"><span class="f-l" data-i18n="fSort">Orden</span>
-            <select id="f-sort">
-              <option value="rec" data-i18n="sRec">Destacados</option>
-              <option value="asc" data-i18n="sAsc">Precio ↑</option>
-              <option value="desc" data-i18n="sDesc">Precio ↓</option>
-              <option value="m2" data-i18n="sM2">Más metros</option>
-            </select>
-          </label>
+  <div class="map-stage">
+    <div class="wrap map-head">
+      <div class="map-legend">
+        <span class="lg-k" data-i18n="lgK">€/m² medio en venta</span>
+        <span class="lg-bar" aria-hidden="true"></span>
+        <span class="lg-ends"><span id="lg-min">—</span><span id="lg-max">—</span></span>
+        <span class="lg-h"><span class="lg-sw" aria-hidden="true"></span><span data-i18n="lgRent">solo alquiler</span></span>
+      </div>
+      <button type="button" class="link-btn" id="map-clear" data-i18n="mapClear" hidden>Ver todas</button>
+    </div>
+    <div class="map-frame">
+      <div class="map-scroll" id="map-scroll"></div>
+      <div class="map-east-wrap"></div>
+      <p class="map-osm">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</p>
+      <p class="map-hint" data-i18n="mapHint">Deslice el mapa para ver toda la ciudad</p>
+    </div>
+    <div class="wrap">
+      <div class="zone-chips" id="zone-chips" role="group" aria-label="Zonas" data-i18n-attr="aria-label:zonesLabel"></div>
+      <p class="note" data-i18n="mapNote">Barrios según OpenStreetMap. Los pines marcan el barrio, no la dirección exacta. El color y la altura indican el precio medio por m² construido de los inmuebles en venta de esta cartera, no del mercado.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="results" id="results">
+      <div class="filters" role="group" aria-label="Filtros" data-i18n-attr="aria-label:filtersLabel">
+        <div class="seg" id="f-op" role="group" aria-label="Operación" data-i18n-attr="aria-label:opLabel">
+          <button type="button" data-v="all" aria-pressed="true" data-i18n="opAll">Todo</button>
+          <button type="button" data-v="venta" aria-pressed="false" data-i18n="opBuy">Comprar</button>
+          <button type="button" data-v="alquiler" aria-pressed="false" data-i18n="opRent">Alquilar</button>
         </div>
-        <p class="count" aria-live="polite"><strong id="count-n">12</strong> <span id="count-t">inmuebles</span> <span id="count-z"></span></p>
-        <div class="cards" id="cards"></div>
-        <div class="empty" id="empty" hidden>
-          <p class="display-s" data-i18n="emptyT">Nada con estos filtros… todavía.</p>
-          <p data-i18n="emptyD">Cuéntenos qué busca y le avisamos cuando entre algo así: muchas operaciones se cierran con su banco de datos de compradores antes de publicarse.</p>
-          <a class="btn btn-ink" id="empty-wa" href="#" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg><span data-i18n="emptyCta">Díganos qué busca</span></a>
+        <label class="sel"><span class="f-l" data-i18n="fType">Tipo</span>
+          <select id="f-type">
+            <option value="" data-i18n="tAll">Todos</option>
+            <option value="piso" data-i18n="tPiso">Piso</option>
+            <option value="casa" data-i18n="tCasa">Casa</option>
+            <option value="estudio" data-i18n="tEstudio">Estudio</option>
+            <option value="habitacion" data-i18n="tHab">Habitación</option>
+            <option value="garaje" data-i18n="tGaraje">Garaje</option>
+          </select>
+        </label>
+        <div class="beds" role="group" aria-label="Dormitorios" data-i18n-attr="aria-label:fBeds">
+          <span class="f-l" data-i18n="fBeds">Dormitorios</span>
+          <div class="seg seg-s" id="f-beds">
+            <button type="button" data-v="0" aria-pressed="true" data-i18n="any">Todos</button>
+            <button type="button" data-v="2" aria-pressed="false">2+</button>
+            <button type="button" data-v="3" aria-pressed="false">3+</button>
+            <button type="button" data-v="4" aria-pressed="false">4+</button>
+          </div>
         </div>
-        <p class="note" data-i18n="listNote">Inmuebles, precios y fotos tal y como aparecen hoy en profesioncasa.com. Disponibilidad por confirmar con la oficina.</p>
+        <label class="range"><span class="f-l"><span data-i18n="fMax">Precio máx. (venta)</span> <output id="f-max-o" for="f-max">—</output></span>
+          <input type="range" id="f-max" min="150000" max="800000" step="10000" value="800000">
+        </label>
+        <label class="sel"><span class="f-l" data-i18n="fSort">Orden</span>
+          <select id="f-sort">
+            <option value="rec" data-i18n="sRec">Destacados</option>
+            <option value="asc" data-i18n="sAsc">Precio ↑</option>
+            <option value="desc" data-i18n="sDesc">Precio ↓</option>
+            <option value="m2" data-i18n="sM2">Más metros</option>
+          </select>
+        </label>
+        <button type="button" class="fav-filter" id="f-fav" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg><span data-i18n="favs">Favoritos</span> <b id="fav-n">0</b></button>
+      </div>
+      <p class="count" aria-live="polite"><strong id="count-n">12</strong> <span id="count-t">inmuebles</span> <span id="count-z"></span></p>
+      <div class="cards" id="cards"></div>
+      <div class="empty" id="empty" hidden>
+        <p class="display-s" data-i18n="emptyT">Nada con estos filtros… todavía.</p>
+        <p data-i18n="emptyD">Cuéntenos qué busca y le avisamos cuando entre algo así: muchas operaciones se cierran con su banco de datos de compradores antes de publicarse.</p>
+        <a class="btn btn-ink" id="empty-wa" href="#" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg><span data-i18n="emptyCta">Díganos qué busca</span></a>
+      </div>
+      <p class="note" data-i18n="listNote">Inmuebles, precios y fotos tal y como aparecen hoy en profesioncasa.com. Disponibilidad por confirmar con la oficina.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PASEO ========== -->
+<section class="walk" id="paseo" aria-labelledby="walk-title">
+  <div class="walk-pin">
+    <div class="wrap walk-head">
+      <div>
+        <p class="eyebrow" data-i18n="walkEyebrow">Un paseo por el barrio</p>
+        <h2 id="walk-title" class="display"><span data-i18n="walkTitle">Un paseo por</span> <em id="walk-name">Centro</em></h2>
+      </div>
+      <div class="walk-chips" id="walk-chips" role="group" aria-label="Barrio" data-i18n-attr="aria-label:zoneLabel"></div>
+    </div>
+    <div class="walk-track" id="walk-track">
+      <div class="wk-card wk-facts">
+        <p class="wk-k" data-i18n="walkFactsK">A pie, aproximadamente</p>
+        <p class="wk-desc" id="wk-desc"></p>
+        <ul class="wk-list" id="wk-list"></ul>
+        <p class="note" data-i18n="walkNote">Tiempos orientativos a pie desde el centro del barrio (distancia en línea recta según OpenStreetMap × 1,3).</p>
+      </div>
+      <figure class="wk-photo"><div class="wk-img"><img id="wk-i1" alt="" width="1400" height="900" loading="lazy" decoding="async"></div><figcaption id="wk-c1"></figcaption></figure>
+      <figure class="wk-photo"><div class="wk-img"><img id="wk-i2" alt="" width="1400" height="900" loading="lazy" decoding="async"></div><figcaption id="wk-c2"></figcaption></figure>
+      <div class="wk-card wk-cta">
+        <p class="display-s" id="wk-cta-t"></p>
+        <a class="btn btn-gold" href="#results" id="wk-cta"><span data-i18n="walkCta">Ver los inmuebles</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
+    <div class="wrap walk-rail" aria-hidden="true"><span class="walk-fill"></span></div>
   </div>
 </section>
 
@@ -457,7 +457,7 @@
       <p data-i18n="footLegal">Aviso legal · Privacidad · Cookies [enlaces por confirmar]</p>
     </div>
     <div class="foot-notes">
-      <p data-i18n="footImg">Foto del skyline: Diego Delso, CC BY-SA 4.0, Wikimedia Commons (color editado) · imagen ilustrativa. Fotos de inmuebles: anuncios publicados en profesioncasa.com.</p>
+      <p data-i18n="footImg">Foto de portada: Ввласенко, CC BY-SA 3.0, Wikimedia Commons (color editado) · imagen ilustrativa. Fotos de barrios: autores en cada pie de foto, Wikimedia Commons · imágenes ilustrativas. Mapa: © colaboradores de OpenStreetMap (ODbL). Fotos de inmuebles: anuncios publicados en profesioncasa.com.</p>
       <p data-i18n="footDemo">Concepto de diseño de Noir Digital. No es la web oficial de Profesión Casa. Ningún formulario envía datos.</p>
     </div>
   </div>
@@ -536,6 +536,8 @@
 </div>
 
 <script src="js/listings.js" defer></script>
+<script src="js/mapdata.js" defer></script>
+<script src="js/mapsvg.js" defer></script>
 <script src="js/i18n.js" defer></script>
 <script src="js/main.js" defer></script>
 </body>

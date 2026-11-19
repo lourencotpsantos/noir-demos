@@ -137,3 +137,59 @@ PC.ui = {
     searchDesc: function (op, type, zone, beds) { return 'a ' + (type ? type.toLowerCase() : 'home') + (op === 'alquiler' ? ' to rent' : op === 'venta' ? ' to buy' : '') + (zone ? ' in ' + zone : ' in Málaga') + (beds ? ', ' + beds + '+ bedrooms' : ''); }
   }
 };
+
+/* ---- upgrade: map, walk, favourites ---- */
+(function () {
+  var e = PC.en;
+  e.heroCap = 'The port and La Malagueta from Gibralfaro · illustrative image';
+  e.scrollCue = 'Go to the property search';
+  e.searchLede = 'The properties published on their website today, on the map of Málaga. Tap a neighbourhood: it rises by its average price per square metre and its properties drop in.';
+  e.lgK = 'Average €/m² for sale';
+  e.mapHint = 'Swipe the map to see the whole city';
+  e.mapNote = 'Neighbourhoods from OpenStreetMap. Pins mark the neighbourhood, not the exact address. Colour and height show the average price per built m² of the properties for sale in this portfolio, not the market.';
+  e.favs = 'Favourites';
+  e.walkEyebrow = 'A walk around the neighbourhood'; e.walkTitle = 'A walk around';
+  e.walkFactsK = 'On foot, roughly';
+  e.walkNote = 'Approximate walking times from the centre of the neighbourhood (straight-line distance from OpenStreetMap × 1.3).';
+  e.walkCta = 'See the properties';
+  e.footImg = 'Cover photo: Ввласенко, CC BY-SA 3.0, Wikimedia Commons (colour edited) · illustrative image. Neighbourhood photos: authors in each caption, Wikimedia Commons · illustrative images. Map: © OpenStreetMap contributors (ODbL). Property photos: listings published on profesioncasa.com.';
+
+  var es = PC.ui.es, en = PC.ui.en;
+  es.favOn = 'Guardar en favoritos'; es.favOff = 'Quitar de favoritos';
+  en.favOn = 'Save to favourites'; en.favOff = 'Remove from favourites';
+  es.wBeach = 'Playa'; es.wMetro = 'Metro'; es.wCentre = 'Centro'; es.wCentreS = 'Plaza de la Constitución';
+  en.wBeach = 'Beach'; en.wMetro = 'Metro'; en.wCentre = 'Old town'; en.wCentreS = 'Plaza de la Constitución';
+  es.illus = 'Imagen ilustrativa'; en.illus = 'Illustrative image';
+  es.walkCtaT = function (n, z) { return n === 1 ? 'Hoy hay 1 inmueble en ' + z + '.' : 'Hoy hay ' + n + ' inmuebles en ' + z + '.'; };
+  en.walkCtaT = function (n, z) { return n === 1 ? 'There is 1 property in ' + z + ' today.' : 'There are ' + n + ' properties in ' + z + ' today.'; };
+  es.walk = {
+    centro: { d: 'El casco histórico: calle Larios, la Catedral, el mercado de Atarazanas y el Museo Picasso, todo a pie.' },
+    perchel: { d: 'Junto a la estación María Zambrano (AVE y Cercanías) y el centro comercial Vialia, a un paso del río Guadalmedina.' },
+    huelin: { d: 'Barrio marinero junto a las playas de San Andrés y Huelin, con su parque y la línea 2 de metro.' },
+    guindos: { d: 'Junto a la playa de la Misericordia y su paseo marítimo; la chimenea de Los Guindos es su emblema.' },
+    teatinos: { d: 'Barrio moderno de bulevares y parques junto al campus de Teatinos de la Universidad de Málaga.' },
+    palo: { d: 'Barrio marinero de playas, espetos y chiringuitos en el extremo este de la ciudad.' },
+    rincon: { d: 'Municipio costero al este de Málaga: playas, paseo marítimo y la Cueva del Tesoro.', f: [['Playa', 'En el municipio', 'Paseo marítimo'], ['Málaga centro', '≈ 13 km', 'en línea recta']] },
+    torre: { d: 'Núcleo costero de Vélez-Málaga con un largo paseo marítimo y su faro.', f: [['Playa', 'En el núcleo', 'Paseo marítimo'], ['Málaga centro', '≈ 29 km', 'en línea recta']] }
+  };
+  en.walk = {
+    centro: { d: 'The old town: Calle Larios, the Cathedral, Atarazanas market and the Picasso Museum, all on foot.' },
+    perchel: { d: 'Next to María Zambrano station (high-speed and commuter trains) and the Vialia shopping centre, a step from the Guadalmedina river.' },
+    huelin: { d: 'A seaside neighbourhood by San Andrés and Huelin beaches, with its park and metro line 2.' },
+    guindos: { d: 'Beside Misericordia beach and its promenade; the old Los Guindos chimney is its landmark.' },
+    teatinos: { d: 'A modern district of boulevards and parks next to the University of Málaga’s Teatinos campus.' },
+    palo: { d: 'A fishing neighbourhood of beaches, sardine skewers (espetos) and beach bars at the city’s eastern end.' },
+    rincon: { d: 'A coastal town east of Málaga: beaches, a seafront promenade and the Cueva del Tesoro cave.', f: [['Beach', 'In town', 'Seafront promenade'], ['Málaga old town', '≈ 13 km', 'straight line']] },
+    torre: { d: 'The coastal part of Vélez-Málaga, with a long promenade and its lighthouse.', f: [['Beach', 'In town', 'Seafront promenade'], ['Málaga old town', '≈ 29 km', 'straight line']] }
+  };
+  PC.walkPhotos = {
+    centro: [{ alt: { es: 'Plaza de la Merced', en: 'Plaza de la Merced' }, by: 'Diego Delso', lic: 'CC BY-SA 4.0' }, { alt: { es: 'Centro histórico', en: 'The old town' }, by: 'Matti Blume', lic: 'CC BY-SA 4.0' }],
+    perchel: [{ alt: { es: 'Estación María Zambrano', en: 'María Zambrano station' }, by: 'Johannes Schwanbeck', lic: 'CC BY-SA 2.0' }, { alt: { es: 'Puente del Perchel de noche', en: 'Puente del Perchel at night' }, by: 'Z thomas', lic: 'CC BY 4.0' }],
+    huelin: [{ alt: { es: 'Playa de Huelin', en: 'Huelin beach' }, by: 'Tyk', lic: 'CC BY-SA 3.0' }, { alt: { es: 'Barcas en la playa de San Andrés', en: 'Boats on San Andrés beach' }, by: 'Tyk', lic: 'CC BY-SA 3.0' }],
+    guindos: [{ alt: { es: 'Playa de la Misericordia', en: 'Misericordia beach' }, by: 'Cesnaro98', lic: 'CC BY-SA 4.0' }, { alt: { es: 'La chimenea de Los Guindos', en: 'The Los Guindos chimney' }, by: 'Mentxuwiki', lic: 'CC BY-SA 4.0' }],
+    teatinos: [{ alt: { es: 'Bulevar Louis Pasteur', en: 'Bulevar Louis Pasteur' }, by: 'Tyk', lic: 'CC BY-SA 3.0' }, { alt: { es: 'Fuente de Teatinos', en: 'Teatinos fountain' }, by: 'Daniel Capilla', lic: 'CC BY-SA 4.0' }],
+    palo: [{ alt: { es: 'El Palo al atardecer', en: 'El Palo at sunset' }, by: 'Alphacosmos', lic: 'CC BY-SA 4.0' }, { alt: { es: 'Playa de El Palo', en: 'El Palo beach' }, by: 'Tyk', lic: 'CC BY-SA 3.0' }],
+    rincon: [{ alt: { es: 'Playa de Rincón de la Victoria al atardecer', en: 'Rincón de la Victoria beach at dusk' }, by: 'Jebulon', lic: 'CC0' }, { alt: { es: 'Playa de La Cala del Moral', en: 'La Cala del Moral beach' }, by: 'Tyk', lic: 'CC BY-SA 3.0' }],
+    torre: [{ alt: { es: 'Playa de Torre del Mar', en: 'Torre del Mar beach' }, by: 'Colling-architektur', lic: 'CC BY-SA 3.0' }, { alt: { es: 'Paseo marítimo de Poniente', en: 'Poniente promenade' }, by: 'Dguendel', lic: 'CC BY 3.0' }]
+  };
+})();
