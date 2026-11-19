@@ -51,7 +51,8 @@
     q = 1 - Math.pow(1 - q, 2.2);
     hero.style.setProperty('--p', p.toFixed(4));
     hero.style.setProperty('--q', q.toFixed(4));
-    var isB = p > .7;
+    hero.classList.toggle('is-aout', p > .1);
+    var isB = p > .68;
     if (isB !== heroB) { heroB = isB; hero.classList.toggle('is-b', isB); heroBEl.inert = !isB; }
     heroDone = p >= 1;
   }
@@ -303,15 +304,22 @@
     var r = tarde.getBoundingClientRect(), vh = window.innerHeight;
     var t = clamp(-r.top / Math.max(1, r.height - vh), 0, 1);
     var dk = clamp(t / .42, 0, 1), nt = clamp((t - .52) / .34, 0, 1), vl = clamp((t - .22) / .2, 0, 1) * (1 - nt * .65);
-    var st = tarde.style;
-    st.setProperty('--t', t.toFixed(4)); st.setProperty('--dk', dk.toFixed(3)); st.setProperty('--nt', nt.toFixed(3)); st.setProperty('--vl', vl.toFixed(3));
-    tarde.classList.toggle('is-night', nt > .3);
+    applyT(t, dk, nt, vl);
     cands.forEach(function (c, i) { c.classList.toggle('is-lit', t >= LIT[i]); });
     var ci = t < .3 ? 0 : t < .68 ? 1 : 2;
     if (ci !== lastCap) { lastCap = ci; caps.forEach(function (c, i) { c.classList.toggle('is-on', i === ci); }); }
   }
+  var TL = { dusk: $('.ts--dusk', tarde), night: $('.ts--night', tarde), milky: $('.ts--milky', tarde), stars: $$('.tl--stars', tarde), wash: $('.tl--wash', tarde), tn: $('.tl--night', tarde), vill: $('.tl--vill', tarde), dim: $('.terr__dim', tarde), dot: $('.clock__dot', tarde) };
+  var prevO = new Map();
+  function setO(el, v) { var r = Math.round(v * 500) / 500; if (prevO.get(el) !== r) { prevO.set(el, r); el.style.opacity = r; } }
+  function applyT(t, dk, nt, vl) {
+    setO(TL.dusk, dk); setO(TL.night, nt); setO(TL.milky, nt); TL.stars.forEach(function (e) { setO(e, nt); });
+    setO(TL.wash, 1 - dk); setO(TL.tn, nt); setO(TL.vill, vl); setO(TL.dim, dk * .5 + nt * .38);
+    var w = TL.dot.parentNode.clientWidth; TL.dot.style.transform = 'translate3d(' + (t * w).toFixed(1) + 'px,0,0)';
+    tarde.classList.toggle('is-night', nt > .3);
+  }
   function requestTarde() { if (tOn && !tTick) { tTick = true; requestAnimationFrame(tardeFrame); } }
-  if (reduced) { cands.forEach(function (c) { c.classList.add('is-lit'); }); caps.forEach(function (c) { c.classList.add('is-on'); }); tarde.classList.add('is-vis'); }
+  if (reduced) { applyT(.7, 1, .55, .7); cands.forEach(function (c) { c.classList.add('is-lit'); }); caps.forEach(function (c) { c.classList.add('is-on'); }); tarde.classList.add('is-vis'); }
   else new IntersectionObserver(function (es) { tOn = es[0].isIntersecting; tarde.classList.toggle('is-vis', tOn); if (tOn) requestTarde(); }).observe(tarde);
 
   /* ---------- nav scrollspy ---------- */

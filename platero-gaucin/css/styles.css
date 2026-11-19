@@ -557,3 +557,43 @@ p, dd, blockquote { text-wrap: pretty; }
   .casa__img img, .plate { transform: none; }
   .kicker.rv::before { transform: scaleX(1); }
 }
+/* upgrade refinements */
+.rays { opacity: .5; }
+.pano__lbl text { stroke: rgba(30, 20, 40, .45); stroke-width: 3px; }
+.terr__wall { height: 5%; background: linear-gradient(180deg, #e2d6c6 0%, #c8b8a5 22%, #a89784 100%); }
+.terr__wall::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: rgba(255, 236, 205, .7); opacity: calc(1 - var(--dk, 0)); }
+.cap { background: rgba(12, 9, 18, .66); border: 1px solid rgba(255, 240, 220, .12); border-radius: 14px; padding: 16px 18px; }
+@media (min-width: 960px) { .cap { max-width: 470px; } }
+/* text reveals are class-based (never half-faded mid-scroll) */
+.hero__a { opacity: 1; transform: none; transition: opacity .5s var(--ease), transform .6s var(--ease); }
+.hero.is-aout .hero__a { opacity: 0; transform: translateY(-30px); pointer-events: none; }
+.hero__b { opacity: 0; transform: translateY(22px); transition: opacity .6s var(--ease), transform .7s var(--ease); }
+.hero.is-b .hero__b { opacity: 1; transform: none; }
+.pano__lbl { opacity: 0; transition: opacity .6s .15s var(--ease); }
+.hero.is-b .pano__lbl { opacity: 1; }
+.rays { opacity: .35; }
+@media (prefers-reduced-motion: reduce) { .vista .hero__b, .vista .pano__lbl { opacity: 1; transform: none; } }
+
+/* composited layers: animated parts live in their own SVGs and only change opacity/transform */
+.pl, .tl { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pl--rays { transform: translate3d(0, calc(var(--q, 0) * 60px - 30px), 0); animation: breathe 7s ease-in-out infinite alternate; will-change: opacity, transform; }
+@keyframes breathe { from { opacity: .2; } to { opacity: .5; } }
+.pl--glit { opacity: 0; transform: translate3d(0, calc((1 - var(--q, 0)) * 90px), 0); will-change: opacity, transform; }
+.hero.is-b .pl--ga { animation: glA 2.4s ease-in-out infinite alternate; }
+.hero.is-b .pl--gb { animation: glA 2.4s 1.2s ease-in-out infinite alternate; }
+.hero.is-clear .pl--glit { animation-duration: 1.6s; }
+@keyframes glA { from { opacity: .1; } to { opacity: 1; } }
+.hero:not(.is-vis) .pl--rays, .hero:not(.is-vis) .pl--glit { animation-play-state: paused; }
+.ts--dusk, .ts--night, .ts--milky, .tl--stars, .tl--wash, .tl--night, .tl--vill, .terr__dim { will-change: opacity; }
+.ts--dusk, .ts--night, .ts--milky, .tl--stars, .tl--night, .tl--vill, .terr__dim { opacity: 0; }
+.tl--tw g { animation: twk2 3.2s ease-in-out infinite alternate; }
+.tarde:not(.is-night) .tl--tw g, .tarde:not(.is-vis) .tl--tw g { animation-play-state: paused; }
+.terr__wall::after, .terr__floor::after { display: none; }
+.terr__dim { position: absolute; left: 0; right: 0; bottom: 0; height: 35%; background: #0a0912; }
+.clock__dot { transform: none; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .pl--rays { opacity: .35; } .pl--glit { opacity: .6; } }
+
+.tl--tw g { animation: none; }
+.twwrap { animation: twW 2.8s ease-in-out infinite alternate; will-change: opacity; }
+@keyframes twW { from { opacity: .35; } to { opacity: 1; } }
+.tarde:not(.is-night) .twwrap, .tarde:not(.is-vis) .twwrap { animation-play-state: paused; }
