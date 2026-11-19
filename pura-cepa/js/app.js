@@ -84,7 +84,11 @@
   function openNow() {
     var box = $('#openNow');
     var h;
-    try { h = +new Intl.DateTimeFormat('en-GB', { hour: 'numeric', hour12: false, timeZone: 'Europe/Madrid' }).format(new Date()); } catch (e) { h = new Date().getHours(); }
+    /* Madrid hour without Intl (its time-zone data is slow to load on phones): CET, CEST from the last Sunday of March to the last Sunday of October, 01:00 UTC */
+    var now = new Date(), y = now.getUTCFullYear();
+    var lastSun = function (m) { var d = new Date(Date.UTC(y, m + 1, 0, 1)); d.setUTCDate(d.getUTCDate() - d.getUTCDay()); return d; };
+    var off = now >= lastSun(2) && now < lastSun(9) ? 2 : 1;
+    h = (now.getUTCHours() + off) % 24;
     var open = h >= 11 || h < 2;
     box.classList.toggle('is-closed', !open);
     box.innerHTML = '<span class="dot" aria-hidden="true"></span>' + (open
@@ -217,7 +221,8 @@
   var TYPE_ORDER = ['gen', 'bla', 'tin', 'ros', 'esp', 'dul', 'gen2', 'ver'];
   var grapes = {};
   P.W.forEach(function (w) { (w.g || '').split(/,\s*| y /).forEach(function (g) { g = g.trim(); if (g) grapes[g] = (grapes[g] || 0) + 1; }); });
-  var grapeList = Object.keys(grapes).sort(function (a, b) { return a.localeCompare(b, 'es'); });
+  var plain = function (x) { return x.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
+  var grapeList = Object.keys(grapes).sort(function (a, b) { var x = plain(a), z = plain(b); return x < z ? -1 : x > z ? 1 : 0; });
 
   function buildFilters() {
     var ft = $('#fType'); ft.innerHTML = '';
@@ -766,10 +771,15 @@
     $$('.js-group').forEach(function (s) { var v = s.value || '8'; var o = ''; [6, 8, 10, 12, 15, 20, 25, 30].forEach(function (i) { o += '<option value="' + i + '"' + (String(i) === v ? ' selected' : '') + '>' + i + '</option>'; }); o += '<option value="30+"' + (v === '30+' ? ' selected' : '') + '>30+</option>'; s.innerHTML = o; });
   }
   fillSelects();
+  /* date words without Intl (keeps phones from loading locale data mid-scroll) */
+  var MON = { es: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'], en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] };
+  var DOW = { es: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'], en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] };
+  function longDate(d) { return lang === 'en' ? DOW.en[d.getDay()] + ' ' + d.getDate() + ' ' + MON.en[d.getMonth()] : DOW.es[d.getDay()] + ', ' + d.getDate() + ' de ' + MON.es[d.getMonth()]; }
+  function monthYear(d) { return lang === 'en' ? MON.en[d.getMonth()] + ' ' + d.getFullYear() : MON.es[d.getMonth()] + ' de ' + d.getFullYear(); }
   function niceDate(v) {
     if (!v) return '';
     var p = v.split('-'); var d = new Date(+p[0], +p[1] - 1, +p[2]);
-    return d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+    return longDate(d);
   }
   function fieldErr(input, on) {
     var f = input.closest('.field'); if (!f) return;
@@ -826,7 +836,7 @@
   }
   function renderCal() {
     var m = new Date(calBase.getFullYear(), calBase.getMonth() + calOff, 1);
-    $('#calM').textContent = cap(m.toLocaleDateString(lang === 'en' ? 'en-GB' : 'es-ES', { month: 'long', year: 'numeric' }));
+    $('#calM').textContent = cap(monthYear(m));
     $('#calPrev').disabled = calOff <= 0; $('#calNext').disabled = calOff >= 2;
     var g = $('#calGrid'); g.innerHTML = '';
     var dows = lang === 'en' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] : ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -841,7 +851,7 @@
       if (d < today) b.classList.add('past');
       if (key === iso(today)) b.classList.add('today');
       b.setAttribute('aria-pressed', key === calSel);
-      b.setAttribute('aria-label', d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) + ', ' + ev.length + ' ' + L(ev.length === 1 ? 'evento' : 'eventos', ev.length === 1 ? 'event' : 'events'));
+      b.setAttribute('aria-label', longDate(d) + ', ' + ev.length + ' ' + L(ev.length === 1 ? 'evento' : 'eventos', ev.length === 1 ? 'event' : 'events'));
       b.innerHTML = '<span aria-hidden="true">' + dnum + '</span><span class="dots" aria-hidden="true">' + ev.map(function (e) { return '<i' + (e.real ? '' : ' class="ej"') + '></i>'; }).join('') + '</span>';
       g.appendChild(b);
     }
@@ -851,7 +861,7 @@
     var p = calSel.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
     var box = $('#calDay');
     var ev = eventsFor(d);
-    box.innerHTML = '<h4>' + esc(cap(d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'es-ES', { weekday: 'long', day: 'numeric', month: 'long' }))) + '</h4>' + ev.map(function (e) {
+    box.innerHTML = '<h4>' + esc(cap(longDate(d))) + '</h4>' + ev.map(function (e) {
       var msg = L('Hola Pura Cepa, quiero reservar para «', 'Hello Pura Cepa, I would like to book for "') + t(e.t) + L('» el ', '" on ') + niceDate(calSel) + ' (' + e.h + ').';
       return '<div class="ev"><span class="ev__h">' + e.h + '</span><div><p class="ev__t">' + esc(t(e.t)) + '<span class="ev__tag ' + (e.real ? 'ev__tag--real">' + L('Diario', 'Daily') : 'ev__tag--ej">' + L('Ejemplo', 'Example')) + '</span></p><p class="ev__d">' + esc(t(e.d)) + '</p>' +
         (d >= today ? '<a href="' + esc(wa(msg)) + '" target="_blank" rel="noopener">' + L('Reservar plaza por WhatsApp', 'Book a place on WhatsApp') + ' →</a>' : '') + '</div></div>';
@@ -986,4 +996,25 @@
     var lz = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { ensureSoon('#' + x.target.id); if (x.target.id === 'carta') ensureSoon('#pared'); lz.unobserve(x.target); } }); }, { rootMargin: '300px 0px' });
     Object.keys(lazyMap).forEach(function (sel) { lz.observe($(sel)); });
   } else { Object.keys(lazyMap).forEach(ensure); }
+
+  /* After load, pre-render every section in idle slots (one render step per slot), list and gin wall first,
+     so nothing heavy is left to build while the visitor scrolls. */
+  function preload() {
+    var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 50); };
+    var order = ['#carta', '#pared'].concat(Object.keys(lazyMap).filter(function (k) { return k !== '#carta' && k !== '#pared'; }));
+    var jobs = [];
+    order.forEach(function (sel) {
+      var L0 = lazyMap[sel]; if (!L0) return;
+      L0.fns.forEach(function (fn, i) { jobs.push(function () { if (i === 0) { if (L0.done) return; L0.done = true; L0.pre = true; } if (L0.pre) fn(); }); });
+    });
+    (function next(dl) {
+      while (jobs.length) {
+        jobs.shift()();
+        if (!dl || !dl.timeRemaining || dl.timeRemaining() < 8) break;
+      }
+      if (jobs.length) idle(next, { timeout: 1500 });
+    })();
+  }
+  if (document.readyState === 'complete') setTimeout(preload, 300);
+  else window.addEventListener('load', function () { setTimeout(preload, 300); });
 })();

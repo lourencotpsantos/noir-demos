@@ -631,3 +631,17 @@ body{font-size:1.0625rem;line-height:1.65}
 }
 .space-frame{max-width:none}
 .js-space .space-caps,.js-space .space-map{z-index:5}
+@media (max-width:899px){
+  .js-space .space-caps{height:250px}
+  .js-space .space-cap{bottom:104px}
+  .js-space .space-map{bottom:90px}
+}
+@media (min-width:900px){
+  .js-space .space-caps,.js-space .space-map{width:calc(26vw - max(32px,calc((100vw - var(--wrap))/2 + 32px)) - 28px)}
+  .js-space .space-cap h3{font-size:clamp(1.5rem,2.2vw,2.1rem)}
+  .js-space .space-cap p{font-size:.98rem}
+}
+/* lighter idle hero: fewer concurrent loops */
+.glow-b{animation:none;opacity:.38}
+.hero-arch .steam-b{display:none}
+.fog-hint svg{animation-iteration-count:4}

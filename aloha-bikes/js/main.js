@@ -459,6 +459,36 @@
     return close ? d + " L1000 200 L0 200 Z" : d;
   }
   function altAt(alts, t) { var f = t * (alts.length - 1), i = Math.floor(f), r = f - i; return i >= alts.length - 1 ? alts[alts.length - 1] : alts[i] + (alts[i + 1] - alts[i]) * r; }
+  /* sample an absolute M/C/S path by arc length without asking the browser for layout */
+  function samplePath(d, n) {
+    var tk = d.match(/[MCS]|-?\d*\.?\d+/g), i = 0, cur = [0, 0], prevC = null, segs = [], cmd = "";
+    var num = function () { return parseFloat(tk[i++]); };
+    while (i < tk.length) {
+      if (/[MCS]/.test(tk[i])) cmd = tk[i++];
+      if (cmd === "M") { cur = [num(), num()]; prevC = null; }
+      else if (cmd === "C") { var c1 = [num(), num()], c2 = [num(), num()], e = [num(), num()]; segs.push([cur, c1, c2, e]); prevC = c2; cur = e; }
+      else if (cmd === "S") { var r1 = prevC ? [2 * cur[0] - prevC[0], 2 * cur[1] - prevC[1]] : cur, r2 = [num(), num()], e2 = [num(), num()]; segs.push([cur, r1, r2, e2]); prevC = r2; cur = e2; }
+      else i++;
+    }
+    var pts = [], L = [0];
+    segs.forEach(function (g) {
+      for (var k = (pts.length ? 1 : 0); k <= 40; k++) {
+        var t = k / 40, m = 1 - t;
+        var x = m * m * m * g[0][0] + 3 * m * m * t * g[1][0] + 3 * m * t * t * g[2][0] + t * t * t * g[3][0];
+        var y = m * m * m * g[0][1] + 3 * m * m * t * g[1][1] + 3 * m * t * t * g[2][1] + t * t * t * g[3][1];
+        if (pts.length) L.push(L[L.length - 1] + Math.hypot(x - pts[pts.length - 1][0], y - pts[pts.length - 1][1]));
+        pts.push([x, y]);
+      }
+    });
+    var total = L[L.length - 1], out = [], j = 0;
+    for (var q = 0; q <= n; q++) {
+      var target = total * q / n;
+      while (j < L.length - 2 && L[j + 1] < target) j++;
+      var f = (target - L[j]) / ((L[j + 1] - L[j]) || 1);
+      out.push([pts[j][0] + (pts[j + 1][0] - pts[j][0]) * f, pts[j][1] + (pts[j + 1][1] - pts[j][1]) * f]);
+    }
+    return out;
+  }
   function buildMap() {
     if (built) return; built = true;
     // contour rings
@@ -481,9 +511,7 @@
     });
     $("#map-contours").innerHTML = rings;
     mr.forEach(function (p, i) {
-      var len = p.getTotalLength(), arr = [];
-      for (var s = 0; s <= 120; s++) { var q = p.getPointAtLength(len * s / 120); arr.push([q.x, q.y]); }
-      samples[i] = arr;
+      samples[i] = samplePath(p.getAttribute("d"), 120);
       p.setAttribute("pathLength", "1");
       p.style.strokeDasharray = "1";
       p.style.strokeDashoffset = "1";
@@ -499,7 +527,7 @@
   function camera(x, y, t) {
     pcs.forEach(function (pc, i) { pc.classList.toggle("show", i === chapter && t >= PC_AT[i]); });
     if (RM || !camBox) return;
-    var z = 1.15 + 0.75 * Math.sin(Math.PI * Math.min(1, t)), k = Math.min(1, (z - 1) / 0.7);
+    var z = (mobileQ.matches ? 1.38 : 1.15) + 0.7 * Math.sin(Math.PI * Math.min(1, t)), k = Math.min(1, (z - 1) / 0.7);
     var tx = (camBox.w / 2 - x * camBox.w / 1000) * k, ty = (camBox.h / 2 - y * camBox.h / 700) * k;
     var tilt = mobileQ.matches ? 38 : 48;
     cam.style.transform = "rotateX(" + tilt + "deg) scale(" + z.toFixed(3) + ") translate(" + tx.toFixed(1) + "px," + ty.toFixed(1) + "px)";
@@ -583,6 +611,7 @@
     var media = $(".hero-media"), blur = $(".hero-blur"), blurImg = $(".hero-blur img"), speed = $(".speed");
     var mq = window.matchMedia("(max-width: 767px)");
     var vis = true, tick = false, lastY = 0, lastT = 0, vel = 0;
+    var hH = 0; window.addEventListener("resize", function () { hH = 0; });
     window.addEventListener("load", function () {
       setTimeout(function () { blurImg.src = window.matchMedia("(max-width: 767px)").matches ? "img/hero-m-blur-700.webp" : "img/hero-blur-1200.webp"; }, 300);
     });
@@ -591,7 +620,8 @@
       var y = window.scrollY, now = performance.now(), dt = Math.max(16, now - lastT);
       var v = Math.min(1, Math.abs(y - lastY) / dt / 2.2);
       vel += (v - vel) * 0.25; lastY = y; lastT = now;
-      var h = hero.offsetHeight, p = Math.min(1, Math.max(0, y / h));
+      if (!hH) hH = hero.offsetHeight;
+      var p = Math.min(1, Math.max(0, y / hH));
       var tr = "translate3d(0," + (p * (mq.matches ? -10 : 14)).toFixed(2) + "%,0) scale(" + (1 + p * 0.08).toFixed(4) + ")";
       media.style.transform = tr; blur.style.transform = tr;
       blur.style.opacity = Math.min(1, p * 1.5 + vel * 0.9).toFixed(3);

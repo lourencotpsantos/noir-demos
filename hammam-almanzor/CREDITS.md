@@ -14,14 +14,17 @@ All photos come from Wikimedia Commons under Creative Commons Attribution-ShareA
 
 | File(s) in `img/` | Used for | Author | Licence | Source |
 |---|---|---|---|---|
-| `lanterns-800/1100/1400.webp` | Hero; ritual step 1 | Petar Milošević | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Oriental_hanging_lanterns._Souk_Haddadine,_Marrakech_Medina,_Morocco.jpg |
-| `dome-800/1400.webp` | Ritual step 2 (steam) | Vinat | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Hammam_interior_view.jpg |
+| `lanterns-800/1100/1400.webp`, `hero-land-1280/1920.webp` (landscape crop), `glow-*.webp` (blurred highlights derived from it) | Hero; ritual step 1 | Petar Milošević | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Oriental_hanging_lanterns._Souk_Haddadine,_Marrakech_Medina,_Morocco.jpg |
+| `dome-800/1400.webp`, `esp-hot-800/1400.webp` (warm-graded) | Ritual step 2 (steam); El espacio "Sala caliente" | Vinat | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Hammam_interior_view.jpg |
 | `fountain-900.webp` | Ritual step 3 (cropped to the central rosette) | Orlysi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Moroccan_zellige_in_Fes.jpg |
-| `kessa-800.webp` | Ritual step 4 (cropped) | Sophienath | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Gant_de_kessa.jpg |
+| `kessa-800.webp` | Ritual step 4 (cropped, pre-blended onto sand) | Sophienath | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Gant_de_kessa.jpg |
 | `stucco-800/1280.webp` | Ritual step 5 | Orlysi | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Moroccan_zellige_marrakesh.jpg |
-| `alley-800/1400.webp` | Ritual step 6; background of the "Cómo llegar" section | PennyLane24 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Lantern_souk_in_Marrakech.jpg |
+| `alley-800/1400.webp`, `esp-door-800/1400.webp` (warm-graded) | Ritual step 6; "Cómo llegar" background; El espacio "Entrada" | PennyLane24 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Lantern_souk_in_Marrakech.jpg |
+| `esp-warm-800/1400.webp` (warm-graded) | El espacio "Sala templada" | Aymen FANTAR | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Hammam_interior_-_frigidarium.jpg |
+| `esp-rest-800/1400.webp` (warm-graded) | El espacio "Sala de reposo" | Aymen FANTAR | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Hammam_Tunisia.jpg |
+| `esp-tea-800/1400.webp` (warm-graded) | El espacio "Rincón del té" | Tamorlan | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Moroccan_tea_glasses.jpg |
 
-The zellige pattern, the eight-point star and the icons are original inline SVG drawn for this demo. The steam, fog and ambient sound are generated in the browser (CSS, canvas and Web Audio), with no media files.
+El espacio is an illustrative walk-through of a traditional hammam, built from photos of other hammams; the page says so and marks Hammam Almanzor's own rooms as [por confirmar]. `zellige-light.webp` was rendered for this demo. The zellige pattern, the eight-point star and the icons are original inline SVG drawn for this demo. The steam, fog, tea pour, petals and ambient sound are generated in the browser (CSS, canvas and Web Audio), with no media files.
 
 ## Fonts (self-hosted, SIL Open Font License 1.1)
 

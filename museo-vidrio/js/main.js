@@ -13,6 +13,8 @@
     fr: { title: 'Musée du Verre et du Cristal de Málaga · Concept Noir Digital', open: 'Ouvert aujourd’hui · 11h–19h', openShort: 'Ouvert aujourd’hui · 11h–15h', closedMon: 'Fermé aujourd’hui (lundi)', closedAug: 'Fermé en août', closedHol: 'Fermé aujourd’hui (jour férié)', closedNow: 'Fermé · ouvre à 11h', lastNow: 'Ouvert · dernière visite (18h) passée', group: 'Plus de 10 personnes : réservation obligatoire, tarif groupe (6 €).', need: 'Indiquez votre nom pour que le musée sache à qui répondre.', pickDay: 'Choisissez un jour d’ouverture.', pickTime: 'Choisissez une heure.', nobody: 'Ajoutez au moins un visiteur.', ready: 'E-mail prêt dans votre messagerie.', subj: 'Réservation de visite guidée', hello: 'Bonjour, je souhaite réserver une visite guidée.', day: 'Jour', time: 'Heure souhaitée', tl: 'Langue de la visite', people: 'Visiteurs', gen: 'plein tarif', red: 'réduit', kid: 'enfants jusqu’à 6 ans', est: 'Total estimé', name: 'Nom', note: 'Note', bye: 'Merci.', from: 'Envoyé depuis le concept web de Noir Digital', p1: 'personne', pN: 'personnes', free: 'Gratuit' }
   };
   var LOC = { es: 'es-ES', en: 'en-GB', fr: 'fr-FR' };
+  var FMT = {};
+  var fmtDate = function (key, o) { var k = lang + key; return FMT[k] || (FMT[k] = new Intl.DateTimeFormat(LOC[lang], o)); };
   var t = function (k) { return STR[lang][k]; };
 
   /* ---------- language ---------- */
@@ -132,10 +134,9 @@
         pc.style.height = Math.max(120, Math.min(max, room)) + 'px';
       });
     };
-    fitPieces();
-    window.addEventListener('resize', fitPieces, { passive: true });
+    var fio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { fio.disconnect(); requestAnimationFrame(fitPieces); window.addEventListener('resize', fitPieces, { passive: true }); } }, { rootMargin: '1200px 0px' });
+    fio.observe(track);
     langHooks.push(fitPieces);
-    if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(fitPieces);
   }
 
   /* ---------- walk through the house (doorways that scale past you) ---------- */
@@ -248,7 +249,7 @@
     for (var i = 0; i < 28; i++) { var d = new Date(start); d.setDate(start.getDate() + i); days.push(d); }
     var firstOpen = null;
     var renderDays = function () {
-      var wd = new Intl.DateTimeFormat(LOC[lang], { weekday: 'short' }), mo = new Intl.DateTimeFormat(LOC[lang], { month: 'short' }), full = new Intl.DateTimeFormat(LOC[lang], { weekday: 'long', day: 'numeric', month: 'long' });
+      var wd = fmtDate('wd', { weekday: 'short' }), mo = fmtDate('mo', { month: 'short' }), full = fmtDate('full', { weekday: 'long', day: 'numeric', month: 'long' });
       daysEl.innerHTML = '';
       days.forEach(function (d, i) {
         var s = dayState(d), b = doc.createElement('button');
@@ -288,7 +289,7 @@
       var n = state.n, people = n.gen + n.red + n.kid, paying = n.gen + n.red, group = people > 10 || paying >= 10;
       return { people: people, group: group, total: group ? paying * 6 : n.gen * 8 + n.red * 6 };
     };
-    var dayLabel = function () { return state.day === null ? '—' : new Intl.DateTimeFormat(LOC[lang], { weekday: 'short', day: 'numeric', month: 'short' }).format(days[state.day]); };
+    var dayLabel = function () { return state.day === null ? '—' : fmtDate('lab', { weekday: 'short', day: 'numeric', month: 'short' }).format(days[state.day]); };
     var update = function () {
       var c = calc();
       pop($('#tDay'), dayLabel());
@@ -303,7 +304,7 @@
     nameIn.addEventListener('blur', function () { if (!nameIn.value.trim() && nameIn.dataset.t) nameErr.textContent = t('need'); });
     nameIn.addEventListener('input', function () { nameIn.dataset.t = '1'; if (nameIn.value.trim()) { nameErr.textContent = ''; nameIn.removeAttribute('aria-invalid'); } });
     var buildMail = function () {
-      var c = calc(), n = state.n, lines = [t('hello'), '', t('day') + ': ' + new Intl.DateTimeFormat(LOC[lang], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(days[state.day]), t('time') + ': ' + state.time, t('tl') + ': ' + state.tl, t('people') + ': ' + c.people + ' (' + n.gen + ' ' + t('gen') + ', ' + n.red + ' ' + t('red') + ', ' + n.kid + ' ' + t('kid') + ')', t('est') + ': ' + (c.total ? c.total + ' €' : t('free')), '', t('name') + ': ' + nameIn.value.trim()];
+      var c = calc(), n = state.n, lines = [t('hello'), '', t('day') + ': ' + fmtDate('long', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(days[state.day]), t('time') + ': ' + state.time, t('tl') + ': ' + state.tl, t('people') + ': ' + c.people + ' (' + n.gen + ' ' + t('gen') + ', ' + n.red + ' ' + t('red') + ', ' + n.kid + ' ' + t('kid') + ')', t('est') + ': ' + (c.total ? c.total + ' €' : t('free')), '', t('name') + ': ' + nameIn.value.trim()];
       var note = $('#fNote').value.trim(); if (note) lines.push(t('note') + ': ' + note);
       lines.push('', t('bye'), '', '— ' + t('from'));
       return 'mailto:museovidriomalaga@gmail.com?subject=' + encodeURIComponent(t('subj') + ' · ' + dayLabel() + ' ' + state.time) + '&body=' + encodeURIComponent(lines.join('\n'));
@@ -322,8 +323,10 @@
       chime();
       setTimeout(function () { window.location.href = href; toast(t('ready')); }, RM ? 0 : 900);
     });
-    renderDays();
-    if (firstOpen !== null) { state.day = firstOpen; renderDays(); renderTimes(); }
+    // pick the first open day without rendering twice
+    for (var fi = 0; fi < days.length; fi++) { var ds = dayState(days[fi]); if (ds !== 'mon' && ds !== 'aug' && ds !== 'hol' && !(fi === 0 && new Date().getHours() * 60 + new Date().getMinutes() >= (ds === 'short' ? 840 : 1080))) { firstOpen = fi; break; } }
+    if (firstOpen !== null) state.day = firstOpen;
+    renderDays(); renderTimes();
     update();
     langHooks.push(function () { renderDays(); update(); if (nameErr.textContent) nameErr.textContent = t('need'); });
   };
@@ -385,9 +388,11 @@
 
   // header progress hairline
   var prog = $('#prog'), pTick = false;
-  var onProg = function () { pTick = false; var h = root.scrollHeight - innerHeight; prog.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, scrollY / h) : 0).toFixed(4) + ')'; };
+  var docH = 0, measure = function () { docH = root.scrollHeight - innerHeight; };
+  if (window.ResizeObserver) new ResizeObserver(measure).observe(doc.body); window.addEventListener('resize', measure, { passive: true });
+  var onProg = function () { pTick = false; if (!docH) measure(); prog.style.transform = 'scaleX(' + (docH > 0 ? Math.min(1, scrollY / docH) : 0).toFixed(4) + ')'; };
   window.addEventListener('scroll', function () { if (!pTick) { pTick = true; requestAnimationFrame(onProg); } }, { passive: true });
-  onProg();
+  requestAnimationFrame(onProg);
   // current section in the nav
   var navLinks = $$('.nav a'), secMap = {};
   navLinks.forEach(function (a) { var el = $(a.getAttribute('href')); if (el) secMap[el.id] = a; });
