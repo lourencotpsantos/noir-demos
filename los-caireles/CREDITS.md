@@ -26,9 +26,17 @@ Originals were downloaded through each photo's free download link (images.unspla
 | dia-clase-1600/800 | Rider trotting a grey horse in a dressage arena | https://unsplash.com/photos/CJLXSVDmH74 |
 | dia-ruta-1600/800 | Rider on a grey horse crossing a green hilltop | https://unsplash.com/photos/QnJfVTtiLbo |
 | dia-toma-1600/800 | Grey horse trotting through a meadow at sunset | https://unsplash.com/photos/BVE-qFaWZpQ |
+| herd-pre-800/480 | Grey horse in a plaited leather bridle | https://unsplash.com/photos/s-a7d-arEfY |
+| herd-alazan-800/480 | Chestnut horse with a star, beside a hand | https://unsplash.com/photos/nzO83fcrudQ |
+| herd-tordo-800/480 | Grey horse looking through fence boards | https://unsplash.com/photos/waYQFDXNtUU |
+| herd-castano-800/480 | Bay horse with a dark mane in a meadow | https://unsplash.com/photos/-Dp3hn-U-LE |
+| herd-moro-800/480 | Dark horse galloping across a meadow | https://unsplash.com/photos/AVyvLiUY530 |
+| herd-blanco-800/480 | White horse cantering among trees | https://unsplash.com/photos/lIeqGEdvex0 |
 
 ## Other assets
 
 - `fonts/`: Bodoni Moda (400, 500 and 400 italic) and Hanken Grotesk (400, 600, 700), latin subset, self-hosted. Static instances were cut from the Fontsource variable files with fontTools (varLib.instancer) to keep text layout fast on phones. Both use the SIL Open Font License 1.1; the licence texts are in `fonts/LICENSE-bodoni-moda.txt` and `fonts/LICENSE-hanken-grotesk.txt`.
-- The following are original inline SVG/CSS drawn for this concept: the logo mark, the layered hills and olive-grove silhouettes in the hero, the sun arc, light washes and clock in «Un día en el club», the route profiles in the ride finder, the livery plan, the 60×20 m dressage arena with its letters, the location sketch and the icons. The arena letters follow the standard dressage arena layout.
+- The following are original inline SVG/CSS drawn for this concept: the logo mark, the layered hills and olive-grove silhouettes in the hero, the sun arc, light washes and clock in «Un día en el club», the dust motes, the hoofprints in the arena, the horseshoe stamp on the booking ticket, the route profiles in the ride finder, the livery plan, the 60×20 m dressage arena with its letters, the location sketch and the icons. The arena letters follow the standard dressage arena layout.
 - There are no third-party requests. "Abrir en Google Maps" and the WhatsApp buttons are plain links that open only when the visitor taps them.
+
+The horse cards in «Conoce a los caballos» use stock photos with illustrative breed, character and level text, each marked [por confirmar]. They do not describe the club's real horses.

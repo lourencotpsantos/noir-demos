@@ -47,7 +47,8 @@
       leaseMsg: "Hola, Club Hípico Los Caireles. Quería información sobre la media pensión de un caballo pupilado.",
       kit: function (a, b) { return a + " de " + b + " listos"; },
       kidMsg: "Hola, Club Hípico Los Caireles. Me gustaría reservar una clase de prueba para mi hijo/a.",
-      lChild: "Nombre del niño/a", lAge: "Edad", lParent: "Madre/padre", errAge: "Las clases son desde los 5 años."
+      lChild: "Nombre del niño/a", lAge: "Edad", lParent: "Madre/padre", errAge: "Las clases son desde los 5 años.",
+      tkTitle: function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }, tkDate: "Fecha", tkRiders: "Jinetes", tkName: "A nombre de"
     },
     en: {
       dur: { "45": "45-minute", medio: "half-day", dia: "full-day" },
@@ -84,7 +85,8 @@
       leaseMsg: "Hello, Club Hípico Los Caireles. I'd like information about half-leasing one of the club's livery horses.",
       kit: function (a, b) { return a + " of " + b + " ready"; },
       kidMsg: "Hello, Club Hípico Los Caireles. I'd like to book a trial lesson for my child.",
-      lChild: "Child's name", lAge: "Age", lParent: "Parent", errAge: "Lessons start from age 5."
+      lChild: "Child's name", lAge: "Age", lParent: "Parent", errAge: "Lessons start from age 5.",
+      tkTitle: function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }, tkDate: "Date", tkRiders: "Riders", tkName: "Name"
     }
   };
   var t = function () { return T[lang]; };
@@ -159,6 +161,19 @@
 
   /* ---------- Hero: layered hills paced by scroll ---------- */
   var hero = $("#hero");
+  /* Hero headline: words rise one by one; re-split after a language change */
+  function splitHeroWords() {
+    var i = 0;
+    $$("[data-words]").forEach(function (el) {
+      var txt = el.textContent.trim();
+      el.innerHTML = txt.split(/\s+/).map(function (w) { return '<span class="w" style="--i:' + (i++) + '">' + w + "</span>"; }).join(" ");
+    });
+  }
+  langHooks.push(splitHeroWords);
+  if (hero && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) { es.forEach(function (e) { hero.classList.toggle("is-off", !e.isIntersecting); }); }).observe(hero);
+  }
+
   /* Olive-grove silhouettes: injected after first paint, they are below the fold at load */
   var oliveTpl = $("#olive-trees");
   if (oliveTpl) {
@@ -352,7 +367,21 @@
       if (!a) bDate.focus(); else if (!b) bName.focus();
       return a && b;
     }
-    bf.addEventListener("submit", function (e) { e.preventDefault(); if (valid()) openWA(message()); });
+    var ticket = $("#ticket");
+    function showTicket(msg) {
+      if (!ticket) return;
+      var st = t(), w = bWhat.value;
+      $("#tk-title").textContent = st.tkTitle(st.what[w]) + (w !== "prueba" ? " · " + st.terrMsg[$("#b-terrain").value] : "");
+      var rows = [[st.tkDate, fmtDate(bDate.value) + " · " + st.slot[$("#b-slot").value]], [st.tkRiders, bPeople.value], [st.tkName, bName.value.trim()]];
+      $("#tk-list").innerHTML = rows.map(function (r) { return "<div><dt>" + r[0] + "</dt><dd></dd></div>"; }).join("");
+      $$("#tk-list dd").forEach(function (dd, i) { dd.textContent = rows[i][1]; });
+      $("#tk-wa").href = waUrl(msg);
+      ticket.hidden = false;
+      ticket.classList.remove("play"); void ticket.offsetWidth; ticket.classList.add("play");
+      $("#tk-title").focus({ preventScroll: true });
+    }
+    if (ticket) $("#tk-edit").addEventListener("click", function () { ticket.hidden = true; ticket.classList.remove("play"); bName.focus(); });
+    bf.addEventListener("submit", function (e) { e.preventDefault(); if (valid()) { var m = message(); openWA(m); showTicket(m); } });
     $("#book-mail").addEventListener("click", function (e) {
       e.preventDefault();
       if (valid()) window.location.href = "mailto:" + MAIL + "?subject=" + encodeURIComponent(t().subj) + "&body=" + encodeURIComponent(message());
@@ -487,12 +516,31 @@
     keys.forEach(function (k) {
       for (var j = from; j < pts.length; j++) { if (Math.hypot(pts[j][0] - k[0], pts[j][1] - k[1]) < 6) { marks.push(j / N); from = j + 5; break; } }
     });
+    /* hoofprints left along the path: placed once, only their opacity changes */
+    var printsG = $("#ar-prints"), PR = 46, printIdx = [], printEls = [];
+    if (printsG) {
+      var ph = "";
+      for (var q = 1; q <= PR; q++) {
+        var ii = Math.min(N - 1, Math.round(q * N / (PR + 1))), a0 = pts[ii], a1 = pts[ii + 1];
+        var ang = Math.atan2(a1[1] - a0[1], a1[0] - a0[0]), side = q % 2 ? 7 : -7;
+        var px = a0[0] - Math.sin(ang) * side, py = a0[1] + Math.cos(ang) * side;
+        ph += '<g class="ar-print" transform="translate(' + px.toFixed(1) + " " + py.toFixed(1) + ") rotate(" + (ang * 180 / Math.PI + 90).toFixed(0) + ')"><path d="M-4.6 4 A4.9 5.6 0 1 1 4.6 4"/></g>';
+        printIdx.push(ii);
+      }
+      printsG.innerHTML = ph;
+      printEls = $$(".ar-print", printsG);
+    }
     var lastStep = -1;
     function drawArena(f) {
       var fi = f * N, i0 = Math.min(N - 1, Math.floor(fi)), k = fi - i0, a = pts[i0], c = pts[i0 + 1];
       var pt = [a[0] + (c[0] - a[0]) * k, a[1] + (c[1] - a[1]) * k];
       rider.setAttribute("transform", "translate(" + pt[0].toFixed(1) + " " + pt[1].toFixed(1) + ")");
       prog.style.transform = "scaleX(" + f + ")";
+      for (var pq = 0; pq < printEls.length; pq++) {
+        var age = fi - printIdx[pq];
+        var op = age < 0 ? 0 : Math.max(0, 1 - age / 70) * 0.9;
+        if (printEls[pq]._o !== op) { printEls[pq].style.opacity = op.toFixed(2); printEls[pq]._o = op; }
+      }
       letterEls.forEach(function (l) {
         var near = Math.hypot(l.x - pt[0], l.y - pt[1]) < 34;
         l.t.classList.toggle("lt-on", near); l.c.classList.toggle("on", near);
@@ -509,6 +557,37 @@
         drawArena(clamp((p - 0.04) / 0.9, 0, 1));
       });
     }
+  }
+
+  /* ---------- Meet the horses: swipe, parallax captions, tap to flip ---------- */
+  var herd = $("#herd");
+  if (herd) {
+    var horses = $$(".horse", herd), hprog = $("#herd-prog"), hTick = false;
+    $$(".horse-card", herd).forEach(function (b) {
+      b.addEventListener("click", function () { b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true")); });
+    });
+    $$(".herd-btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var step = horses[0].getBoundingClientRect().width + 16;
+        herd.scrollBy({ left: step * parseInt(b.dataset.dir, 10), behavior: RM ? "auto" : "smooth" });
+      });
+    });
+    var parts = horses.map(function (h) { return { h: h, img: $(".horse-img", h), cap: $(".horse-cap", h) }; });
+    function herdFrame() {
+      hTick = false;
+      var max = herd.scrollWidth - herd.clientWidth;
+      if (hprog) hprog.style.transform = "scaleX(" + (max > 0 ? 0.17 + 0.83 * herd.scrollLeft / max : 1).toFixed(3) + ")";
+      if (RM) return;
+      var hr = herd.getBoundingClientRect(), mid = hr.left + hr.width / 2;
+      parts.forEach(function (o) {
+        var r = o.h.getBoundingClientRect(), off = clamp((r.left + r.width / 2 - mid) / hr.width, -1, 1);
+        o.img.style.transform = "translate3d(" + (-off * 9).toFixed(2) + "%,0,0)";
+        o.cap.style.transform = "translate3d(" + (off * 28).toFixed(1) + "px,0,0)";
+      });
+    }
+    herd.addEventListener("scroll", function () { if (!hTick) { hTick = true; requestAnimationFrame(herdFrame); } }, { passive: true });
+    whenNear(herd, function () { requestAnimationFrame(herdFrame); });
+    window.addEventListener("resize", function () { if (!hTick) { hTick = true; requestAnimationFrame(herdFrame); } });
   }
 
   /* ---------- A day at the club: dawn to dusk ---------- */
