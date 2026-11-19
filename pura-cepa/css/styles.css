@@ -847,4 +847,8 @@ h1, h2 { text-wrap: balance; }
 .candle--a { left: -22vmax; bottom: -24vmax; }
 .candle--b { right: -26vmax; top: -22vmax; }
 /* off-screen shelves skip rendering; padding leaves room for the lit bottle and its glow */
-.pared__row { content-visibility: auto; contain-intrinsic-size: auto 96px; padding-top: 14px; margin-top: -14px; }
+.pared__row { content-visibility: auto; contain-intrinsic-height: auto 88px; padding-top: 14px; margin-top: -14px; flex: none; }
+.pared__row.warm { content-visibility: visible; }
+@media (min-width: 960px) { .pared__row { contain-intrinsic-height: auto 96px; } }
+/* ambient loops pause while the page scrolls */
+.hero.scrolling .bk i, .hero.scrolling .candle, .hero.scrolling .hero__drip i, .hero.scrolling .hero__media img, .pared.scrolling .gb.lit b, .glass.scrolling .bubbles circle, .swipe-hint.scrolling svg { animation-play-state: paused !important; }

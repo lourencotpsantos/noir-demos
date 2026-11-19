@@ -12,6 +12,18 @@ All three are **illustrative pieces of the period, not pieces from the museum's 
 | `vidriera-xix-420.webp`, `vidriera-xix-720.webp` | 1899, France | Stained-glass window, Lobin workshops (Tours), 19th c., church of Cormery | Photo: Joël Thibault | CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Cropped and recompressed; the cropped files are shared under the same licence. | https://commons.wikimedia.org/wiki/File:Cormery_%C3%A9glise_vitrail.jpg |
 | `jugendstil-420.webp`, `jugendstil-720.webp` | 1913, Jugendstil | Vase, Johann Loetz Witwe glassworks (Bohemia), c. 1900, Bröhan-Museum Berlin | Photo: Vassil | CC0 1.0 | https://commons.wikimedia.org/wiki/File:Vase_1_Glasfabrik_Johann_Loetz_Witwe_Berlin_Br%C3%B6han-Museum_21042018_1.jpg |
 
+### Photographs of the museum itself (Wikimedia Commons)
+
+The "walk through the house" uses photos of the Museo del Vidrio y Cristal taken by the Commons user **Tyk** on 27 Apr 2013, licensed **CC BY-SA 3.0** (https://creativecommons.org/licenses/by-sa/3.0). They are real photos of the museum, not illustrative ones; the page credits them under the section. Resized and converted to WebP; the derived files are shared under the same licence. The museum's own current photos would replace them.
+
+| File(s) in `img/` | Room on the page | Source |
+|---|---|---|
+| `casa-fachada-800/1400.webp` | I. La fachada | https://commons.wikimedia.org/wiki/File:Museo_del_Vidrio_y_Cristal-front.jpg |
+| `casa-puerta-800/1400.webp` | II. La puerta | https://commons.wikimedia.org/wiki/File:Museo_del_Vidrio_y_Cristal,_M%C3%A1laga-door.jpg |
+| `casa-patio-800/1400.webp` | III. El patio | https://commons.wikimedia.org/wiki/File:Museo_del_Vidrio_y_Cristal,_M%C3%A1laga-patio.jpg |
+| `casa-escalera-800/1400.webp` | IV. La escalera | https://commons.wikimedia.org/wiki/File:Museo_del_Vidrio_y_Cristal-stairs.jpg |
+| `casa-galeria-800/1400.webp` | V. Las salas | https://commons.wikimedia.org/wiki/File:Museo_del_Vidrio_y_Cristal-view.jpg |
+
 No modern copyrighted artworks are shown (no Chihuly, Dalí, Daum 1980 or other 20th-century designs). For the 1950s, 1978, 1980s, 1990s and 2013 stops the page draws a generic glass silhouette in code (`js/pieces.js`), captioned "Silueta ilustrativa dibujada por código, no de la colección".
 
 ### Drawn by code

@@ -175,7 +175,7 @@
         o.door.style.transform = 'scale(' + (1 + e * 7).toFixed(4) + ')';
         o.door.style.opacity = (1 - clamp((e - 0.85) / 0.15)).toFixed(3);
         o.img.style.transform = 'scale(' + (1.22 - e * 0.22).toFixed(4) + ')';
-        o.el.classList.toggle('cap-on', i === top && q > 0.62);
+        o.el.classList.toggle('cap-on', i === top && q > 0.25);
       });
       dotFills.forEach(function (d, i) { d.style.transform = 'scaleX(' + clamp(p - i).toFixed(3) + ')'; });
     };

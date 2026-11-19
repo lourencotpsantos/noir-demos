@@ -594,8 +594,11 @@
     var per = Math.ceil(wallItems.length / ROWS), r = 0;
     var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 1); };
     (function nextRow() {
-      if (r >= ROWS) { measureWall(); return; }
+      if (r >= ROWS) { measureWall(); warmShelves(); return; }
       var row = el('div', 'pared__row');
+      /* explicit width so measuring works while off-screen shelves skip rendering (content-visibility) */
+      var tw = window.matchMedia('(min-width: 960px)').matches ? 48 : 44;
+      row.style.width = (per * (tw + 4) - 4) + 'px';
       wallItems.slice(r * per, (r + 1) * per).forEach(function (g, j) {
         var i = r * per + j, tn = TINT[ginTint(g)];
         var b = el('button', 'gb', '<i><s></s></i><b></b>');
@@ -627,7 +630,7 @@
     wallRaf = 0;
     var p = wallProgress(), bell = p * (1 - p) * 4;
     for (var r = 0; r < wallRows.length; r++) wallRows[r].style.transform = 'translate3d(' + (-travel * p + DRIFT[r] * bell).toFixed(1) + 'px,0,0)';
-    pared.style.setProperty('--sx', (-40 + p * 290).toFixed(1) + '%');
+    sweepEl.style.transform = 'translate3d(' + (-40 + p * 290).toFixed(1) + '%,0,0)';
   }
   function onWallScroll() { if (wallOn && !wallRaf && travel) wallRaf = requestAnimationFrame(wallFrame); }
   window.addEventListener('scroll', onWallScroll, { passive: true });
@@ -704,6 +707,13 @@
   });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (es) { es.forEach(function (x) { wallOn = x.isIntersecting; pared.classList.toggle('live', wallOn && !RM); if (wallOn) onWallScroll(); }); }).observe(pared);
+  }
+  /* Shelves start as content-visibility:auto (skipped while off-screen). Right after the idle build they are
+     warmed one per idle slot, so their style and layout are done before anyone scrolls to the wall. */
+  var sweepEl = $('.pared__sweep', pared);
+  function warmShelves() {
+    var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 30); }, k = 0;
+    (function warm() { if (k < wallRows.length) { wallRows[k++].classList.add('warm'); void wallEl.offsetWidth; idle(warm, { timeout: 1000 }); } })();
   }
   lazy('#pared', function () { buildWall(); writeWallIdle(); wallEl.setAttribute('aria-label', L('Pared de ginebras: usa las flechas para moverte', 'Gin wall: use the arrow keys to move')); });
 
@@ -912,16 +922,20 @@
   }
 
   /* ---------------- round 2: cinematic hero (bokeh parting), vine-to-glass chapter, cursor ---------------- */
+  /* ambient hero motion starts once the idle pre-render is done, or on a touch / mouse move, never mid-scroll */
+  var startFx = function () {};
   (function () {
     if (RM) return;
-    var evs = ['pointermove', 'pointerdown', 'touchstart', 'scroll', 'keydown', 'wheel'];
-    function go() { $('#inicio').classList.add('fx'); evs.forEach(function (e) { window.removeEventListener(e, go, true); }); }
-    evs.forEach(function (e) { window.addEventListener(e, go, { capture: true, passive: true }); });
+    var evs = ['pointermove', 'pointerdown', 'touchstart', 'keydown'];
+    startFx = function () { $('#inicio').classList.add('fx'); evs.forEach(function (e) { window.removeEventListener(e, startFx, true); }); };
+    evs.forEach(function (e) { window.addEventListener(e, startFx, { capture: true, passive: true }); });
   })();
+  var heroH = window.innerHeight;
+  window.addEventListener('resize', function () { heroH = $('#inicio').offsetHeight || window.innerHeight; });
   var hero = $('#inicio'), heroOn = true, bkL = $('.bk--l'), bkR = $('.bk--r'), bkF = $('.bk--f'), heroRaf = 0;
   function heroFrame() {
     heroRaf = 0;
-    var h = hero.offsetHeight || 1, p = Math.min(1, Math.max(0, window.scrollY / h));
+    var p = Math.min(1, Math.max(0, window.scrollY / heroH));
     bkL.style.transform = 'translate3d(' + (-p * 34).toFixed(2) + 'vw,' + (p * 6).toFixed(2) + 'vh,0) scale(' + (1 + p * .25).toFixed(3) + ')';
     bkR.style.transform = 'translate3d(' + (p * 34).toFixed(2) + 'vw,' + (-p * 4).toFixed(2) + 'vh,0) scale(' + (1 + p * .25).toFixed(3) + ')';
     bkF.style.transform = 'translate3d(0,' + (-p * 22).toFixed(2) + 'vh,0) scale(' + (1 + p * .6).toFixed(3) + ')';
@@ -1013,8 +1027,26 @@
         if (!dl || !dl.timeRemaining || dl.timeRemaining() < 8) break;
       }
       if (jobs.length) idle(next, { timeout: 1500 });
+      else idle(function () { startFx(); decodeImages(); }, { timeout: 2000 });
     })();
   }
+  /* decode the below-the-fold photos one per idle slot, so no image decodes during a scroll frame */
+  function decodeImages() {
+    var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 50); };
+    var imgs = $$('img[loading="lazy"]');
+    (function next() {
+      var im = imgs.shift(); if (!im) return;
+      im.loading = 'eager';
+      var go = function () { idle(next, { timeout: 1500 }); };
+      if (im.decode) im.decode().then(go, go); else go();
+    })();
+  }
+  /* pause ambient loops while the page is moving; they resume a moment after scrolling stops */
+  var scT = 0, moving = [$('#inicio'), $('#pared'), glass, $('#swipeHint')];
+  window.addEventListener('scroll', function () {
+    if (!scT) moving.forEach(function (x) { x.classList.add('scrolling'); });
+    clearTimeout(scT); scT = setTimeout(function () { scT = 0; moving.forEach(function (x) { x.classList.remove('scrolling'); }); }, 180);
+  }, { passive: true });
   if (document.readyState === 'complete') setTimeout(preload, 300);
   else window.addEventListener('load', function () { setTimeout(preload, 300); });
 })();
