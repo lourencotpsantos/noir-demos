@@ -441,6 +441,7 @@
   var ric = window.requestIdleCallback || function (f) { return setTimeout(f, 200); };
   ric(initBelow, { timeout: 1500 });
 
+  function initScroll() {
   /* ---------------- Routes (signature) ---------------- */
   var track = $("#routes-track"), mapSvg = $("#map-svg"), rider = $("#rider");
   var rpSvg = $("#rp-svg"), rpClip = $("#rp-clip-rect"), rpMarker = $("#rp-marker");
@@ -677,6 +678,10 @@
     sp.style.left = (e.clientX - r.left - d / 2) + "px"; sp.style.top = (e.clientY - r.top - d / 2) + "px";
     t.appendChild(sp); setTimeout(function () { sp.remove(); }, 650);
   }, { passive: true });
+
+  splitHead();
+  }
+  requestAnimationFrame(function () { setTimeout(initScroll, 0); });
 
   /* ---------------- Init language ---------------- */
   if (lang === "en") applyLang("en");

@@ -680,7 +680,7 @@ html[lang=es] .l-en,html[lang=en] .l-es{display:none}
 .wi{display:inline-block;transform:translateY(112%) rotate(4deg);transform-origin:0 100%;animation:wordUp 1s var(--ease-out) forwards;animation-delay:calc(.12s + var(--d, 0) * .085s)}
 @keyframes wordUp{to{transform:none}}
 /* hero: motion layers */
-.hero-media{will-change:transform}
+
 .hero-blur{position:absolute;inset:0;opacity:0;pointer-events:none;will-change:opacity,transform}
 .hero-blur img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
 .speed{position:absolute;inset:0;pointer-events:none;overflow:hidden;will-change:transform,opacity;opacity:.55}
