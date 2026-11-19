@@ -1,7 +1,7 @@
 /* Abysub concept · hero caustics: half-resolution WebGL light ripples, ~30 fps, paused off-screen and in hidden tabs */
 (function () {
   "use strict";
-  var cv = document.getElementById("heroFx"); if (!cv || /nofx/.test(location.search)) return;
+  var cv = document.getElementById("heroFx"); if (!cv) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   function fallback() { document.querySelector(".hero").classList.add("css-light"); }

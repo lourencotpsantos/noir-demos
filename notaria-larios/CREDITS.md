@@ -6,10 +6,10 @@ Both photos are from Wikimedia Commons, by the user Zarateman, released under **
 
 | File(s) in `img/` | Used for | Source |
 |---|---|---|
-| `larios-800.avif`, `larios-1100.avif`, `larios-1800.avif`, `larios-1100.webp`, `larios-1400.webp`, `larios-2400.webp` | Hero (AVIF with WebP fallback) | https://commons.wikimedia.org/wiki/File:M%C3%A1laga_-_Calle_Marqu%C3%A9s_de_Larios_07.jpg |
-| `facade-700.webp`, `facade-1200.webp` | Foreign buyers section | https://commons.wikimedia.org/wiki/File:M%C3%A1laga_-_Calle_Marqu%C3%A9s_de_Larios_03.jpg |
+| `street-800.avif`, `street-1200.avif`, `street-1920.avif`, `street-1200.webp`, `street-1920.webp` | Hero, back layer (façades) | https://commons.wikimedia.org/wiki/File:M%C3%A1laga_-_Calle_Marqu%C3%A9s_de_Larios_07.jpg |
+| `wing-l.avif`, `wing-l.webp`, `wing-r.avif`, `wing-r.webp` | Hero, foreground side layers (balconies) | https://commons.wikimedia.org/wiki/File:M%C3%A1laga_-_Calle_Marqu%C3%A9s_de_Larios_03.jpg |
 
-Processing: cropped to the upper floors (so that no shop signs or brand logos are shown), converted to a two-tone ink/ivory duotone with ImageMagick, exported to WebP.
+Processing: cropped to the upper floors (so that no shop signs or brand logos are shown), converted to grayscale and tinted with a warm "golden hour" colour map in ImageMagick (the light is a grade, not the real time of day), exported to AVIF with WebP fallback. The sky and sun glow behind them are CSS gradients.
 
 ## Fonts (self-hosted in `fonts/`)
 
@@ -18,7 +18,7 @@ Processing: cropped to the upper floors (so that no shop signs or brand logos ar
 
 ## Icons and graphics
 
-Line icons, the rotating seal and the "lista completa" stamp are original inline SVG/CSS made for this concept. The seal is decorative and is not the notary's official seal.
+Line icons, the rotating seal, the deed, the signature, the folder, the passport and its stamps, the pen-nib cursor and the "lista completa" stamp are original inline SVG/CSS made for this concept. Seals and signatures are decorative and are not the notary's official seal or anyone's real signature.
 
 ## Content
 

@@ -38,7 +38,7 @@
     var f = depth / 30;
     fill.style.transform = "scaleY(" + f.toFixed(4) + ")";
     dot.style.transform = "translate3d(0," + (f * trackH).toFixed(1) + "px,0)";
-    dark.style.opacity = (f * 0.62).toFixed(3);
+    dark.style.opacity = (f * 0.48).toFixed(3);
     tint.style.opacity = Math.min(1, depth / 16).toFixed(3);
     for (var k = 0; k < 5; k++) {
       var sp = SPEC[k], o = k === 4 ? 1 : 1 - (1 - sp[2]) * clamp((depth - sp[0]) / (sp[1] - sp[0]), 0, 1);
