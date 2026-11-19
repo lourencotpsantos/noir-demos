@@ -35,15 +35,15 @@
     "faro.h3": "Independence", "faro.p3": "A free and independent perspective, serving each client's interests.",
     "faro.h4": "Added value", "faro.p4": "We train clients to protect themselves, with update manuals at no extra cost.",
     "faro.cap": "La Farola, Málaga port · illustrative image",
-    "intl.eyebrow": "04 · International clients", "intl.t": "Buying, investing or living in Spain?",
+    "intl.eyebrow": "05 · International clients", "snd": "Sound", "w.eyebrow": "04 · Reach", "w.t": "From Plaza de la Marina to the world.", "w.l": "Based in central Málaga, on the Málaga–Madrid axis. The firm serves clients in Spain and Portugal and works with partners in the UK, France, Sweden, Norway and Denmark.", "w.langs": "working languages", "w.note": "Indicative points per country, based on the firm's website.", "intl.t": "Buying, investing or living in Spain?",
     "intl.l": "Many of the firm's clients come from abroad. It works with partners in the UK, France, Sweden, Norway and Denmark, and has a dedicated contact for Scandinavian clients.",
     "intl.c1": "Buying a home", "intl.c1s": "See the route step by step",
     "intl.c2": "Residency and immigration", "intl.c2s": "Find my way in the guide",
     "intl.c3": "Starting a business in Spain", "intl.c3s": "Find my way in the guide",
     "intl.en": "Leer esta web en español",
-    "team.eyebrow": "05 · Team", "team.t": "Lawyers, economists and paralegals, each with a clear role.",
+    "team.eyebrow": "06 · Team", "team.t": "Lawyers, economists and paralegals, each with a clear role.",
     "team.l": "Names and roles as published by the firm. Filter by area to see who handles each kind of matter.",
-    "c.eyebrow": "06 · Consultation", "c.t": "Tell us about your case.",
+    "c.eyebrow": "07 · Consultation", "c.t": "Tell us about your case.",
     "c.l": "The form prepares an email to the firm with your details. You review it and send it from your own email: this website sends and stores nothing.",
     "c.addr": "Address", "c.phone": "Phone", "c.hours": "Hours",
     "c.hoursv": "Monday to Friday 6:00–22:00<br>Saturday 9:00–14:00 · Sunday closed", "c.map": "Get directions ↗",
@@ -163,11 +163,52 @@
     var target = ar.bearing, cur = ((needleDeg % 360) + 360) % 360, diff = target - cur;
     if (diff > 180) diff -= 360; if (diff < -180) diff += 360;
     var from = needleDeg; needleDeg += diff;
-    needle.style.transform = "rotate(" + needleDeg + "deg)";
+    swingNeedle(from, needleDeg);
     $$("[data-a]", labels).forEach(function (n) { n.classList.toggle("is-on", n.getAttribute("data-a") === id); });
     areaEl.textContent = L(ar).short;
     countDeg(from, needleDeg);
   }
+  var needleAnim = null;
+  function swingNeedle(from, to) {
+    var d = to - from, os = Math.max(-16, Math.min(16, d * .22));
+    needle.style.transform = "rotate(" + to + "deg)";
+    if (RM || !needle.animate || Math.abs(d) < .5) return;
+    if (needleAnim) needleAnim.cancel();
+    needleAnim = needle.animate([
+      { transform: "rotate(" + from + "deg)", easing: "cubic-bezier(.45,0,.2,1)" },
+      { transform: "rotate(" + (to + os) + "deg)", offset: .5, easing: "ease-in-out" },
+      { transform: "rotate(" + (to - os * .45) + "deg)", offset: .72, easing: "ease-in-out" },
+      { transform: "rotate(" + (to + os * .16) + "deg)", offset: .87, easing: "ease-in-out" },
+      { transform: "rotate(" + to + "deg)" }
+    ], { duration: 1600 });
+    if (snd.on) {
+      var n = Math.min(8, Math.max(2, Math.round(Math.abs(d) / 25)));
+      for (var i = 0; i < n; i++) setTimeout(tick, i * (760 / n), .5 + .5 * (i / n));
+      setTimeout(tick, 820, 1); setTimeout(function () { tick(.5); }, 1150);
+    }
+  }
+  /* optional tick sound: off by default, only after a click */
+  var snd = { on: false, ctx: null, buf: null };
+  function tick(v) {
+    if (!snd.on || !snd.ctx) return;
+    var c = snd.ctx, src = c.createBufferSource(), g = c.createGain(), f = c.createBiquadFilter();
+    src.buffer = snd.buf; f.type = "bandpass"; f.frequency.value = 3200; f.Q.value = 4;
+    g.gain.value = .12 * (v || 1); src.connect(f); f.connect(g); g.connect(c.destination); src.start();
+  }
+  var sndBtn = $("[data-snd]");
+  sndBtn.addEventListener("click", function () {
+    snd.on = !snd.on;
+    if (snd.on && !snd.ctx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) {
+        snd.ctx = new AC(); var len = Math.floor(snd.ctx.sampleRate * .018);
+        snd.buf = snd.ctx.createBuffer(1, len, snd.ctx.sampleRate); var ch = snd.buf.getChannelData(0);
+        for (var i = 0; i < len; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 6);
+      }
+    }
+    sndBtn.setAttribute("aria-pressed", String(snd.on)); $("[data-snd-state]").textContent = snd.on ? "on" : "off";
+    if (snd.on) tick(1);
+  });
   function countDeg(from, to) {
     var fmt = function (v) { var d = Math.round(((v % 360) + 360) % 360); return ("00" + d).slice(-3) + "°"; };
     if (RM) { degEl.textContent = fmt(to); return; }
@@ -182,7 +223,7 @@
   if ("IntersectionObserver" in window && !RM) {
     var dio = new IntersectionObserver(function (es) {
       if (!es[0].isIntersecting) return; dio.disconnect();
-      if (!state.area) { needleDeg = -30; needle.style.transform = "rotate(-30deg)"; setTimeout(function () { if (!state.area) { needleDeg = 0; needle.style.transform = "rotate(0deg)"; countDeg(-30, 0); } }, 300); }
+      if (!state.area) { needleDeg = -30; needle.style.transform = "rotate(-30deg)"; setTimeout(function () { if (!state.area) { needleDeg = 0; swingNeedle(-30, 0); countDeg(-30, 0); } }, 300); }
     }, { threshold: .4 });
     dio.observe($(".dial"));
   } else { needle.style.transform = "rotate(0deg)"; needleDeg = 0; }
@@ -250,7 +291,7 @@
   }
 
   /* ---------- journey ---------- */
-  var jr = { pts: [], len: 0, cum: [], ghost: $(".jr__ghost"), boat: $(".jr__boat"), items: [], active: -1, raf: 0, on: false };
+  var jr = { pts: [], len: 0, cum: [], ghost: $(".jr__ghost"), boat: $(".jr__ov"), chart: $(".jr__chart"), svg: $(".jr__svg"), items: [], active: -1, raf: 0, on: false };
   function buildContours() {
     var g = $(".jr__contours"); if (g.childNodes.length) return;
     for (var k = 0; k < 7; k++) {
@@ -276,11 +317,15 @@
     }
     jr.ghost.setAttribute("d", d);
     jr.pts.forEach(function (p, i) {
+      mk("circle", { cx: p[0], cy: p[1], r: 18, "class": "jr__glow", "data-g": i }, pts);
+      mk("circle", { cx: p[0], cy: p[1], r: 10, "class": "jr__ring", "data-r": i }, pts);
       mk("circle", { cx: p[0], cy: p[1], r: 7, "data-i": i }, pts);
       var tx = mk("text", { x: p[0] + (i % 2 ? -22 : 18), y: p[1] + 4, "text-anchor": i % 2 ? "end" : "start", "data-i": i }, pts);
       tx.textContent = ("0" + (i + 1)).slice(-2) + " " + L(steps[i])[0].toUpperCase();
     });
     jr.len = jr.ghost.getTotalLength();
+    var wk = $(".jr__wk"); wk.innerHTML = ""; jr.wake = [];
+    for (var w = 0; w < 7; w++) { var dot = doc.createElement("i"); dot.style.opacity = (.55 - w * .07).toFixed(2); dot.style.width = dot.style.height = (7 - w * .8).toFixed(1) + "px"; wk.appendChild(dot); jr.wake.push(dot); }
     jr.cum = [0];
     var acc = 0;
     $$("path", segs).forEach(function (s) { acc += s.getTotalLength(); jr.cum.push(acc); });
@@ -313,13 +358,22 @@
     var idx = Math.round(f);
     var seg = Math.min(n - 2, Math.floor(f)), loc = f - seg;
     var L0 = jr.cum[seg] + (jr.cum[seg + 1] - jr.cum[seg]) * loc;
-    var p = jr.ghost.getPointAtLength(Math.min(jr.len, L0));
-    jr.boat.setAttribute("transform", "translate(" + p.x.toFixed(1) + " " + p.y.toFixed(1) + ")");
+    L0 = Math.min(jr.len, L0);
+    var p = jr.ghost.getPointAtLength(L0), q = jr.ghost.getPointAtLength(Math.min(jr.len, L0 + 2)), q0 = jr.ghost.getPointAtLength(Math.max(0, L0 - 2));
+    var ang = Math.atan2(q.y - q0.y, q.x - q0.x) * 180 / Math.PI;
+    var M = jr.svg.getScreenCTM(), cr = jr.chart.getBoundingClientRect();
+    var map = function (pt) { return [(M.a * pt.x + M.e - cr.left).toFixed(1), (M.d * pt.y + M.f - cr.top).toFixed(1)]; };
+    var bp = map(p);
+    jr.boat.style.transform = "translate3d(" + bp[0] + "px," + bp[1] + "px,0) rotate(" + ang.toFixed(1) + "deg)";
+    jr.wake.forEach(function (c, k) { var wp = map(jr.ghost.getPointAtLength(Math.max(0, L0 - 12 - k * 9))); c.style.transform = "translate3d(" + wp[0] + "px," + wp[1] + "px,0)"; });
     if (idx !== jr.active) {
       jr.active = idx;
       jr.items.forEach(function (it, k) { it.classList.toggle("is-on", k === idx || RM); });
       $$(".jr__segs path").forEach(function (s) { s.classList.toggle("is-on", +s.getAttribute("data-i") <= idx); });
       $$(".jr__pts [data-i]").forEach(function (s) { s.classList.toggle("is-on", +s.getAttribute("data-i") <= idx); });
+      $$(".jr__glow").forEach(function (s) { s.classList.toggle("is-on", +s.getAttribute("data-g") === idx); });
+      var ring = $('.jr__ring[data-r="' + idx + '"]');
+      if (ring && !RM) { ring.classList.remove("is-hit"); void ring.getBoundingClientRect(); ring.classList.add("is-hit"); }
       $("[data-jr-step]").textContent = ("0" + (idx + 1)).slice(-2);
     }
   }
@@ -329,6 +383,7 @@
       var on = es[0].isIntersecting;
       if (on && !jr.on) { window.addEventListener("scroll", onJrScroll, { passive: true }); onJrScroll(); }
       if (!on && jr.on) window.removeEventListener("scroll", onJrScroll);
+      $(".journey").classList.toggle("rumbo-paused", !on);
       jr.on = on;
     }).observe($(".jr"));
   }
@@ -419,9 +474,125 @@
     window.location.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body);
   });
 
+  /* ---------- hero: parallax layers + beam that lights the headline ---------- */
+  var hero = $(".hero"), layers = $$(".hl"), heroOn = true, hRaf = 0, px = 0, py = 0, tx = 0, ty = 0;
+  function heroFrame() {
+    hRaf = 0;
+    var sy = Math.min(window.scrollY, window.innerHeight * 1.2);
+    tx += (px - tx) * .08; ty += (py - ty) * .08;
+    layers.forEach(function (l) {
+      var d = +l.getAttribute("data-depth");
+      l.style.transform = "translate3d(" + (tx * d * 60).toFixed(2) + "px," + (-sy * d + ty * d * 40).toFixed(2) + "px,0)";
+    });
+    if (heroOn && (Math.abs(px - tx) > .002 || Math.abs(py - ty) > .002)) hRaf = requestAnimationFrame(heroFrame);
+  }
+  function heroKick() { if (!hRaf && heroOn && !RM) hRaf = requestAnimationFrame(heroFrame); }
+  window.addEventListener("scroll", heroKick, { passive: true });
+  if (window.matchMedia("(pointer:fine)").matches) hero.addEventListener("pointermove", function (e) { px = e.clientX / window.innerWidth - .5; py = e.clientY / window.innerHeight - .5; heroKick(); });
+  var beamEl = $(".hero__beam i"), beamAnim = null, litAnim = null, litEl = null, BEAM = 16000;
+  function buildLit() {
+    var h1 = $("#hero-t"); if (!h1) return;
+    if (litEl) litEl.remove();
+    litEl = h1.cloneNode(true); litEl.removeAttribute("id"); litEl.setAttribute("aria-hidden", "true");
+    litEl.classList.add("hero__t--lit"); $$("[data-i18n]", litEl).forEach(function (n) { n.removeAttribute("data-i18n"); });
+    h1.parentNode.appendChild(litEl);
+  }
+  function syncBeam() {
+    if (RM || !beamEl || !beamEl.animate) return;
+    var o = $(".hero__beam").getBoundingClientRect(), h = $("#hero-t").getBoundingClientRect();
+    var th = Math.atan2(h.top + h.height / 2 - o.top, h.left + h.width * .4 - o.left) * 180 / Math.PI;
+    th = ((th % 180) + 180) % 180;
+    var a = th / 360, b = a + .5, w = .045, kf = [];
+    function peak(c) { return [[c - w, 0], [c - w * .25, .95], [c + w * .35, .9], [c + w * 1.3, 0]]; }
+    var pts = peak(a).concat(peak(b)).map(function (q) { return [((q[0] % 1) + 1) % 1, q[1]]; }).sort(function (x, y) { return x[0] - y[0]; });
+    kf.push({ opacity: 0, offset: 0 }); pts.forEach(function (q) { kf.push({ opacity: q[1], offset: q[0] }); }); kf.push({ opacity: 0, offset: 1 });
+    var t0 = beamAnim ? beamAnim.currentTime : 0;
+    if (beamAnim) beamAnim.cancel(); if (litAnim) litAnim.cancel();
+    beamEl.style.animation = "none";
+    beamAnim = beamEl.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: BEAM, iterations: Infinity });
+    litAnim = litEl ? litEl.animate(kf, { duration: BEAM, iterations: Infinity }) : null;
+    beamAnim.currentTime = t0 || 0; if (litAnim) litAnim.currentTime = t0 || 0;
+    if (!heroOn) { beamAnim.pause(); if (litAnim) litAnim.pause(); }
+  }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      heroOn = es[0].isIntersecting;
+      [beamAnim, litAnim].forEach(function (an) { if (an) { if (heroOn) an.play(); else an.pause(); } });
+      if (heroOn) heroKick();
+    }).observe(hero);
+  }
+  var rsT; window.addEventListener("resize", function () { clearTimeout(rsT); rsT = setTimeout(syncBeam, 250); }, { passive: true });
+
+  function loadLayers() {
+    $$(".hl--mid, .hl--front").forEach(function (l, i) {
+      $$("[data-srcset]", l).forEach(function (n) { n.setAttribute("srcset", n.getAttribute("data-srcset")); });
+      var im = $("img", l); im.src = im.getAttribute("data-src");
+      var show = function () { setTimeout(function () { im.classList.add("is-ld"); }, i * 350); };
+      if (im.decode) im.decode().then(show, show); else im.onload = show;
+    });
+  }
+  if (doc.readyState === "complete") loadLayers(); else window.addEventListener("load", loadLayers);
+
+  /* ---------- world: arcs, comets, legend ---------- */
+  var gl = $(".gl"), world = $(".world"), arcs = $$(".gl__arc"), glows = $$(".gl__arcg"), gpts = $$(".gl__pt"), comets = [], wOn = false, wRaf = 0, wT0 = 0;
+  var gov = $(".gl__ov"), gW = 0;
+  gpts.concat([$(".gl__home")]).forEach(function (g) {
+    var tr = /translate\(([\d.]+) ([\d.]+)\)/.exec(g.getAttribute("transform"));
+    var r = doc.createElement("i"); r.className = "gl__r" + (g.classList.contains("gl__home") ? " gl__r--home" : "");
+    r.style.left = (tr[1] / 6) + "%"; r.style.top = (tr[2] / 6) + "%"; gov.appendChild(r);
+  });
+  arcs.forEach(function (a, i) {
+    var len = a.getTotalLength(), samp = [];
+    for (var k = 0; k <= 120; k++) { var q = a.getPointAtLength(len * k / 120); samp.push([q.x, q.y]); }
+    var parts = [];
+    for (var k2 = 0; k2 < 3; k2++) { var d = doc.createElement("i"); d.className = "gl__c" + (k2 ? " t" : ""); gov.appendChild(d); parts.push(d); }
+    comets.push({ samp: samp, parts: parts, off: i * .37 });
+  });
+  function gMeasure() { gW = gl.clientWidth / 600; }
+  window.addEventListener("resize", gMeasure, { passive: true });
+  function worldFrame(ts) {
+    if (!wT0) { wT0 = ts; gMeasure(); }
+    var t = (ts - wT0) / 4200;
+    comets.forEach(function (c) {
+      var ph = (t + c.off) % 1.6, vis = ph <= 1;
+      c.parts.forEach(function (pt, k) {
+        var u = Math.max(0, Math.min(1, ph - k * .03)), q = c.samp[Math.round(u * 120)];
+        pt.style.transform = "translate3d(" + (q[0] * gW).toFixed(1) + "px," + (q[1] * gW).toFixed(1) + "px,0)";
+        pt.style.opacity = vis ? (1 - k * .3) : 0;
+      });
+    });
+    if (wOn) wRaf = requestAnimationFrame(worldFrame);
+  }
+  var wShown = false;
+  function worldShow() {
+    if (wShown) return; wShown = true;
+    arcs.forEach(function (a, i) { setTimeout(function () { a.classList.add("is-on"); glows[i].classList.add("is-on"); gpts[i].classList.add("is-on"); }, RM ? 0 : 250 + i * 220); });
+  }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) {
+      wOn = es[0].isIntersecting; world.classList.toggle("is-paused", !wOn);
+      if (wOn) { worldShow(); if (!RM && !wRaf) wRaf = requestAnimationFrame(worldFrame); }
+      else if (wRaf) { cancelAnimationFrame(wRaf); wRaf = 0; }
+    }, { threshold: .15 }).observe(world);
+  } else worldShow();
+  function hi(k) {
+    gl.classList.toggle("has-hi", !!k);
+    arcs.forEach(function (a, i) { var on = a.getAttribute("data-k") === k; a.classList.toggle("is-hi", on); glows[i].classList.toggle("is-hi", on); gpts[i].classList.toggle("is-hi", on); });
+    $$(".gl__b").forEach(function (b) { b.classList.toggle("is-hi", b.getAttribute("data-k") === k); });
+  }
+  $$(".gl__b").forEach(function (b) {
+    var k = b.getAttribute("data-k");
+    b.addEventListener("mouseenter", function () { hi(k); }); b.addEventListener("focus", function () { hi(k); });
+    b.addEventListener("mouseleave", function () { hi(null); }); b.addEventListener("blur", function () { hi(null); });
+    b.addEventListener("click", function () { hi(gl.classList.contains("has-hi") && b.classList.contains("is-hi") ? k : k); });
+  });
+  rv($(".world__txt"));
+
   /* ---------- render ---------- */
   function renderAll() { buildDial(); renderAreas(); renderGuide(); buildContours(); buildJourney(); renderTeam(); fillSelects();
-    if (state.area) pointTo(state.area); }
+    if (state.area) pointTo(state.area);
+    $$("[data-es]").forEach(function (n) { n.textContent = n.getAttribute("data-" + lang); });
+    if (typeof buildLit === "function" && hero) { buildLit(); syncBeam(); } }
 
   var start = "es";
   try { var q = new URLSearchParams(location.search).get("lang"); start = q || localStorage.getItem("lt-lang") || "es"; } catch (e) {}
