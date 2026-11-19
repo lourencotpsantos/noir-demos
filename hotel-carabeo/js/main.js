@@ -92,7 +92,7 @@
   var L_ = {
     bg: $('.hl-bg'), fg: $('.hl-fg'), dusk: $$('.hl-dusk, .hl-fgdusk'), night: $$('.hl-night, .hl-fgnight'), stars: $('.hl-stars'), moon: $('.hl-moon'),
     glow: $('.hl-glow'), lamps: $('.hl-lamps'), b1: $('.beat-1'), b2: $('.beat-2'), b3: $('.beat-3'), fill: $('.hc-fill'),
-    cue: $('.hero-cue'), copy: $('.hero-copy'), shimmer: $('.hl-shimmer')
+    cue: $('.hero-cue'), copy: $('.hero-copy'), moonpath: $('.moonpath')
   };
   function loadLayers() {
     $$('.hero source[data-srcset], .hero img[data-srcset]').forEach(function (el) {
@@ -104,8 +104,12 @@
       if (im.complete && im.naturalWidth) go(); else { im.addEventListener('load', go, { once: true }); }
     });
   }
-  if (document.readyState === 'complete') setTimeout(loadLayers, 200);
-  else addEventListener('load', function () { if (window.requestIdleCallback) requestIdleCallback(loadLayers, { timeout: 800 }); else setTimeout(loadLayers, 300); });
+  /* depth layers wait until the first paint is done: first scroll/touch, or 2.5 s after load */
+  var layersAsked = false;
+  function askLayers() { if (layersAsked) return; layersAsked = true; removeEventListener('scroll', askLayers); removeEventListener('touchstart', askLayers); loadLayers(); }
+  addEventListener('scroll', askLayers, { passive: true }); addEventListener('touchstart', askLayers, { passive: true });
+  var afterLoad = function () { setTimeout(function () { if (window.requestIdleCallback) requestIdleCallback(askLayers, { timeout: 1000 }); else askLayers(); }, 2500); };
+  if (document.readyState === 'complete') afterLoad(); else addEventListener('load', afterLoad);
 
   var heroVisible = true, heroQueued = false, lastSolid = null, depthReady = false;
   function beat(el, inA, inB, outA, outB, p) {
@@ -130,7 +134,7 @@
     L_.night.forEach(function (e) { e.style.opacity = n; });
     L_.stars.style.opacity = seg(p, 0.6, 0.9).toFixed(3);
     L_.moon.style.opacity = seg(p, 0.55, 0.85).toFixed(3);
-    L_.shimmer.style.setProperty('--night', n);
+    L_.moonpath.style.opacity = (n * 0.7).toFixed(3);
     var lights = seg(p, 0.5, 0.76);
     L_.glow.style.opacity = lights.toFixed(3);
     L_.lamps.style.opacity = lights.toFixed(3);
@@ -560,6 +564,7 @@
   var lawn = $('#pl-lawn'), gardenG = $('#pl-garden'), zoneA = $('#pl-zoneA'), zoneB = $('#pl-zoneB');
   /* filled from the sea edge inwards */
   var TPOS = [[115, 196], [205, 196], [295, 196], [70, 130], [160, 130], [250, 130], [340, 130], [115, 64], [205, 64], [295, 64]];
+  function buildPlan() {
   TPOS.forEach(function (p) {
     var g = svgEl('g', { 'class': 'pl-t off' });
     g.appendChild(svgEl('circle', { 'class': 'pl-sh', cx: p[0] + 3, cy: p[1] + 5, r: 27, fill: 'url(#pl-shadow)' }));
@@ -586,6 +591,9 @@
     }
     lightsG.appendChild(g);
   });
+  wUpdate();
+  }
+  nearView('bodas', buildPlan);
   var planLive = false;
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (es) {
