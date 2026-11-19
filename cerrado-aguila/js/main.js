@@ -62,6 +62,7 @@
 
   /* ---------------- header ---------------- */
   var hdr = $('.hdr');
+  hdr.addEventListener('focusin', function () { hdr._hide = false; hdr.classList.remove('hide'); });
 
   /* ---------------- hero ---------------- */
   var hero = $('.hero'), heroBg = $('.hero-bg'), heroFg = $('.hero-fg'), heroTitle = $('.hero-title-wrap');
